@@ -19,6 +19,7 @@ import Counter from "../inputs/Counter";
 import CountrySelect from "../inputs/CountrySelect";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
+import VideoUpload from "../inputs/VideoUpload";
 import { categories } from "../navbar/Categories";
 import Modal from "./Modal";
 
@@ -56,6 +57,7 @@ function RentModal({}: Props) {
       roomCount: 1,
       bathroomCount: 1,
       imageSrc: "",
+      videoSrc: "",
       price: 1,
       title: "",
       description: "",
@@ -68,6 +70,7 @@ function RentModal({}: Props) {
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
+  const videoSrc = watch("videoSrc");
 
   const Map = useMemo(
     () =>
@@ -216,6 +219,10 @@ function RentModal({}: Props) {
           onChange={(value) => setCustomValue("imageSrc", value)}
           value={imageSrc}
         />
+        <VideoUpload
+          onChange={(value) => setCustomValue("videoSrc", value)}
+          value={videoSrc}
+        />
       </div>
     );
   }
@@ -229,7 +236,7 @@ function RentModal({}: Props) {
         />
         <Input
           id="title"
-          label="Title"
+          label="Service Detail"
           disabled={isLoading}
           register={register}
           errors={errors}

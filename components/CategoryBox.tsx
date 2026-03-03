@@ -33,7 +33,7 @@ function CategoryBox({ icon: Icon, label, selected }: Props) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/",
+        url: "/services",
         query: updatedQuery,
       },
       { skipNull: true }

@@ -4,6 +4,7 @@ import useCountries from "@/hook/useCountries";
 import { SafeUser } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { CldVideoPlayer } from "next-cloudinary";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 
@@ -11,6 +12,7 @@ type Props = {
   title: string;
   locationValue: string;
   imageSrc: string;
+  videoSrc?: string | null;
   id: string;
   currentUser?: SafeUser | null;
 };
@@ -19,6 +21,7 @@ function ListingHead({
   title,
   locationValue,
   imageSrc,
+  videoSrc,
   id,
   currentUser,
 }: Props) {
@@ -51,6 +54,21 @@ function ListingHead({
           <HeartButton listingId={id} currentUser={currentUser} />
         </div>
       </motion.div>
+      {videoSrc && (
+        <div className="w-full mt-4 rounded-xl overflow-hidden">
+          <CldVideoPlayer
+            width="1920"
+            height="1080"
+            src={videoSrc}
+            colors={{
+              base: "#000000",
+              text: "#ffffff",
+              accent: "#404040",
+            }}
+            logo={false}
+          />
+        </div>
+      )}
     </>
   );
 }

@@ -88,7 +88,7 @@ function SearchModal({}: Props) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/",
+        url: "/services",
         query: updatedQuery,
       },
       { skipNull: true }

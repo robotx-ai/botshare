@@ -41,9 +41,9 @@ function Categories({}: Props) {
   const category = params?.get("category");
   const pathname = usePathname();
 
-  const isMainPage = pathname === "/";
+  const isServicesPage = pathname === "/services";
 
-  if (!isMainPage) {
+  if (!isServicesPage) {
     return null;
   }
 

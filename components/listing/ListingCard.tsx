@@ -33,6 +33,11 @@ function ListingCard({
   const { getByValue } = useCountries();
 
   const location = getByValue(data.locationValue);
+  const serviceDetail = data.title?.trim() || "RobotX Service";
+  const locationLabel = [location?.region, location?.label]
+    .filter(Boolean)
+    .join(", ");
+  const serviceLocation = locationLabel || data.locationValue || "Service area";
 
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -88,17 +93,16 @@ function ListingCard({
             <HeartButton listingId={data.id} currentUser={currentUser} />
           </div>
         </div>
-        <div className="font-semibold text-lg">
-          {location?.region}, {location?.label}
-        </div>
-        <div className="font-light text-neutral-500">
-          {reservationDate || data.category}
-        </div>
-        <div className="flex flex-row items-center gap-">
+        <div className="font-semibold text-lg">{serviceDetail}</div>
+        <div className="font-light text-neutral-500">{serviceLocation}</div>
+        <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
             ${price} {!reservation && <div className="font-light"> / day</div>}
           </div>
         </div>
+        {reservationDate && (
+          <div className="font-light text-neutral-500">{reservationDate}</div>
+        )}
         {onAction && actionLabel && (
           <Button
             disabled={disabled}

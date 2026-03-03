@@ -58,7 +58,7 @@ function Search({}: Props) {
           {durationLabel}
         </div>
         <div className="text-sm px-2 text-gray-600 flex flex-row items-center">
-          <div className="p-2 bg-robotx rounded-full text-white">
+          <div className="rounded-full bg-black p-2 text-white">
             <BiSearch size={18} />
           </div>
         </div>
