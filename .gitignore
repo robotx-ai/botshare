@@ -42,6 +42,8 @@ supabase/.branches
 next-env.d.ts
 
 # netlify
-.netlify/state.json
-.netlify/functions-internal/
-.netlify/edge-functions-dist/
+# .netlify/state.json
+# .netlify/functions-internal/
+# .netlify/edge-functions-dist/
+.netlify/
+deno.lock
