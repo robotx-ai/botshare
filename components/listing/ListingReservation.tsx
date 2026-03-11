@@ -5,6 +5,7 @@ import { Range } from "react-date-range";
 import Calendar from "../inputs/Calendar";
 import Button from "../Button";
 import ServiceTierSelector, { TIERS } from "./ServiceTierSelector";
+import { ScenarioPricing } from "@/lib/scenarioPricing";
 
 type Props = {
   price: number;
@@ -18,6 +19,7 @@ type Props = {
   onTierChange: (tierId: string) => void;
   robotCount: number;
   onRobotCountChange: (count: number) => void;
+  fixedPrices?: ScenarioPricing;
 };
 
 function ListingReservation({
@@ -32,6 +34,7 @@ function ListingReservation({
   onTierChange,
   robotCount,
   onRobotCountChange,
+  fixedPrices,
 }: Props) {
   const selectedTier = TIERS.find((t) => t.id === selectedTierId)!;
   const isCustomQuote = selectedTier.multiplier === null;
@@ -44,6 +47,7 @@ function ListingReservation({
           basePrice={price}
           selectedTierId={selectedTierId}
           onSelect={onTierChange}
+          fixedPrices={fixedPrices}
         />
       </div>
       <hr />
@@ -108,7 +112,15 @@ function ListingReservation({
               {robotCount > 1 ? "s" : ""}
             </span>
             <span>
-              ${Math.round(price * (selectedTier.multiplier ?? 1))} / day
+              $
+              {fixedPrices
+                ? selectedTierId === "silver"
+                  ? fixedPrices.silver
+                  : selectedTierId === "gold"
+                  ? fixedPrices.gold
+                  : fixedPrices.platinum
+                : Math.round(price * (selectedTier.multiplier ?? 1))}{" "}
+              / day
             </span>
           </div>
         )}

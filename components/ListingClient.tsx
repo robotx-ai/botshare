@@ -17,6 +17,7 @@ import ListingInfo from "./listing/ListingInfo";
 import ListingReservation from "./listing/ListingReservation";
 import { TIERS } from "./listing/ServiceTierSelector";
 import { categories } from "./navbar/Categories";
+import { getScenarioPricing } from "@/lib/scenarioPricing";
 
 const initialDateRange = {
   startDate: new Date(),
@@ -35,6 +36,7 @@ type Props = {
 function ListingClient({ reservations = [], listing, currentUser }: Props) {
   const router = useRouter();
   const loginModal = useLoginModel();
+  const scenarioPricing = getScenarioPricing(listing.title);
 
   const disableDates = useMemo(() => {
     let dates: Date[] = [];
@@ -85,8 +87,19 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
   }, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
 
   useEffect(() => {
-    const tier = TIERS.find((t) => t.id === selectedTierId);
-    const multiplier = tier?.multiplier ?? 1;
+    let perDayPrice: number;
+    if (scenarioPricing) {
+      const priceMap: Record<string, number> = {
+        silver: scenarioPricing.silver,
+        gold: scenarioPricing.gold,
+        premium: scenarioPricing.platinum,
+      };
+      perDayPrice = priceMap[selectedTierId] ?? listing.price;
+    } else {
+      const tier = TIERS.find((t) => t.id === selectedTierId);
+      const multiplier = tier?.multiplier ?? 1;
+      perDayPrice = listing.price * multiplier;
+    }
 
     if (dateRange.startDate && dateRange.endDate) {
       const dayCount = differenceInCalendarDays(
@@ -95,12 +108,12 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
       );
 
       if (dayCount && listing.price) {
-        setTotalPrice(dayCount * listing.price * multiplier * robotCount);
+        setTotalPrice(dayCount * perDayPrice * robotCount);
       } else {
-        setTotalPrice(listing.price * multiplier * robotCount);
+        setTotalPrice(perDayPrice * robotCount);
       }
     }
-  }, [dateRange, listing.price, selectedTierId, robotCount]);
+  }, [dateRange, listing.price, selectedTierId, robotCount, scenarioPricing]);
 
   const category = useMemo(() => {
     return categories.find((item) => item.label === listing.category);
@@ -144,6 +157,7 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
                 onTierChange={setSelectedTierId}
                 robotCount={robotCount}
                 onRobotCountChange={setRobotCount}
+                fixedPrices={scenarioPricing ?? undefined}
               />
             </div>
           </div>

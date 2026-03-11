@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ScenarioPricing } from "@/lib/scenarioPricing";
 
 export type Tier = {
   id: string;
@@ -14,19 +15,19 @@ export const TIERS: Tier[] = [
     id: "silver",
     label: "Silver",
     multiplier: 1.0,
-    desc: "5-day advance consulting · simple performance",
+    desc: "4h service · simple performance",
   },
   {
     id: "gold",
     label: "Gold",
     multiplier: 1.5,
-    desc: "20-day consulting · custom choreography",
+    desc: "6h service · custom choreography",
   },
   {
     id: "premium",
-    label: "Premium Gold",
+    label: "Platinum",
     multiplier: 2.5,
-    desc: "1-month on-site · custom outfits · 2 rehearsals",
+    desc: "8h service · full customization",
   },
   {
     id: "super",
@@ -47,9 +48,15 @@ type Props = {
   basePrice: number;
   selectedTierId: string;
   onSelect: (tierId: string) => void;
+  fixedPrices?: ScenarioPricing;
 };
 
-function ServiceTierSelector({ basePrice, selectedTierId, onSelect }: Props) {
+function ServiceTierSelector({
+  basePrice,
+  selectedTierId,
+  onSelect,
+  fixedPrices,
+}: Props) {
   return (
     <div className="flex flex-col gap-2">
       <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
@@ -57,10 +64,19 @@ function ServiceTierSelector({ basePrice, selectedTierId, onSelect }: Props) {
       </p>
       {TIERS.map((tier) => {
         const isSelected = tier.id === selectedTierId;
-        const tierPrice =
-          tier.multiplier !== null
-            ? Math.round(basePrice * tier.multiplier)
-            : null;
+
+        let tierPrice: number | null;
+        if (fixedPrices) {
+          if (tier.id === "silver") tierPrice = fixedPrices.silver;
+          else if (tier.id === "gold") tierPrice = fixedPrices.gold;
+          else if (tier.id === "premium") tierPrice = fixedPrices.platinum;
+          else tierPrice = null;
+        } else {
+          tierPrice =
+            tier.multiplier !== null
+              ? Math.round(basePrice * tier.multiplier)
+              : null;
+        }
 
         return (
           <button
