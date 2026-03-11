@@ -8,3 +8,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[functions."___netlify-server-handler"]
+  included_files = ["node_modules/.prisma/client/**", "node_modules/@prisma/client/runtime/libquery_engine-rhel-openssl-3.0.x.so.node"]
