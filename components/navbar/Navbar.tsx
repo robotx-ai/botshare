@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SafeUser } from "@/types";
 import Container from "../Container";
@@ -42,6 +43,16 @@ function Navbar({ currentUser, isAdmin = false }: Props) {
               <Search transparent={transparent} />
             </div>
             <div className="flex items-center gap-3 justify-end">
+              <Link
+                href="/robot-types"
+                className={`hidden md:block text-sm font-semibold py-2 px-4 rounded-full border transition ${
+                  transparent
+                    ? "border-white/70 text-white hover:bg-white/10"
+                    : "border-black hover:bg-neutral-100"
+                }`}
+              >
+                Robot Types
+              </Link>
               <a
                 href="https://robotxshop.com"
                 target="_blank"

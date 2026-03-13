@@ -105,11 +105,25 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                   onClick={() => { setIsOpen(false); window.open("https://robotxshop.com", "_blank"); }}
                   label="Visit robotxshop.com"
                 />
+                <MenuItem
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push("/robot-types");
+                  }}
+                  label="Browse robot types"
+                />
                 <hr />
                 <MenuItem onClick={() => { setIsOpen(false); signOut(); }} label="Logout" />
               </>
             ) : (
               <>
+                <MenuItem
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push("/robot-types");
+                  }}
+                  label="Browse robot types"
+                />
                 <MenuItem
                   onClick={() => { setIsOpen(false); window.open("https://robotxshop.com", "_blank"); }}
                   label="Visit robotxshop.com"

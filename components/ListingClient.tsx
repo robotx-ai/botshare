@@ -18,6 +18,7 @@ import ListingReservation from "./listing/ListingReservation";
 import { TIERS } from "./listing/ServiceTierSelector";
 import { categories } from "./navbar/Categories";
 import { getScenarioPricing } from "@/lib/scenarioPricing";
+import { getAgibotScenarioDetails } from "@/lib/agibotScenarioDetails";
 
 const initialDateRange = {
   startDate: new Date(),
@@ -119,6 +120,10 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
     return categories.find((item) => item.label === listing.category);
   }, [listing.category]);
 
+  const agibotScenario = useMemo(() => {
+    return getAgibotScenarioDetails(listing.title);
+  }, [listing.title]);
+
   return (
     <Container>
       <div className="max-w-screen-lg mx-auto">
@@ -143,6 +148,7 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
               guestCount={listing.guestCount}
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
+              agibotScenario={agibotScenario}
             />
             <div className="order-first mb-10 md:order-last md:col-span-3">
               <ListingReservation

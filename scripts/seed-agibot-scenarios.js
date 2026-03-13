@@ -10,6 +10,18 @@ const LOCATION_VALUE = "Southern California";
 const CLD =
   "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto";
 
+function resolveScenarioImageSrc(imageSrc) {
+  if (!imageSrc) {
+    return imageSrc;
+  }
+
+  if (/^https?:\/\//i.test(imageSrc) || imageSrc.startsWith("/")) {
+    return imageSrc;
+  }
+
+  return `${CLD}/${imageSrc}`;
+}
+
 function buildDescription(scenario) {
   const lines = [scenario.description, ""];
   for (const [tierKey, tier] of Object.entries(scenario.tiers)) {
@@ -70,7 +82,7 @@ async function main() {
       data: {
         title,
         description: buildDescription(scenario),
-        imageSrc: `${CLD}/${scenario.imageSrc}`,
+        imageSrc: resolveScenarioImageSrc(scenario.imageSrc),
         category: "Showcase & Performance",
         price: scenario.pricing.silver,
         locationValue: LOCATION_VALUE,

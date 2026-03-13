@@ -3,24 +3,47 @@
     "id": "party",
     "title": "Party",
     "description": "Bring your party to life with AGIBot robots performing dynamic dances, crowd interactions, and entertainment routines. Perfect for corporate celebrations, product launches, and private events.",
-    "imageSrc": "agibot-scene-party",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/party",
     "primaryRobot": "AGIBot X2",
-    "pricing": { "silver": 2000, "gold": 2500, "platinum": 4000 },
+    "pricing": {
+      "silver": 2000,
+      "gold": 2500,
+      "platinum": 4000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h deployment window", "Pre-programmed dance routines", "Basic crowd interaction", "5-day advance consultation"]
+        "features": [
+          "4h deployment window",
+          "Pre-programmed dance routines",
+          "Basic crowd interaction",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2",
         "hours": 6,
-        "features": ["6h deployment window", "Custom choreography", "Interactive crowd engagement", "20-day consultation & rehearsal", "On-site technician"]
+        "features": [
+          "6h deployment window",
+          "Custom choreography",
+          "Interactive crowd engagement",
+          "20-day consultation & rehearsal",
+          "On-site technician"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2 Ultra",
         "hours": 8,
-        "features": ["8h deployment window", "Full custom performance design", "Multi-robot coordination", "1-month pre-event consulting", "Custom outfit & branding", "2 full rehearsals", "Dedicated support team"]
+        "features": [
+          "8h deployment window",
+          "Full custom performance design",
+          "Multi-robot coordination",
+          "1-month pre-event consulting",
+          "Custom outfit & branding",
+          "2 full rehearsals",
+          "Dedicated support team"
+        ]
       }
     }
   },
@@ -28,24 +51,47 @@
     "id": "exhibition",
     "title": "Exhibition",
     "description": "Captivate exhibition attendees with cutting-edge humanoid robots that demonstrate AI capabilities, engage visitors, and serve as a stunning centerpiece for your booth or display.",
-    "imageSrc": "agibot-scene-exhibition",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/exhibition",
     "primaryRobot": "AGIBot X2 Ultra",
-    "pricing": { "silver": 2000, "gold": 2500, "platinum": 4000 },
+    "pricing": {
+      "silver": 2000,
+      "gold": 2500,
+      "platinum": 4000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h deployment window", "Standard demo sequences", "Visitor greeting routines", "5-day advance consultation"]
+        "features": [
+          "4h deployment window",
+          "Standard demo sequences",
+          "Visitor greeting routines",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2 Ultra",
         "hours": 6,
-        "features": ["6h deployment window", "Custom product demonstrations", "Multilingual visitor interaction", "20-day consultation", "On-site technician"]
+        "features": [
+          "6h deployment window",
+          "Custom product demonstrations",
+          "Multilingual visitor interaction",
+          "20-day consultation",
+          "On-site technician"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2 Ultra",
         "hours": 8,
-        "features": ["8h deployment window", "Fully branded robot experience", "Live AI capability showcase", "1-month consulting & content design", "Custom branded outfit", "2 rehearsals", "Dedicated technical crew"]
+        "features": [
+          "8h deployment window",
+          "Fully branded robot experience",
+          "Live AI capability showcase",
+          "1-month consulting & content design",
+          "Custom branded outfit",
+          "2 rehearsals",
+          "Dedicated technical crew"
+        ]
       }
     }
   },
@@ -53,24 +99,47 @@
     "id": "salesman",
     "title": "Salesman",
     "description": "Deploy intelligent humanoid robots as proactive sales assistants. They approach potential customers, deliver tailored pitches, answer questions, and guide prospects through your product offerings.",
-    "imageSrc": "agibot-scene-salesman",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/salesman",
     "primaryRobot": "AGIBot X2 Ultra",
-    "pricing": { "silver": 2000, "gold": 2500, "platinum": 4000 },
+    "pricing": {
+      "silver": 2000,
+      "gold": 2500,
+      "platinum": 4000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h deployment window", "Standard sales script", "Product catalog walkthrough", "5-day advance consultation"]
+        "features": [
+          "4h deployment window",
+          "Standard sales script",
+          "Product catalog walkthrough",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2 Ultra",
         "hours": 6,
-        "features": ["6h deployment window", "Custom sales dialogue", "Dynamic product recommendations", "20-day consultation & script development", "On-site support"]
+        "features": [
+          "6h deployment window",
+          "Custom sales dialogue",
+          "Dynamic product recommendations",
+          "20-day consultation & script development",
+          "On-site support"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2 Ultra",
         "hours": 8,
-        "features": ["8h deployment window", "Fully personalized sales AI", "Lead capture integration", "1-month sales script consulting", "Branded robot styling", "2 rehearsals", "Dedicated operator"]
+        "features": [
+          "8h deployment window",
+          "Fully personalized sales AI",
+          "Lead capture integration",
+          "1-month sales script consulting",
+          "Branded robot styling",
+          "2 rehearsals",
+          "Dedicated operator"
+        ]
       }
     }
   },
@@ -78,24 +147,47 @@
     "id": "showroom-guide",
     "title": "Showroom Guide",
     "description": "Transform your showroom with an intelligent robotic guide that welcomes visitors, explains product features, leads tours, and answers questions — delivering a memorable brand experience.",
-    "imageSrc": "agibot-scene-showroom",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/showroom-guide",
     "primaryRobot": "AGIBot A2 Ultra",
-    "pricing": { "silver": 2500, "gold": 4000, "platinum": 6000 },
+    "pricing": {
+      "silver": 2500,
+      "gold": 4000,
+      "platinum": 6000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot A2 Lite",
         "hours": 4,
-        "features": ["4h deployment window", "Guided showroom tour", "Product feature narration", "5-day advance consultation"]
+        "features": [
+          "4h deployment window",
+          "Guided showroom tour",
+          "Product feature narration",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot A2 Ultra",
         "hours": 6,
-        "features": ["6h deployment window", "Custom tour script & routing", "Interactive Q&A capability", "20-day consultation", "On-site technician"]
+        "features": [
+          "6h deployment window",
+          "Custom tour script & routing",
+          "Interactive Q&A capability",
+          "20-day consultation",
+          "On-site technician"
+        ]
       },
       "platinum": {
         "robot": "AGIBot A2 Ultra",
         "hours": 8,
-        "features": ["8h deployment window", "Fully personalized visitor experience", "Multi-zone showroom coverage", "1-month content & route design", "Branded uniform & custom voice", "2 dry-run rehearsals", "Dedicated support staff"]
+        "features": [
+          "8h deployment window",
+          "Fully personalized visitor experience",
+          "Multi-zone showroom coverage",
+          "1-month content & route design",
+          "Branded uniform & custom voice",
+          "2 dry-run rehearsals",
+          "Dedicated support staff"
+        ]
       }
     }
   },
@@ -103,24 +195,47 @@
     "id": "show",
     "title": "Show",
     "description": "Stage a breathtaking live performance with humanoid robots. From choreographed solo acts to ensemble shows, AGIBot robots deliver precision movement and dramatic presence on any stage.",
-    "imageSrc": "agibot-scene-show",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/show",
     "primaryRobot": "AGIBot X2",
-    "pricing": { "silver": 300, "gold": 2000, "platinum": 2500 },
+    "pricing": {
+      "silver": 300,
+      "gold": 2000,
+      "platinum": 2500
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot A2 Lite",
         "hours": 4,
-        "features": ["4h deployment window", "Pre-programmed solo act", "Basic stage movement", "5-day advance consultation"]
+        "features": [
+          "4h deployment window",
+          "Pre-programmed solo act",
+          "Basic stage movement",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2",
         "hours": 6,
-        "features": ["6h deployment window", "Custom choreographed performance", "Stage lighting synchronization", "20-day rehearsal & consultation", "On-site operator"]
+        "features": [
+          "6h deployment window",
+          "Custom choreographed performance",
+          "Stage lighting synchronization",
+          "20-day rehearsal & consultation",
+          "On-site operator"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2",
         "hours": 8,
-        "features": ["8h deployment window", "Full custom show production", "Multi-robot ensemble", "1-month choreography development", "Costume & prop integration", "3 full rehearsals", "Production crew support"]
+        "features": [
+          "8h deployment window",
+          "Full custom show production",
+          "Multi-robot ensemble",
+          "1-month choreography development",
+          "Costume & prop integration",
+          "3 full rehearsals",
+          "Production crew support"
+        ]
       }
     }
   },
@@ -128,24 +243,47 @@
     "id": "reception",
     "title": "Reception",
     "description": "Elevate your front-of-house experience with a sophisticated robotic receptionist. Greet guests, check them in, answer FAQs, and direct visitors — all with a cutting-edge AI personality.",
-    "imageSrc": "agibot-scene-reception",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/reception",
     "primaryRobot": "AGIBot X2 Ultra",
-    "pricing": { "silver": 2500, "gold": 4000, "platinum": 6000 },
+    "pricing": {
+      "silver": 2500,
+      "gold": 4000,
+      "platinum": 6000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h deployment window", "Guest greeting & check-in", "FAQ responses", "5-day advance consultation"]
+        "features": [
+          "4h deployment window",
+          "Guest greeting & check-in",
+          "FAQ responses",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2 Ultra",
         "hours": 6,
-        "features": ["6h deployment window", "Custom greeting scripts", "Visitor routing & navigation", "20-day consultation", "On-site technician"]
+        "features": [
+          "6h deployment window",
+          "Custom greeting scripts",
+          "Visitor routing & navigation",
+          "20-day consultation",
+          "On-site technician"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2 Ultra",
         "hours": 8,
-        "features": ["8h deployment window", "Full reception workflow automation", "Multi-language support", "1-month onboarding & customization", "Branded robot appearance", "2 rehearsals", "Dedicated support operator"]
+        "features": [
+          "8h deployment window",
+          "Full reception workflow automation",
+          "Multi-language support",
+          "1-month onboarding & customization",
+          "Branded robot appearance",
+          "2 rehearsals",
+          "Dedicated support operator"
+        ]
       }
     }
   },
@@ -153,24 +291,47 @@
     "id": "live-stream",
     "title": "Live Stream",
     "description": "Supercharge your live stream content with a humanoid robot co-host, performer, or interactive guest. Drive engagement, go viral, and give your audience a glimpse into the future of entertainment.",
-    "imageSrc": "agibot-x2",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/live-stream",
     "primaryRobot": "AGIBot X2",
-    "pricing": { "silver": 700, "gold": 2000, "platinum": 2500 },
+    "pricing": {
+      "silver": 700,
+      "gold": 2000,
+      "platinum": 2500
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h streaming window", "Pre-scripted robot segments", "Basic audience interaction", "5-day advance consultation"]
+        "features": [
+          "4h streaming window",
+          "Pre-scripted robot segments",
+          "Basic audience interaction",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2",
         "hours": 6,
-        "features": ["6h streaming window", "Custom live-stream script", "Dynamic audience Q&A participation", "20-day content consultation", "On-site operator & tech support"]
+        "features": [
+          "6h streaming window",
+          "Custom live-stream script",
+          "Dynamic audience Q&A participation",
+          "20-day content consultation",
+          "On-site operator & tech support"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2",
         "hours": 8,
-        "features": ["8h streaming window", "Full co-host experience", "Live reaction & improv responses", "1-month content planning", "Branded robot styling", "Camera & streaming equipment coordination", "Dedicated production support"]
+        "features": [
+          "8h streaming window",
+          "Full co-host experience",
+          "Live reaction & improv responses",
+          "1-month content planning",
+          "Branded robot styling",
+          "Camera & streaming equipment coordination",
+          "Dedicated production support"
+        ]
       }
     }
   },
@@ -178,24 +339,47 @@
     "id": "school",
     "title": "School",
     "description": "Inspire the next generation with hands-on AI education. AGIBot robots conduct STEM demonstrations, assist teachers, and provide interactive learning experiences that make technology tangible.",
-    "imageSrc": "agibot-d1-edu",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/school",
     "primaryRobot": "AGIBot D1 Edu",
-    "pricing": { "silver": 500, "gold": 2000, "platinum": 2500 },
+    "pricing": {
+      "silver": 500,
+      "gold": 2000,
+      "platinum": 2500
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot D1 Edu",
         "hours": 4,
-        "features": ["4h school session", "STEM demo modules", "Basic student Q&A", "5-day curriculum consultation"]
+        "features": [
+          "4h school session",
+          "STEM demo modules",
+          "Basic student Q&A",
+          "5-day curriculum consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot D1 Edu",
         "hours": 6,
-        "features": ["6h school session", "Custom curriculum-aligned lessons", "Interactive student workshops", "20-day educator consultation", "On-site operator & educator support"]
+        "features": [
+          "6h school session",
+          "Custom curriculum-aligned lessons",
+          "Interactive student workshops",
+          "20-day educator consultation",
+          "On-site operator & educator support"
+        ]
       },
       "platinum": {
         "robot": "AGIBot D1 Pro",
         "hours": 8,
-        "features": ["8h school program", "Full custom educational experience", "Multi-classroom scheduling", "1-month curriculum development", "Teacher training included", "2 pilot rehearsals", "Dedicated education specialist"]
+        "features": [
+          "8h school program",
+          "Full custom educational experience",
+          "Multi-classroom scheduling",
+          "1-month curriculum development",
+          "Teacher training included",
+          "2 pilot rehearsals",
+          "Dedicated education specialist"
+        ]
       }
     }
   },
@@ -203,24 +387,47 @@
     "id": "security",
     "title": "Security",
     "description": "Enhance your security operations with intelligent robotic patrol units. AGIBot security robots monitor premises, detect anomalies, alert staff, and provide a visible deterrent — 24/7.",
-    "imageSrc": "agibot-d1-ultra",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/security",
     "primaryRobot": "AGIBot D1 Ultra",
-    "pricing": { "silver": 700, "gold": 1500, "platinum": 2000 },
+    "pricing": {
+      "silver": 700,
+      "gold": 1500,
+      "platinum": 2000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot D1 Pro",
         "hours": 4,
-        "features": ["4h patrol window", "Pre-programmed patrol routes", "Visual anomaly detection", "5-day advance consultation"]
+        "features": [
+          "4h patrol window",
+          "Pre-programmed patrol routes",
+          "Visual anomaly detection",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot D1 Ultra",
         "hours": 6,
-        "features": ["6h patrol window", "Custom patrol routing", "Real-time alert system", "20-day integration consultation", "On-site technical support"]
+        "features": [
+          "6h patrol window",
+          "Custom patrol routing",
+          "Real-time alert system",
+          "20-day integration consultation",
+          "On-site technical support"
+        ]
       },
       "platinum": {
         "robot": "AGIBot D1 Ultra",
         "hours": 8,
-        "features": ["8h patrol window", "Full-site security coverage", "Multi-zone coordination", "1-month security protocol design", "Integration with existing systems", "2 operational rehearsals", "Dedicated security operator"]
+        "features": [
+          "8h patrol window",
+          "Full-site security coverage",
+          "Multi-zone coordination",
+          "1-month security protocol design",
+          "Integration with existing systems",
+          "2 operational rehearsals",
+          "Dedicated security operator"
+        ]
       }
     }
   },
@@ -228,24 +435,47 @@
     "id": "athlete",
     "title": "Athlete",
     "description": "Showcase the physical capabilities of humanoid robotics with athletic demonstrations — running, jumping, lifting, and sports performances that blur the line between machine and human.",
-    "imageSrc": "agibot-x2",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/athlete",
     "primaryRobot": "AGIBot X2",
-    "pricing": { "silver": 700, "gold": 2000, "platinum": 2500 },
+    "pricing": {
+      "silver": 700,
+      "gold": 2000,
+      "platinum": 2500
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h performance window", "Pre-programmed athletic routines", "Standard sport demonstrations", "5-day advance consultation"]
+        "features": [
+          "4h performance window",
+          "Pre-programmed athletic routines",
+          "Standard sport demonstrations",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2",
         "hours": 6,
-        "features": ["6h performance window", "Custom athletic sequence design", "Live sport interaction demo", "20-day consultation & training", "On-site operator"]
+        "features": [
+          "6h performance window",
+          "Custom athletic sequence design",
+          "Live sport interaction demo",
+          "20-day consultation & training",
+          "On-site operator"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2 Ultra",
         "hours": 8,
-        "features": ["8h performance window", "Full custom athletic showcase", "Multi-sport performance program", "1-month choreography development", "Athletic gear & branding", "3 rehearsals", "Dedicated performance crew"]
+        "features": [
+          "8h performance window",
+          "Full custom athletic showcase",
+          "Multi-sport performance program",
+          "1-month choreography development",
+          "Athletic gear & branding",
+          "3 rehearsals",
+          "Dedicated performance crew"
+        ]
       }
     }
   },
@@ -253,24 +483,91 @@
     "id": "retail",
     "title": "Retail",
     "description": "Revolutionize the in-store experience with robotic retail assistants that help customers find products, answer questions, manage queues, and create buzz that drives foot traffic and sales.",
-    "imageSrc": "agibot-x2",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/retail",
     "primaryRobot": "AGIBot X2",
-    "pricing": { "silver": 2000, "gold": 2500, "platinum": 4000 },
+    "pricing": {
+      "silver": 2000,
+      "gold": 2500,
+      "platinum": 4000
+    },
     "tiers": {
       "silver": {
         "robot": "AGIBot X2",
         "hours": 4,
-        "features": ["4h in-store deployment", "Product location assistance", "Basic customer Q&A", "5-day advance consultation"]
+        "features": [
+          "4h in-store deployment",
+          "Product location assistance",
+          "Basic customer Q&A",
+          "5-day advance consultation"
+        ]
       },
       "gold": {
         "robot": "AGIBot X2",
         "hours": 6,
-        "features": ["6h in-store deployment", "Custom product promotion script", "Queue management & customer routing", "20-day consultation", "On-site operator"]
+        "features": [
+          "6h in-store deployment",
+          "Custom product promotion script",
+          "Queue management & customer routing",
+          "20-day consultation",
+          "On-site operator"
+        ]
       },
       "platinum": {
         "robot": "AGIBot X2 Ultra",
         "hours": 8,
-        "features": ["8h in-store deployment", "Full branded retail experience", "Inventory-aware product guidance", "1-month integration & scripting", "Custom retail uniform branding", "2 rehearsals", "Dedicated retail specialist"]
+        "features": [
+          "8h in-store deployment",
+          "Full branded retail experience",
+          "Inventory-aware product guidance",
+          "1-month integration & scripting",
+          "Custom retail uniform branding",
+          "2 rehearsals",
+          "Dedicated retail specialist"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cleaning",
+    "title": "Cleaning",
+    "description": "Deploy AGIBot cleaning robots to handle routine floor care with consistent coverage, remote support, and operational reporting for commercial environments.",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/cleaning",
+    "primaryRobot": "AGIBot C5",
+    "pricing": {
+      "silver": 1000,
+      "gold": 1800,
+      "platinum": 4000
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBot C5",
+        "hours": 4,
+        "features": [
+          "One hour 1-1 consultation video conference",
+          "No operator remote training",
+          "2 weeks use"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBot C5",
+        "hours": 6,
+        "features": [
+          "One hour 1-1 consultation video conference",
+          "No operator remote training",
+          "1 month use",
+          "Cleaning report"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBot C5",
+        "hours": 8,
+        "features": [
+          "One hour 1-1 consultation video conference",
+          "Unlimited hotline service",
+          "Operator onsite setup and physical training",
+          "1 month use",
+          "Full performance report"
+        ]
       }
     }
   }

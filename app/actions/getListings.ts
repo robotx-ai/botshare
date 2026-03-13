@@ -11,6 +11,7 @@ export interface IListingsParams {
   endDate?: string;
   locationValue?: string;
   category?: string;
+  robotModel?: string;
 }
 
 export default async function getListings(params: IListingsParams) {

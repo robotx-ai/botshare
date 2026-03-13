@@ -13,6 +13,7 @@ export async function POST(request: Request, { params }: { params: IPrisma }) {
 
   const currentUser = await getCurrentUser();
 
+  
   if (!currentUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

@@ -3,6 +3,7 @@ import Container from "@/components/Container";
 import EmptyState from "@/components/EmptyState";
 import Heading from "@/components/Heading";
 import ListingCard from "@/components/listing/ListingCard";
+import { matchesRobotModel } from "@/lib/robotModel";
 import getCurrentUser from "../actions/getCurrentUser";
 import getListings, { IListingsParams } from "../actions/getListings";
 
@@ -13,10 +14,15 @@ interface ServicesProps {
 }
 
 export default async function ServicesPage({ searchParams }: ServicesProps) {
-  const listing = await getListings(searchParams);
+  const { robotModel, ...filters } = searchParams;
+  const listing = await getListings(filters);
+  const filteredListing =
+    typeof robotModel === "string" && robotModel.trim().length > 0
+      ? listing.filter((item) => matchesRobotModel(item, robotModel))
+      : listing;
   const currentUser = await getCurrentUser();
 
-  if (listing.length === 0) {
+  if (filteredListing.length === 0) {
     return (
       <ClientOnly>
         <EmptyState showReset />
@@ -29,12 +35,12 @@ export default async function ServicesPage({ searchParams }: ServicesProps) {
       <Container>
         <div className="pt-10 md:pt-16">
           <Heading
-            title="Explore Services"
-            subtitle="Browse RobotX service packages by category, coverage area, and booking dates."
+            title="Explore Bundle Deals"
+            subtitle="Browse RobotX bundle service packages by category, coverage area, robot model, and booking dates."
           />
         </div>
         <div className="pt-10 grid grid-cols-1 gap-8 overflow-x-hidden sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
-          {listing.map((list) => {
+          {filteredListing.map((list) => {
             return (
               <ListingCard
                 key={list.id}

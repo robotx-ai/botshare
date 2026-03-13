@@ -5,6 +5,32 @@
 - Secondary domain: `robotxshop.com` (robot sales commerce).
 - `robotxshop.com` is CTA cross-link only in MVP; no shared checkout/cart/auth integration.
 - Do not present this product as Airbnb, home rental, or property rental.
+- If any internal doc conflicts on branding/taxonomy, this file is the source of truth for agent behavior.
+
+## Core Commands
+```bash
+npm run dev          # Start dev server on http://localhost:3000
+npm run build        # Production build
+npm run lint         # ESLint check (must pass before PR/merge)
+
+# One-time Supabase migration utilities
+npm run db:migrate:sql
+npm run db:migrate:data
+npm run db:migrate:verify
+```
+
+## Architecture Snapshot
+- Framework: Next.js 13 hybrid (`app/` + `pages/api/`).
+- `app/actions/`: server-side data loaders (`getListings`, `getListingById`, `getReservations`, `getFavoriteListings`, `getCurrentUser`).
+- `app/listings/[listingId]/`: service detail page.
+- `app/services/`: service catalog browsing/filtering.
+- `app/trips/`, `app/reservations/`, `app/favorites/`, `app/properties/`: authenticated pages protected by `middleware.ts`.
+- `components/modals/`: modal dialogs (Login, Register, RentModal, Search).
+- `components/navbar/`: navbar, categories filter, search, user menu.
+- `components/listing/`: service card/detail UI.
+- `lib/`: shared utilities including `robotxAdmin.ts`, `robotxServiceCategories.ts`, `writeGuard.ts`, `prismadb.ts`.
+- Database: Supabase Postgres via Prisma (`prisma/schema.prisma`).
+- Auth: NextAuth with Prisma adapter and admin allowlist by `ROBOTX_ADMIN_EMAILS`.
 
 ## Canonical Service Taxonomy
 - Allowed service categories (exact labels):
@@ -16,6 +42,7 @@
   - `warehouse`
   - `restaurant`
 - No additional categories without explicit product request.
+- If other docs mention 4 categories, treat that as stale unless this file is explicitly updated.
 
 ## Strict Terminology Map (Mandatory)
 Use this map in user-facing copy first, then variable naming when practical and safe.
@@ -49,6 +76,7 @@ Hard rule:
 - Non-admin users must not create, edit, or delete services.
 - Admin gating default: `ROBOTX_ADMIN_EMAILS` environment variable (comma-separated email allowlist).
 - Enforce authorization at API layer even if UI hides controls.
+- Keep `RentModal` mounted for admins only (currently controlled from `app/layout.tsx`).
 
 ## Supabase Control Contract
 - Codex can operate Supabase for this repo when the following environment variables are set:
@@ -74,6 +102,28 @@ Hard rule:
   - Never print credential values in chat/log summaries.
   - Keep service-role usage server-side only.
 
+## Environment Variables (Operational)
+- Core app:
+  - `DATABASE_URL`
+  - `ROBOTX_ADMIN_EMAILS`
+  - `NEXTAUTH_SECRET`
+  - `NEXTAUTH_URL`
+- Cloudinary:
+  - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
+  - `CLOUDINARY_API_KEY`
+  - `CLOUDINARY_API_SECRET`
+  - `CLOUDINARY_URL`
+- Supabase/migrations:
+  - `SUPABASE_PROJECT_REF`
+  - `SUPABASE_ACCESS_TOKEN`
+  - `SUPABASE_DB_PASSWORD`
+  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_URL`
+  - `DB_MIGRATION_READ_ONLY` (`"true"` blocks write API routes via `lib/writeGuard.ts`)
+- Legacy one-time migration:
+  - `MONGODB_MIGRATION_URI`
+  - `MONGODB_MIGRATION_DB`
+
 ## Routing and UX Rules
 - Keep existing route skeleton in MVP (for example `/`, `/listings/[listingId]`, `/api/listings`, `/api/reservations`).
 - Rebrand labels/copy first; defer route renaming.
@@ -85,6 +135,12 @@ Hard rule:
 - Replace legacy accent colors (for example rose/coral/indigo/blue) with neutral grayscale equivalents.
 - Prefer centralized Tailwind/CSS tokens for neutral palette updates instead of scattered hardcoded values.
 - Do not introduce non-neutral theme colors unless there is an explicit product request in the task thread.
+
+## Cloudinary Video Management
+- Cloudinary is used for both images and videos.
+- Do not commit local video files into git (for example `public/videos/*.mp4|.mov|.webm`).
+- Delivery URL pattern:
+  - `https://res.cloudinary.com/<cloud>/video/upload/q_auto,f_auto/<public_id>.mp4`
 
 ## Definition of Done for Rebrand Tasks
 - All visible Airbnb wording removed.
@@ -106,3 +162,6 @@ Hard rule:
 - Catalog model: RobotX-managed.
 - Service area model: city/region coverage.
 - Any role model beyond `ROBOTX_ADMIN_EMAILS` is deferred to phase 2.
+
+## Skills
+- Use `/robotx-rebrand-migration` for terminology cleanup, category filter updates, theme normalization, admin-write enforcement, and Supabase operations tied to rebrand work.
