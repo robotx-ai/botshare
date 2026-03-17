@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Identity
 
-**RobotX Share** (`robotxshare.com`) is a robot service rental booking platform. The `AGENTS.md` file contains the authoritative product and terminology rules; always consult it for any user-facing copy decisions.
+**BotShare** (`botsharing.us`) is a robot service rental booking platform. The `AGENTS.md` file contains the authoritative product and terminology rules; always consult it for any user-facing copy decisions.
 
 A secondary commerce domain, `robotxshop.com`, exists as a CTA cross-link only — there is no shared auth/cart between the two.
 
@@ -18,28 +18,16 @@ npm run lint         # ESLint check (must pass before any PR/merge)
 
 ## Deployment
 
-This repo deploys to **two separate Netlify sites** from a single codebase. Each site uses its own Supabase database via Netlify environment variables.
-
-| Site | Domain | Supabase Project |
-|------|--------|-----------------|
-| robotx-share | robotxshare.com | `ncqmdyjchvmksxprgiut` |
-| botshare | botsharing.us | `jylxrvwxsjehthsqswib` |
+This repo deploys to **botsharing.us** (Netlify site `147defb9`, Supabase project `jylxrvwxsjehthsqswib`).
 
 ```bash
-# Preview deploys (safe — no live site impact)
-npm run deploy:robotx         # robotx-share preview
-npm run deploy:botshare       # botshare preview
-npm run deploy:all            # both preview
-
-# Production deploys
-npm run deploy:robotx:prod    # robotx-share live
-npm run deploy:botshare:prod  # botshare live
-npm run deploy:all:prod       # both live
+npm run deploy:preview   # Preview deploy (safe — no live site impact)
+npm run deploy:prod      # Production deploy
 ```
 
-**Default:** always deploy preview first; use `:prod` only when verified.
+**Default:** always deploy preview first; use `deploy:prod` only when verified.
 
-Each Netlify site manages its own env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the Netlify dashboard. The `.env` file is for local dev only.
+Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the site dashboard. The `.env` file is for local dev only.
 
 ## Architecture
 
