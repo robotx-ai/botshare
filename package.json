@@ -13,8 +13,12 @@
     "db:migrate:verify": "node scripts/verify-migration.js",
     "db:seed": "prisma db seed",
     "build:netlify": "prisma generate && next build",
-    "deploy:preview": "netlify build && netlify deploy",
-    "deploy:prod": "netlify build && netlify deploy --prod"
+    "deploy:robotx": "netlify build && netlify deploy --site 288834e5-4fa2-40b6-bc2b-ab686e063887",
+    "deploy:robotx:prod": "netlify build && netlify deploy --prod --site 288834e5-4fa2-40b6-bc2b-ab686e063887",
+    "deploy:botshare": "netlify build && netlify deploy --site 147defb9-131c-42ca-8375-37ebc8ba5531",
+    "deploy:botshare:prod": "netlify build && netlify deploy --prod --site 147defb9-131c-42ca-8375-37ebc8ba5531",
+    "deploy:all": "npm run deploy:robotx && npm run deploy:botshare",
+    "deploy:all:prod": "npm run deploy:robotx:prod && npm run deploy:botshare:prod"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
