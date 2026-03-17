@@ -42,9 +42,6 @@ Prioritize these files for RobotX migration tasks.
   - Semantics only: `Listing.category`, `Listing.price`, `locationValue` reinterpretation.
 
 ## Supabase operations context
-- `/Users/jasonliu/Github/robotx-share/docs/supabase-cutover-runbook.md`
-  - Source runbook for migration/cutover steps and permissions checks.
-- `/Users/jasonliu/Github/robotx-share/scripts/migrate-mongo-to-postgres.js`
-  - Data migration entrypoint tied to Supabase Postgres cutover.
-- `/Users/jasonliu/Github/robotx-share/scripts/verify-migration.js`
-  - Verification script for migration correctness before and after changes.
+- `/Users/jasonliu/Github/robotx-share/.env.example`
+  - Template for local dev env vars. Production env vars live in Netlify dashboard per site.
+- See `references/supabase-operations.md` for multi-project setup (robotx-share + botshare).

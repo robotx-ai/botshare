@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Identity
 
-**RobotX Share** (`robotxshare.com`) is a robot service rental booking platform — not a home/property rental site. It was originally an Airbnb clone and is being migrated to the RobotX brand. The `AGENTS.md` file contains the authoritative product and terminology rules; always consult it for any user-facing copy decisions.
+**RobotX Share** (`robotxshare.com`) is a robot service rental booking platform. The `AGENTS.md` file contains the authoritative product and terminology rules; always consult it for any user-facing copy decisions.
 
 A secondary commerce domain, `robotxshop.com`, exists as a CTA cross-link only — there is no shared auth/cart between the two.
 
@@ -14,12 +14,32 @@ A secondary commerce domain, `robotxshop.com`, exists as a CTA cross-link only �
 npm run dev          # Start dev server on http://localhost:3000
 npm run build        # Production build
 npm run lint         # ESLint check (must pass before any PR/merge)
-
-# One-time Supabase migration utilities
-npm run db:migrate:sql     # Generate migration SQL from Prisma schema
-npm run db:migrate:data    # Copy data from MongoDB to Postgres
-npm run db:migrate:verify  # Verify migration integrity
 ```
+
+## Deployment
+
+This repo deploys to **two separate Netlify sites** from a single codebase. Each site uses its own Supabase database via Netlify environment variables.
+
+| Site | Domain | Supabase Project |
+|------|--------|-----------------|
+| robotx-share | robotxshare.com | `ncqmdyjchvmksxprgiut` |
+| botshare | botsharing.us | `jylxrvwxsjehthsqswib` |
+
+```bash
+# Preview deploys (safe — no live site impact)
+npm run deploy:robotx         # robotx-share preview
+npm run deploy:botshare       # botshare preview
+npm run deploy:all            # both preview
+
+# Production deploys
+npm run deploy:robotx:prod    # robotx-share live
+npm run deploy:botshare:prod  # botshare live
+npm run deploy:all:prod       # both live
+```
+
+**Default:** always deploy preview first; use `:prod` only when verified.
+
+Each Netlify site manages its own env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the Netlify dashboard. The `.env` file is for local dev only.
 
 ## Architecture
 
@@ -59,7 +79,7 @@ npm run db:migrate:verify  # Verify migration integrity
 
 Internal variable names and route paths may keep legacy names during MVP for compatibility.
 
-## Service Categories (Canonical — Do Not Add More Without Explicit Request)
+## Service Categories (Canonical — Do Not Add Without Explicit Request)
 
 - `Showcase & Performance` (slug: `showcase-performance`)
 - `Warehouse` (slug: `warehouse`)
@@ -77,15 +97,14 @@ Source of truth: `lib/robotxServiceCategories.ts`
 
 User-facing UI must use only **white, gray, and black**. Replace any legacy rose/coral/indigo/blue accent colors with neutral grayscale Tailwind classes. Prefer updating centralized Tailwind tokens over scattered hardcoded values.
 
-## MVP Guardrails
+## Schema Guardrails
 
-- Do not redesign the Prisma schema during the MVP rebrand phase.
+- Do not redesign the Prisma schema without explicit request.
 - Keep existing route shapes (`/listings/[listingId]`, `/api/listings`, `/api/reservations`, etc.).
-- `Listing.category` → one of the 4 RobotX service categories.
+- `Listing.category` → one of the 3 RobotX service categories.
 - `Listing.price` → per-day service price.
 - `locationValue` → service coverage city/region.
-- `guestCount`, `roomCount`, `bathroomCount` are legacy compatibility fields; do not repurpose in MVP.
-- `DB_MIGRATION_READ_ONLY=true` env var will block all write API routes via `lib/writeGuard.ts`.
+- `guestCount`, `roomCount`, `bathroomCount` are legacy compatibility fields; do not repurpose.
 
 ## Environment Variables
 
@@ -96,9 +115,7 @@ Copy `.env.example` to `.env` and fill in values. Key vars:
 - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` — Cloudinary cloud name (used for image and video delivery)
 - `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — Cloudinary server-side credentials for uploads
 - `CLOUDINARY_URL` — shorthand `cloudinary://<key>:<secret>@<cloud>` (alternative to key/secret pair)
-- `SUPABASE_*` — for Supabase CLI operations and migration scripts
-- `MONGODB_MIGRATION_URI`, `MONGODB_MIGRATION_DB` — one-time migration source (legacy)
-- `DB_MIGRATION_READ_ONLY` — set to `"true"` during cutover to block writes
+- `SUPABASE_*` — for Supabase CLI operations
 
 ## Cloudinary Video Management
 

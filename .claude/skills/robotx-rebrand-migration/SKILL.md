@@ -1,29 +1,25 @@
 ---
 name: robotx-rebrand-migration
-description: Deterministic workflow for migrating this repo from Airbnb-style copy and taxonomy to RobotX service rental, including strict terminology enforcement, category constraints, white/gray/black theme color normalization, admin-write policy, and regression validation.
+description: Deterministic workflow for maintaining RobotX service rental platform standards, including terminology enforcement, category constraints, white/gray/black theme color normalization, admin-write policy, and regression validation.
 ---
 
-# RobotX Rebrand Migration
+# RobotX Platform Standards
 
 ## When to use this skill
 Use this skill when any request includes:
-- Rebranding Airbnb-style UX/copy to RobotX service rental language.
 - Updating service taxonomy, category filters, booking copy, or service detail text.
 - Updating or normalizing UI theme colors to white/gray/black.
 - Adding or validating `robotxshop.com` cross-link placements.
 - Enforcing RobotX admin-only mutation rules for service catalog endpoints.
 - Running Supabase checks/migrations/policies for this repo.
-- Running migration QA checks to detect regressions in wording, taxonomy, or authorization.
+- Running QA checks to detect regressions in wording, taxonomy, or authorization.
 
 ## Workflow
 Follow this sequence unless the user requests a narrower scope.
 
-### 1. Scan legacy wording
+### 1. Check for terminology drift
 - Run `scripts/find_legacy_terms.sh <repo_path>`.
-- Review hits and classify:
-  - customer-facing copy (must change now)
-  - internal identifiers (change only when low-risk)
-  - historical docs (change if still user-facing or onboarding-critical)
+- Review any hits and fix customer-facing copy immediately.
 
 ### 2. Update taxonomy sources
 - Canonical categories are fixed to:
@@ -64,6 +60,10 @@ Follow this sequence unless the user requests a narrower scope.
   - `npm run lint`
   - `npm run build`
 - Execute smoke scenarios from `references/qa-checklist.md`.
+- Deploy to preview before promoting to production:
+  - `npm run deploy:robotx` — preview robotx-share
+  - `npm run deploy:botshare` — preview botshare
+  - Use `:prod` variants only after preview is verified.
 
 ### 8. Supabase operations (when requested)
 - Confirm env readiness with `scripts/check_supabase_env.sh <repo_path>`.
@@ -78,13 +78,13 @@ Provide:
 - unresolved risks or deferred items (especially anything in out-of-scope list)
 
 ## Rules
-- Preserve existing route and API paths in MVP.
+- Preserve existing route and API paths.
 - Do not run schema migrations unless explicitly requested.
-- Keep Prisma models structurally unchanged in MVP.
-- `Listing.category` semantics must map to one of the 4 RobotX services.
+- Keep Prisma models structurally unchanged unless explicitly requested.
+- `Listing.category` must map to one of the 3 RobotX service categories.
 - `Listing.price` is per-day service pricing.
 - `locationValue` is service coverage area.
-- No Airbnb wording in new user-facing copy.
+- No banned terms in user-facing copy (see `references/term-map.md`).
 - Theme colors in user-facing UI must stay within white/gray/black unless explicitly requested otherwise.
 - Never expose Supabase secret values in outputs.
 

@@ -32,5 +32,5 @@ These should not appear in new user-facing copy:
 
 ## Naming guidance for code
 - Prefer semantic naming in new code (`service`, `booking`) where safe.
-- For MVP, route names and DB field names may stay legacy for compatibility.
-- Do not rename stable API paths solely for terminology cleanup during MVP.
+- Route names and DB field names may stay legacy for compatibility.
+- Do not rename stable API paths solely for terminology cleanup.

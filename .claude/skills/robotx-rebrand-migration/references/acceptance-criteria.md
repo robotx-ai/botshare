@@ -3,7 +3,7 @@
 A migration task is complete only if all criteria below pass.
 
 ## 1. Taxonomy
-- Service taxonomy is constrained to exactly:
+- Service taxonomy is constrained to:
   - `Showcase & Performance`
   - `Warehouse`
   - `Restaurant`
@@ -23,7 +23,7 @@ A migration task is complete only if all criteria below pass.
 ## 4. Booking behavior
 - Date-range booking remains functional.
 - Total price calculations remain correct for day-based booking windows.
-- Existing route/API shapes remain unchanged in MVP.
+- Existing route/API shapes remain unchanged.
 
 ## 5. Regression safety
 - `npm run lint` passes.
@@ -33,11 +33,10 @@ A migration task is complete only if all criteria below pass.
 ## 6. Branding and domain linkage
 - `robotxshare.com` branding is visible in primary app framing.
 - `robotxshop.com` appears as a visible CTA in navbar/footer.
-- Integration remains cross-link only in MVP.
+- Integration is cross-link only (no shared auth/cart).
 
 ## 7. Scope compliance
 - No Prisma schema redesign included unless explicitly requested.
-- No hourly scheduling implementation included.
 - No multi-provider marketplace features added.
 
 ## 8. Supabase operational readiness
