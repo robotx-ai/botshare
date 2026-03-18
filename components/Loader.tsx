@@ -15,9 +15,9 @@ function Loader({}: Props) {
     >
       <div className="px-4 py-12">
         <div className="rounded relative bg-white py-12">
-          <div className="rounded-full bg-robotx-subtle w-[177px] h-[177px] relative flex justify-center items-center mx-auto animate-spin">
+          <div className="rounded-full bg-brand-subtle w-[177px] h-[177px] relative flex justify-center items-center mx-auto animate-spin">
             <svg
-              className="absolute top-0 0 left-0 text-robotx"
+              className="absolute top-0 0 left-0 text-brand"
               width={177}
               height={177}
               viewBox="0 0 177 177"

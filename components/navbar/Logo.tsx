@@ -16,8 +16,8 @@ function Logo({ transparent = false }: Props) {
       <Image
         alt="logo"
         className={`hidden md:block cursor-pointer transition-all duration-300 ${transparent ? "brightness-0 invert" : ""}`}
-        height="100"
-        width="100"
+        height="130"
+        width="130"
         src="/Botsharing_Logo.png"
       />
     </div>

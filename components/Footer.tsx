@@ -11,8 +11,8 @@ function Footer({}: Props) {
 
   const itemData = [
     [
-      "ROBOTX SHARE",
-      "About RobotX",
+      "BOTSHARING US",
+      "About BotSharing US",
       "Service categories",
       "Company updates",
       "Careers",
@@ -21,7 +21,7 @@ function Footer({}: Props) {
     [
       "Support",
       "Help Center",
-      "RobotX Service Assurance",
+      "BotSharing US Service Assurance",
       "Booking options",
       "Safety information",
       "Report an issue",
@@ -32,14 +32,6 @@ function Footer({}: Props) {
       "Warehouse",
       "Restaurant",
       "Deployment guides",
-    ],
-    [
-      "RobotX Store",
-      "Shop at robotxshop.com",
-      "Robot accessories",
-      "Maintenance plans",
-      "Enterprise sales",
-      "Developer kits",
     ],
   ];
 
@@ -57,18 +49,10 @@ function Footer({}: Props) {
 
   return (
     <ClientOnly>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-y-10 px-32 py-14 bg-gray-100 text-gray-600">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-10 px-32 py-14 bg-gray-100 text-gray-600">
         {footerColumns}
         <div className="flex flex-col gap-1 text-sm">
           <p>{country}</p>
-          <a
-            href="https://robotxshop.com"
-            target="_blank"
-            rel="noreferrer"
-            className="font-semibold text-gray-800 underline"
-          >
-            Visit robotxshop.com
-          </a>
         </div>
       </div>
     </ClientOnly>

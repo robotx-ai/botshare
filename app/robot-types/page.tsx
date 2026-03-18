@@ -30,7 +30,7 @@ export default async function RobotTypesPage() {
         <div className="pt-10 md:pt-16">
           <Heading
             title="Browse Robot Types"
-            subtitle="Compare robot models by 4-hour and per-day pricing. Per-day booking gives the best value for longer deployments."
+            subtitle="Compare robot models by per-day pricing."
           />
         </div>
 
@@ -70,22 +70,12 @@ export default async function RobotTypesPage() {
                 </div>
 
                 <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-neutral-500">From 4 hours</span>
-                    <span className="font-semibold text-black">
-                      ${robot.fourHourPrice}
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-base">
+                  <div className="flex items-center justify-between text-base">
                     <span className="font-semibold text-black">Per day</span>
                     <span className="text-xl font-bold text-black">
                       ${robot.dayPrice}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs text-neutral-500">
-                    Per-day booking saves about {robot.dailySavingsPercent}% vs
-                    six separate 4-hour blocks.
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">

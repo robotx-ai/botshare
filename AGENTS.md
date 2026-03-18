@@ -2,8 +2,6 @@
 
 ## Product Identity
 - Primary brand/domain: `botsharing.us` (robot service rental bookings).
-- Secondary domain: `robotxshop.com` (robot sales commerce).
-- `robotxshop.com` is CTA cross-link only in MVP; no shared checkout/cart/auth integration.
 - Do not present this product as Airbnb, home rental, or property rental.
 - If any internal doc conflicts on branding/taxonomy, this file is the source of truth for agent behavior.
 
@@ -28,9 +26,9 @@ npm run db:migrate:verify
 - `components/modals/`: modal dialogs (Login, Register, RentModal, Search).
 - `components/navbar/`: navbar, categories filter, search, user menu.
 - `components/listing/`: service card/detail UI.
-- `lib/`: shared utilities including `robotxAdmin.ts`, `robotxServiceCategories.ts`, `writeGuard.ts`, `prismadb.ts`.
+- `lib/`: shared utilities including `adminAuth.ts`, `serviceCategories.ts`, `writeGuard.ts`, `prismadb.ts`.
 - Database: Supabase Postgres via Prisma (`prisma/schema.prisma`).
-- Auth: NextAuth with Prisma adapter and admin allowlist by `ROBOTX_ADMIN_EMAILS`.
+- Auth: NextAuth with Prisma adapter and admin allowlist by `ADMIN_EMAILS`.
 
 ## Canonical Service Taxonomy
 - Allowed service categories (exact labels):
@@ -50,12 +48,12 @@ Use this map in user-facing copy first, then variable naming when practical and 
 | Legacy term | Canonical term |
 | --- | --- |
 | listing | service |
-| host | RobotX or service operator |
+| host | service operator |
 | guest | customer |
 | home/place/property | service package or deployment |
 | reservation | booking |
 | per night | per day |
-| AirCover | RobotX Service Assurance |
+| AirCover | BotSharing US Service Assurance |
 
 Hard rule:
 - Reject PRs that introduce new Airbnb wording in user-facing copy.
@@ -64,7 +62,7 @@ Hard rule:
 - No Prisma schema redesign in MVP rebrand phase.
 - Keep existing route shapes and DB fields for compatibility.
 - Reinterpret semantics in-place:
-  - `Listing.category` must be one of the 3 RobotX services.
+  - `Listing.category` must be one of the 3 service categories.
   - `Listing.price` means per-day service price.
   - `locationValue` means service coverage city/region.
 - Existing fields `guestCount`, `roomCount`, and `bathroomCount` are legacy compatibility fields.
@@ -72,9 +70,9 @@ Hard rule:
 - Prefer UI/copy/validation remap over DB migration during MVP.
 
 ## Access Control Rules
-- Catalog is RobotX-managed only in MVP.
+- Catalog is admin-managed only in MVP.
 - Non-admin users must not create, edit, or delete services.
-- Admin gating default: `ROBOTX_ADMIN_EMAILS` environment variable (comma-separated email allowlist).
+- Admin gating default: `ADMIN_EMAILS` environment variable (comma-separated email allowlist).
 - Enforce authorization at API layer even if UI hides controls.
 - Keep `RentModal` mounted for admins only (currently controlled from `app/layout.tsx`).
 
@@ -105,7 +103,7 @@ Hard rule:
 ## Environment Variables (Operational)
 - Core app:
   - `DATABASE_URL`
-  - `ROBOTX_ADMIN_EMAILS`
+  - `ADMIN_EMAILS`
   - `NEXTAUTH_SECRET`
   - `NEXTAUTH_URL`
 - Cloudinary:
@@ -127,7 +125,6 @@ Hard rule:
 ## Routing and UX Rules
 - Keep existing route skeleton in MVP (for example `/`, `/listings/[listingId]`, `/api/listings`, `/api/reservations`).
 - Rebrand labels/copy first; defer route renaming.
-- Ensure visible cross-link CTA to `robotxshop.com` in navbar and footer.
 - Keep location/date filtering flow, but wording must describe service booking.
 
 ## Theme Color Policy (MVP)
@@ -144,7 +141,7 @@ Hard rule:
 
 ## Definition of Done for Rebrand Tasks
 - All visible Airbnb wording removed.
-- Category filters show exactly 3 RobotX services.
+- Category filters show exactly 3 service categories.
 - Non-admin cannot access create/edit/delete service flows.
 - Theme colors use only white/gray/black across user-facing UI in MVP scope.
 - `npm run lint` passes.
@@ -152,16 +149,13 @@ Hard rule:
 - Manual smoke checklist completed (home browse, detail, booking flow, auth flow, favorites/trips/reservations pages).
 
 ## Out of Scope (MVP)
-- Unified auth/cart between `botsharing.us` and `robotxshop.com`.
 - Hourly/time-slot scheduling.
 - Multi-provider marketplace model.
 - DB schema migration for service-specific fields.
 
 ## Working Defaults
 - Booking model: date range + day rate.
-- Catalog model: RobotX-managed.
+- Catalog model: admin-managed.
 - Service area model: city/region coverage.
-- Any role model beyond `ROBOTX_ADMIN_EMAILS` is deferred to phase 2.
+- Any role model beyond `ADMIN_EMAILS` is deferred to phase 2.
 
-## Skills
-- Use `/robotx-rebrand-migration` for terminology cleanup, category filter updates, theme normalization, admin-write enforcement, and Supabase operations tied to rebrand work.

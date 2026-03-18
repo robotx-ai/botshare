@@ -42,14 +42,14 @@ function buildDescription(scenario) {
 
 async function main() {
   // Look up admin user
-  const adminEmails = (process.env.ROBOTX_ADMIN_EMAILS || "")
+  const adminEmails = (process.env.ADMIN_EMAILS || "")
     .split(",")
     .map((e) => e.trim())
     .filter(Boolean);
 
   if (adminEmails.length === 0) {
     throw new Error(
-      "ROBOTX_ADMIN_EMAILS env var is not set. Cannot determine admin user."
+      "ADMIN_EMAILS env var is not set. Cannot determine admin user."
     );
   }
 
@@ -59,7 +59,7 @@ async function main() {
 
   if (!adminUser) {
     throw new Error(
-      `No user found matching ROBOTX_ADMIN_EMAILS: ${adminEmails.join(", ")}`
+      `No user found matching ADMIN_EMAILS: ${adminEmails.join(", ")}`
     );
   }
 

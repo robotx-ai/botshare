@@ -33,7 +33,7 @@ function ListingCard({
   const { getByValue } = useCountries();
 
   const location = getByValue(data.locationValue);
-  const serviceDetail = data.title?.trim() || "RobotX Service";
+  const serviceDetail = data.title?.trim() || "BotSharing US Service";
   const locationLabel = [location?.region, location?.label]
     .filter(Boolean)
     .join(", ");

@@ -36,7 +36,7 @@ export default async function ServicesPage({ searchParams }: ServicesProps) {
         <div className="pt-10 md:pt-16">
           <Heading
             title="Explore Bundle Deals"
-            subtitle="Browse RobotX bundle service packages by category, coverage area, robot model, and booking dates."
+            subtitle="Browse BotSharing US service packages by category, coverage area, robot model, and booking dates."
           />
         </div>
         <div className="pt-10 grid grid-cols-1 gap-8 overflow-x-hidden sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">

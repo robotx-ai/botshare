@@ -16,7 +16,7 @@ function ListingCTA() {
         href="#"
         className="inline-block bg-white text-black text-sm font-semibold px-6 py-3 rounded-lg hover:bg-neutral-100 transition"
       >
-        Contact RobotX
+        Contact BotSharing US
       </a>
     </div>
   );

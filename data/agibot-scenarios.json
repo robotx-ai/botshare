@@ -528,6 +528,53 @@
     }
   },
   {
+    "id": "showcase-a2-lite",
+    "title": "Showcase A2 Lite",
+    "description": "Deploy the AGIBot A2 Lite for live showcase events — demonstrations, meet-and-greets, and interactive experiences that highlight next-generation humanoid robotics.",
+    "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/showcase-a2-lite",
+    "primaryRobot": "AGIBot A2 Lite",
+    "pricing": {
+      "silver": 500,
+      "gold": 700,
+      "platinum": 1000
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBot A2 Lite",
+        "hours": 4,
+        "features": [
+          "4h deployment window",
+          "Pre-programmed showcase routines",
+          "Basic audience interaction",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBot A2 Lite",
+        "hours": 6,
+        "features": [
+          "6h deployment window",
+          "Custom showcase script",
+          "Interactive Q&A capability",
+          "20-day consultation",
+          "On-site technician"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBot A2 Lite",
+        "hours": 8,
+        "features": [
+          "8h deployment window",
+          "Fully personalized showcase experience",
+          "Multi-zone coverage",
+          "1-month content & route design",
+          "2 dry-run rehearsals",
+          "Dedicated support staff"
+        ]
+      }
+    }
+  },
+  {
     "id": "cleaning",
     "title": "Cleaning",
     "description": "Deploy AGIBot cleaning robots to handle routine floor care with consistent coverage, remote support, and operational reporting for commercial environments.",

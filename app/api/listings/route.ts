@@ -1,7 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
-import { canManageServices } from "@/lib/robotxAdmin";
-import { isRobotxServiceCategory } from "@/lib/robotxServiceCategories";
+import { canManageServices } from "@/lib/adminAuth";
+import { isServiceCategory } from "@/lib/serviceCategories";
 import { isServiceAreaValue } from "@/lib/serviceLocation";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 import { NextResponse } from "next/server";
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!isRobotxServiceCategory(category)) {
+  if (!isServiceCategory(category)) {
     return NextResponse.json(
       { error: "Invalid service category." },
       { status: 400 }

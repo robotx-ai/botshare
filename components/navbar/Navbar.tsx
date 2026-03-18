@@ -53,19 +53,7 @@ function Navbar({ currentUser, isAdmin = false }: Props) {
               >
                 Robot Types
               </Link>
-              <a
-                href="https://robotxshop.com"
-                target="_blank"
-                rel="noreferrer"
-                className={`hidden md:block text-sm font-semibold py-2 px-4 rounded-full border transition ${
-                  transparent
-                    ? "border-white/70 text-white hover:bg-white/10"
-                    : "border-black hover:bg-neutral-100"
-                }`}
-              >
-                RobotX Store
-              </a>
-              <UserMenu currentUser={currentUser} isAdmin={isAdmin} transparent={transparent} />
+<UserMenu currentUser={currentUser} isAdmin={isAdmin} transparent={transparent} />
             </div>
           </div>
         </Container>

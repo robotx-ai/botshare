@@ -1,6 +1,6 @@
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import { isRobotxAdminEmail } from "@/lib/robotxAdmin";
+import { isAdminEmail } from "@/lib/adminAuth";
 import getCurrentUser from "../actions/getCurrentUser";
 import getListings from "../actions/getListings";
 import PropertiesClient from "./PropertiesClient";
@@ -18,12 +18,12 @@ const PropertiesPage = async (props: Props) => {
     );
   }
 
-  if (!isRobotxAdminEmail(currentUser.email)) {
+  if (!isAdminEmail(currentUser.email)) {
     return (
       <ClientOnly>
         <EmptyState
           title="Admin access required"
-          subtitle="Only RobotX admins can manage service publishing."
+          subtitle="Only admins can manage service publishing."
         />
       </ClientOnly>
     );

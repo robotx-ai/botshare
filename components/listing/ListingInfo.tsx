@@ -70,8 +70,8 @@ function ListingInfo({
       )}
       <hr />
       <div className="flex flex-col">
-        <p className="text-4xl font-bold text-robotx">
-          RobotX <span className="text-black">Service Assurance</span>
+        <p className="text-4xl font-bold text-brand">
+          BotSharing US <span className="text-black">Service Assurance</span>
         </p>
         <p className="text-neutral-500 pt-3">
           Every booking includes support coverage for schedule changes,

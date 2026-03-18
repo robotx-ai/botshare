@@ -78,8 +78,8 @@ function RegisterModal() {
   const step1Body = (
     <div className="flex flex-col gap-6">
       <Heading
-        title="Welcome to RobotX Share"
-        subtitle="How would you like to use RobotX Share?"
+        title="Welcome to BotSharing US"
+        subtitle="How would you like to use BotSharing US?"
         center
       />
       <div className="grid grid-cols-2 gap-4">
@@ -113,7 +113,7 @@ function RegisterModal() {
     <div className="flex flex-col gap-4">
       <Heading
         title={userType === "PROVIDER" ? "Create a provider account" : "Create an account"}
-        subtitle={userType === "PROVIDER" ? "List your robot services on RobotX Share" : "Book robot services with RobotX Share"}
+        subtitle={userType === "PROVIDER" ? "List your robot services on BotSharing US" : "Book robot services with BotSharing US"}
         center
       />
       <Input

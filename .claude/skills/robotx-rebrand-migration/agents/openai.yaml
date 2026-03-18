@@ -1,7 +1,0 @@
-interface:
-  display_name: "RobotX Rebrand Migration"
-  short_description: "Rebrand workflow with white/gray/black theme and Supabase safety checks"
-  default_prompt: "Use $robotx-rebrand-migration to rebrand this repo to RobotX service rental, normalize UI colors to white/gray/black, and run Supabase-safe policy checks."
-
-policy:
-  allow_implicit_invocation: true

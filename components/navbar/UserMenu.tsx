@@ -102,10 +102,6 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                 )}
                 {isAdmin && <MenuItem onClick={() => { setIsOpen(false); onRent(); }} label="List a service" />}
                 <MenuItem
-                  onClick={() => { setIsOpen(false); window.open("https://robotxshop.com", "_blank"); }}
-                  label="Visit robotxshop.com"
-                />
-                <MenuItem
                   onClick={() => {
                     setIsOpen(false);
                     router.push("/robot-types");
@@ -123,10 +119,6 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                     router.push("/robot-types");
                   }}
                   label="Browse robot types"
-                />
-                <MenuItem
-                  onClick={() => { setIsOpen(false); window.open("https://robotxshop.com", "_blank"); }}
-                  label="Visit robotxshop.com"
                 />
                 <MenuItem onClick={() => { setIsOpen(false); registerModel.onClose(); loginModel.onOpen(); }} label="Login" />
                 <MenuItem onClick={() => { setIsOpen(false); loginModel.onClose(); registerModel.onOpen(); }} label="Sign up" />

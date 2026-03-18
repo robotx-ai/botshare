@@ -96,13 +96,13 @@ const SERVICES = [
 
 async function main() {
   const adminEmail =
-    (process.env.ROBOTX_ADMIN_EMAILS ?? "").split(",")[0].trim() ||
-    "seed@robotxshare.com";
+    (process.env.ADMIN_EMAILS ?? "").split(",")[0].trim() ||
+    "seed@botsharing.us";
 
   console.log(`Upserting seed admin user: ${adminEmail}`);
   const seedUser = await prisma.user.upsert({
     where: { email: adminEmail },
-    create: { email: adminEmail, name: "RobotX Admin" },
+    create: { email: adminEmail, name: "BotSharing US Admin" },
     update: {},
   });
 

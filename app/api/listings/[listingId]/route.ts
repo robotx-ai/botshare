@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
-import { canManageServices } from "@/lib/robotxAdmin";
+import { canManageServices } from "@/lib/adminAuth";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 
 interface IParams {

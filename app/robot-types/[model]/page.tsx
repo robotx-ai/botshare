@@ -42,7 +42,7 @@ const RobotTypeDetailPage = async ({ params }: { params: IParams }) => {
         <div className="mx-auto max-w-screen-lg pt-10 md:pt-16">
           <Heading
             title={robotType.model}
-            subtitle="Single Type Deal booking. Choose 4 hours or per-day rental and confirm instantly."
+            subtitle="Per-day single type deal. Confirm your dates and book instantly."
           />
 
           <div className="mt-8 flex flex-col gap-6">
@@ -79,7 +79,6 @@ const RobotTypeDetailPage = async ({ params }: { params: IParams }) => {
             <RobotTypeBookingClient
               model={robotType.model}
               dayPrice={robotType.dayPrice}
-              fourHourPrice={robotType.fourHourPrice}
               listingId={robotType.primaryListingId}
               reservations={reservations}
               currentUser={currentUser}

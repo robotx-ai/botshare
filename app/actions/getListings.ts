@@ -1,5 +1,5 @@
 import prisma from "@/lib/prismadb";
-import { isRobotxServiceCategory } from "@/lib/robotxServiceCategories";
+import { isServiceCategory } from "@/lib/serviceCategories";
 import { isServiceAreaValue } from "@/lib/serviceLocation";
 
 export interface IListingsParams {
@@ -33,7 +33,7 @@ export default async function getListings(params: IListingsParams) {
       query.userId = userId;
     }
 
-    if (category && !isRobotxServiceCategory(category)) {
+    if (category && !isServiceCategory(category)) {
       return [];
     }
 

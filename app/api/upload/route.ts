@@ -1,12 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import { isRobotxAdminEmail } from "@/lib/robotxAdmin";
+import { isAdminEmail } from "@/lib/adminAuth";
 
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser || !isRobotxAdminEmail(currentUser.email)) {
+  if (!currentUser || !isAdminEmail(currentUser.email)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 

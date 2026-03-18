@@ -73,7 +73,7 @@ export default function HeroCarousel() {
             <h1
               className={`${barlow.className} text-[2.75rem] font-extrabold uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl`}
             >
-              Book RobotX Services for
+              Book BotSharing US Services for
               {/* Animated service name — clip reveal */}
               <span className="mt-1 block overflow-hidden">
                 <AnimatePresence mode="wait">

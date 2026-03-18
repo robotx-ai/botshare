@@ -16,7 +16,7 @@ function Avatar({ src, userName }: Props) {
       .map((part) => part[0])
       .join("")
       .slice(0, 2)
-      .toUpperCase() || "RX";
+      .toUpperCase() || "BS";
 
   return (
     <div>
@@ -29,7 +29,7 @@ function Avatar({ src, userName }: Props) {
           src={src}
         />
       ) : userName ? (
-        <div className="rounded-full h-[30px] w-[30px] bg-robotx text-white text-xs font-semibold flex items-center justify-center">
+        <div className="rounded-full h-[30px] w-[30px] bg-brand text-white text-xs font-semibold flex items-center justify-center">
           {initials}
         </div>
       ) : (

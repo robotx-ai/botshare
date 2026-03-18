@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        robotx: {
+        brand: {
           DEFAULT: "#111827",
           muted: "#6b7280",
           subtle: "#e5e7eb",

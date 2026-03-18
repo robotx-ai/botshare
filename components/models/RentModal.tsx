@@ -140,7 +140,7 @@ function RentModal({}: Props) {
     <div className="flex flex-col gap-8">
       <Heading
         title="Which service type are you publishing?"
-        subtitle="Select a RobotX service category."
+        subtitle="Select a service category."
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700">
         {categories.map((item, index) => (
@@ -280,7 +280,7 @@ function RentModal({}: Props) {
     <Modal
       disabled={isLoading}
       isOpen={rentModel.isOpen}
-      title="Create a RobotX service"
+      title="Create a service"
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}

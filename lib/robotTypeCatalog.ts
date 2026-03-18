@@ -1,13 +1,18 @@
 import { safeListing } from "@/types";
 import {
-  computeDailySavingsVsFourHour,
-  computeFourHourPrice,
-} from "./rentalPricing";
-import {
   getRobotModelFromListing,
   normalizeRobotText,
   slugifyRobotModel,
 } from "./robotModel";
+
+const ROBOT_TYPE_DAY_PRICES: Record<string, number> = {
+  "AGIBot X2": 300,
+  "AGIBot X2 Ultra": 500,
+  "AGIBot A2 Lite": 500,
+  "AGIBot A2 Ultra": 800,
+  "AGIBot D1 Edu": 100,
+  "AGIBot D1 Ultra": 200,
+};
 
 export type RobotTypeCardData = {
   model: string;
@@ -15,8 +20,6 @@ export type RobotTypeCardData = {
   imageSrc: string;
   categories: string[];
   dayPrice: number;
-  fourHourPrice: number;
-  dailySavingsPercent: number;
   listingCount: number;
   primaryListingId: string;
 };
@@ -61,15 +64,12 @@ export function buildRobotTypeCatalog(listings: safeListing[]): RobotTypeCardDat
 
   return Array.from(grouped.entries())
     .map(([model, value]) => {
-      const fourHourPrice = computeFourHourPrice(value.dayPrice);
       return {
         model,
         modelSlug: slugifyRobotModel(model),
         imageSrc: value.imageSrc,
         categories: Array.from(value.categories).sort(),
-        dayPrice: value.dayPrice,
-        fourHourPrice,
-        dailySavingsPercent: computeDailySavingsVsFourHour(value.dayPrice),
+        dayPrice: ROBOT_TYPE_DAY_PRICES[model] ?? value.dayPrice,
         listingCount: value.listingCount,
         primaryListingId: value.primaryListingId,
       };

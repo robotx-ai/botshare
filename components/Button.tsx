@@ -25,8 +25,8 @@ function Button({
       disabled={disabled}
       onClick={onClick}
       className={`relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full ${
-        outline ? "bg-white" : "bg-robotx"
-      } ${outline ? "border-black" : "border-robotx"} ${
+        outline ? "bg-white" : "bg-brand"
+      } ${outline ? "border-black" : "border-brand"} ${
         outline ? "text-black" : "text-white"
       } ${small ? "text-sm" : "text-md"} ${small ? "py-1" : "py-3"} ${
         small ? "font-light" : "font-semibold"
@@ -35,7 +35,7 @@ function Button({
       {Icon && (
         <Icon
           size={24}
-          className={`absolute left-4 top-3 ${isColor && "text-robotx"}`}
+          className={`absolute left-4 top-3 ${isColor && "text-brand"}`}
         />
       )}
       {label}
