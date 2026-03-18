@@ -168,6 +168,12 @@ function RentModal({}: Props) {
           value={location}
           onChange={(value) => setCustomValue("location", value)}
         />
+        <Input
+          id="zipCode"
+          label="Zip Code (optional)"
+          register={register}
+          errors={errors}
+        />
         <Map
           center={location?.latlng ?? defaultServiceArea.latlng}
           locationValue={location?.value ?? defaultServiceArea.value}

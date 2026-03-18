@@ -29,6 +29,7 @@ type Props = {
       }
     | undefined;
   locationValue: string;
+  zipCode?: string;
   agibotScenario?: AgibotScenarioDetails | null;
 };
 
@@ -40,6 +41,7 @@ function ListingInfo({
   bathroomCount,
   category,
   locationValue,
+  zipCode,
   agibotScenario,
 }: Props) {
   const { getByValue } = useCountries();
@@ -165,7 +167,7 @@ function ListingInfo({
       <Offers />
       <hr />
       <p className="text-xl font-semibold">{`Service coverage area`}</p>
-      <Map center={coordinates} locationValue={locationValue} flagCode={flagCode} />
+      <Map center={coordinates} locationValue={locationValue} flagCode={flagCode} zipCode={zipCode} />
     </div>
   );
 }

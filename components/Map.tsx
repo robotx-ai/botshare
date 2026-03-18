@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Map, { Marker, NavigationControl, Source, Layer } from "react-map-gl/maplibre";
-import type { FillLayer, LineLayer } from "react-map-gl/maplibre";
+import type { MapRef, LayerProps } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Flag from "react-world-flags";
 import { getServiceAreaByValue } from "@/lib/serviceLocation";
@@ -10,7 +10,7 @@ import { getServiceAreaByValue } from "@/lib/serviceLocation";
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
 const MAP_STYLE = `https://api.maptiler.com/maps/dataviz/style.json?key=${MAPTILER_KEY}`;
 
-const fillLayer: FillLayer = {
+const fillLayer: LayerProps = {
   id: "service-area-fill",
   type: "fill",
   paint: {
@@ -19,7 +19,7 @@ const fillLayer: FillLayer = {
   },
 };
 
-const outlineLayer: LineLayer = {
+const outlineLayer: LayerProps = {
   id: "service-area-outline",
   type: "line",
   paint: {
@@ -34,10 +34,42 @@ type Props = {
   locationValue?: string;
   flagCode?: string;
   zoom?: number;
+  zipCode?: string;
 };
 
-function MapComponent({ center, locationValue, flagCode, zoom }: Props) {
+function MapComponent({ center, locationValue, flagCode, zoom, zipCode }: Props) {
   const [lat, lng] = center ?? [20, 0];
+  const [zipBoundary, setZipBoundary] = useState<GeoJSON.Feature | null>(null);
+  const mapRef = useRef<MapRef | null>(null);
+
+  useEffect(() => {
+    if (!zipCode) return;
+    setZipBoundary(null);
+    fetch(
+      `https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/1/query?where=ZCTA5%3D%27${encodeURIComponent(zipCode)}%27&outFields=ZCTA5&outSR=4326&f=geojson`
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        const feature = data.features?.[0];
+        if (feature?.geometry?.type === "Polygon" || feature?.geometry?.type === "MultiPolygon") {
+          setZipBoundary(feature);
+          // Fit map to zip boundary bounds
+          const rings: number[][][] =
+            feature.geometry.type === "Polygon"
+              ? feature.geometry.coordinates
+              : feature.geometry.coordinates.flat(1);
+          const allCoords = rings.flat();
+          const lngs = allCoords.map((c: number[]) => c[0]);
+          const lats = allCoords.map((c: number[]) => c[1]);
+          const west = Math.min(...lngs);
+          const east = Math.max(...lngs);
+          const south = Math.min(...lats);
+          const north = Math.max(...lats);
+          mapRef.current?.fitBounds([[west, south], [east, north]], { padding: 40, duration: 800 });
+        }
+      })
+      .catch(() => {});
+  }, [zipCode]);
 
   const serviceArea = locationValue ? getServiceAreaByValue(locationValue) : undefined;
   const bboxGeoJSON: GeoJSON.Feature<GeoJSON.Polygon> | null = serviceArea?.bbox
@@ -57,9 +89,12 @@ function MapComponent({ center, locationValue, flagCode, zoom }: Props) {
       }
     : null;
 
+  const boundaryData = zipBoundary ?? bboxGeoJSON;
+
   return (
     <div className="h-[35vh] rounded-lg overflow-hidden">
       <Map
+        ref={mapRef}
         initialViewState={{
           latitude: lat,
           longitude: lng,
@@ -71,8 +106,8 @@ function MapComponent({ center, locationValue, flagCode, zoom }: Props) {
         attributionControl={false}
       >
         <NavigationControl position="top-right" showCompass={false} />
-        {bboxGeoJSON && (
-          <Source id="service-area" type="geojson" data={bboxGeoJSON}>
+        {boundaryData && (
+          <Source id="service-area" type="geojson" data={boundaryData}>
             <Layer {...fillLayer} />
             <Layer {...outlineLayer} />
           </Source>

@@ -35,6 +35,7 @@ export async function POST(request: Request) {
     guestCount,
     location,
     price,
+    zipCode,
   } = body;
 
   if (!title || !description || !imageSrc) {
@@ -99,6 +100,7 @@ export async function POST(request: Request) {
       bathroomCount: parsedBathroomCount,
       guestCount: parsedGuestCount,
       locationValue: location.value,
+      ...(zipCode ? { zipCode: String(zipCode) } : {}),
       price: Math.floor(parsedPrice),
       userId: currentUser.id,
     },
