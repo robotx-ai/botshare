@@ -11,32 +11,6 @@ const VID =
 const SERVICES = [
   // ── Showcase & Performance ──
   {
-    title: "Unitree H1 — Humanoid Performer",
-    description:
-      "Full-size humanoid robot standing 1.8m tall with 43 degrees of freedom. Built for synchronized group choreography, grand openings, and live stage performances. Proven at large-scale cultural events with multi-unit coordination.",
-    imageSrc: `${CLD}/listing-unitree-h1`,
-    videoSrc: `${VID}/hero-showcase.mp4`,
-    category: "Showcase & Performance",
-    price: 650,
-    locationValue: "Los Angeles, CA",
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 500,
-  },
-  {
-    title: "Unitree Go2 — Quadruped Showcase",
-    description:
-      "Next-generation quadruped robot with embodied AI and autonomous terrain navigation. Draws crowds at tech showcases and exhibitions with fluid, lifelike movement. Suitable for indoor and outdoor event environments.",
-    imageSrc: `${CLD}/listing-unitree-go2`,
-    videoSrc: `${VID}/exhibition-bg.mp4`,
-    category: "Showcase & Performance",
-    price: 420,
-    locationValue: "San Diego, CA",
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 300,
-  },
-  {
     title: "AgiBot A2 — Humanoid Brand Ambassador",
     description:
       "1.75m humanoid robot with 40+ degrees of freedom and L4-level autonomous navigation. Delivers guided tours, product demos, and interactive brand experiences in multiple languages. Ideal for exhibitions, product launches, and retail activations.",
@@ -51,19 +25,6 @@ const SERVICES = [
   },
 
   // ── Warehouse ──
-  {
-    title: "Unitree B2 — Industrial Inspection Unit",
-    description:
-      "Industrial-grade quadruped robot built for demanding facility environments. Performs autonomous security patrols, equipment inspections, and hazard detection in warehouses, power facilities, and manufacturing plants. Operates 24/7 in challenging conditions.",
-    imageSrc: `${CLD}/listing-unitree-b2`,
-    videoSrc: `${VID}/hero-warehouse.mp4`,
-    category: "Warehouse",
-    price: 420,
-    locationValue: "Commerce, CA",
-    roomCount: 2,
-    bathroomCount: 2,
-    guestCount: 20,
-  },
   {
     title: "AgiBot G2 — Precision Assembly Robot",
     description:

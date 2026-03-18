@@ -27,7 +27,7 @@ const SERVICES = [
     description:
       "Deploy RobotX performers alongside live acts — from intimate stages to arena-scale productions.",
     href: "/services?category=Showcase+%26+Performance",
-    videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/showcase-bg.mp4",
+    videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/agibot-stage-performance.mp4",
     waveConfig: { frequency: 0.006, amplitude: 70, speed: 0.017, layers: 3 },
   },
   {

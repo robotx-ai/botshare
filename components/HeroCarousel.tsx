@@ -13,9 +13,8 @@ const barlow = Barlow_Condensed({
 });
 
 const slides = [
-  { videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/hero-showcase.mp4", label: "Performance Services" },
-  { videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/hero-restaurant.mp4", label: "Restaurant Services" },
-  { videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/hero-warehouse.mp4", label: "Warehouse Services" },
+  { videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/pepsi-bg.mp4", label: "Brand Promotion" },
+  { videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/paris-performance-bg.mp4", label: "Live Performance" },
 ];
 
 export default function HeroCarousel() {

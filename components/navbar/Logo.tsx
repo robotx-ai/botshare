@@ -18,7 +18,7 @@ function Logo({ transparent = false }: Props) {
         className={`hidden md:block cursor-pointer transition-all duration-300 ${transparent ? "brightness-0 invert" : ""}`}
         height="100"
         width="100"
-        src="/assets/robotx_logo.webp"
+        src="/Botsharing_Logo.png"
       />
     </div>
   );

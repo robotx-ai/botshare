@@ -130,7 +130,9 @@ https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/<public_id>.mp4
 **Current video assets:**
 | public_id | Component | Notes |
 |---|---|---|
-| `showcase-bg` | `components/ServiceShowcase.tsx` | Unitree G1 demo, 25s loop, 1080p |
+| `showcase-bg` | `components/ServiceShowcase.tsx` | AGIBot demo, 25s loop, 1080p |
+| `pepsi-bg` | `components/HeroCarousel.tsx` | Pepsi performance, 22s, hero slot 1 |
+| `paris-performance-bg` | `components/HeroCarousel.tsx` | Paris performance, 10s, hero slot 2 |
 
 ## RobotX Rebrand Migration Skill
 

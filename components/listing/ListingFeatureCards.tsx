@@ -18,7 +18,7 @@ const FEATURE_CARDS: Record<string, FeatureCard[]> = {
       title: "Fashion Show",
       bullets: ["Synchronized choreography", "Multi-robot runway", "On-site tech support"],
       emoji: "🎭",
-      imageSrc: `${CLD}/listing-unitree-h1`,
+      imageSrc: `${CLD}/listing-agibot-a2`,
     },
     {
       title: "Stage Co-Host",
@@ -30,7 +30,7 @@ const FEATURE_CARDS: Record<string, FeatureCard[]> = {
       title: "Corporate Gala",
       bullets: ["Autonomous navigation", "Facial recognition", "Guest interaction"],
       emoji: "🏢",
-      imageSrc: `${CLD}/listing-unitree-go2`,
+      imageSrc: `${CLD}/listing-agibot-a2`,
     },
     {
       title: "Gallery Guide",
@@ -44,7 +44,7 @@ const FEATURE_CARDS: Record<string, FeatureCard[]> = {
       title: "Inventory Patrol",
       bullets: ["Autonomous shelf scan", "Real-time stock alerts", "Route optimization"],
       emoji: "📦",
-      imageSrc: `${CLD}/listing-unitree-b2`,
+      imageSrc: `${CLD}/listing-agibot-g2`,
     },
     {
       title: "Pick Assist",
@@ -56,7 +56,7 @@ const FEATURE_CARDS: Record<string, FeatureCard[]> = {
       title: "Safety Monitor",
       bullets: ["Hazard detection", "Incident logging", "24/7 coverage"],
       emoji: "🦺",
-      imageSrc: `${CLD}/listing-unitree-b2`,
+      imageSrc: `${CLD}/listing-agibot-g2`,
     },
     {
       title: "Delivery Run",

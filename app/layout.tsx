@@ -12,9 +12,9 @@ import "../styles/globals.css";
 import getCurrentUser from "./actions/getCurrentUser";
 
 export const metadata = {
-  title: "RobotX Share",
-  description: "Robot service rental marketplace by RobotX",
-  icons: "/assets/robotx_logo.webp",
+  title: "BotShare — Robot Service Rentals",
+  description: "Book professional robot services for performances, events, restaurants, and warehouses.",
+  icons: "/favicon.ico",
 };
 
 const font = Nunito({

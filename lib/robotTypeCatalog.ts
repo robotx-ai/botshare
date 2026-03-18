@@ -33,7 +33,9 @@ export function buildRobotTypeCatalog(listings: safeListing[]): RobotTypeCardDat
     }
   >();
 
-  for (const listing of listings) {
+  const agibotListings = listings.filter((l) => /^agibot\s+/i.test(l.title));
+
+  for (const listing of agibotListings) {
     const model = getRobotModelFromListing(listing);
     const existing = grouped.get(model);
 
