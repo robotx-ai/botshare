@@ -61,9 +61,8 @@ Follow this sequence unless the user requests a narrower scope.
   - `npm run build`
 - Execute smoke scenarios from `references/qa-checklist.md`.
 - Deploy to preview before promoting to production:
-  - `npm run deploy:robotx` — preview robotx-share
-  - `npm run deploy:botshare` — preview botshare
-  - Use `:prod` variants only after preview is verified.
+  - `npm run deploy:preview` — preview deploy
+  - `npm run deploy:prod` — production deploy (only after preview is verified)
 
 ### 8. Supabase operations (when requested)
 - Confirm env readiness with `scripts/check_supabase_env.sh <repo_path>`.

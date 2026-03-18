@@ -5,9 +5,9 @@ Run these checks for each migration PR.
 ## Automated checks
 - `npm run lint`
 - `npm run build`
-- `scripts/find_legacy_terms.sh /Users/jasonliu/Github/robotx-share`
-- `scripts/validate_service_categories.sh /Users/jasonliu/Github/robotx-share`
-- `scripts/check_supabase_env.sh /Users/jasonliu/Github/robotx-share`
+- `scripts/find_legacy_terms.sh /Users/jasonliu/Github/botshare`
+- `scripts/validate_service_categories.sh /Users/jasonliu/Github/botshare`
+- `scripts/check_supabase_env.sh /Users/jasonliu/Github/botshare`
 
 ## Manual smoke checks
 1. Home page

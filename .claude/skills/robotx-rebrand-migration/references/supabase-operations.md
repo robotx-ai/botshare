@@ -21,17 +21,11 @@ Use `scripts/check_supabase_env.sh <repo_path>` before Supabase actions.
   - auth provider reset
 - Production-impacting operations require explicit in-thread approval.
 
-## Multi-project setup
-This repo deploys to two Supabase projects — one per Netlify site:
+## Project
+This repo targets Supabase project `jylxrvwxsjehthsqswib` (`botsharing.us`).
+Local `.env` should point to this project. Production env vars live in the Netlify dashboard for site `147defb9`.
 
-| Site | Supabase Project Ref | NEXTAUTH_URL |
-|------|----------------------|--------------|
-| robotx-share | `ncqmdyjchvmksxprgiut` | `https://robotxshare.com` |
-| botshare | `jylxrvwxsjehthsqswib` | `https://botsharing.us` |
-
-- Local `.env` targets one project at a time (developer's choice).
-- Each Netlify site carries its own `DATABASE_URL`, `SUPABASE_PROJECT_REF`, `SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` in the Netlify dashboard.
-- When running Supabase CLI or MCP operations, confirm which project ref is active before executing.
+- When running Supabase CLI or MCP operations, confirm `SUPABASE_PROJECT_REF=jylxrvwxsjehthsqswib` is active before executing.
 
 ## Integration notes for this repo
 - Prisma remains the schema source of truth in MVP.

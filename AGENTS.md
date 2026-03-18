@@ -1,7 +1,7 @@
-# RobotX Share Agent Playbook
+# BotShare Agent Playbook
 
 ## Product Identity
-- Primary brand/domain: `robotxshare.com` (robot service rental bookings).
+- Primary brand/domain: `botsharing.us` (robot service rental bookings).
 - Secondary domain: `robotxshop.com` (robot sales commerce).
 - `robotxshop.com` is CTA cross-link only in MVP; no shared checkout/cart/auth integration.
 - Do not present this product as Airbnb, home rental, or property rental.
@@ -152,7 +152,7 @@ Hard rule:
 - Manual smoke checklist completed (home browse, detail, booking flow, auth flow, favorites/trips/reservations pages).
 
 ## Out of Scope (MVP)
-- Unified auth/cart between `robotxshare.com` and `robotxshop.com`.
+- Unified auth/cart between `botsharing.us` and `robotxshop.com`.
 - Hourly/time-slot scheduling.
 - Multi-provider marketplace model.
 - DB schema migration for service-specific fields.

@@ -31,7 +31,7 @@ A migration task is complete only if all criteria below pass.
 - Home, detail, booking, favorites, trips/reservations, and auth flows continue to work.
 
 ## 6. Branding and domain linkage
-- `robotxshare.com` branding is visible in primary app framing.
+- `botsharing.us` branding is visible in primary app framing.
 - `robotxshop.com` appears as a visible CTA in navbar/footer.
 - Integration is cross-link only (no shared auth/cart).
 

@@ -2,7 +2,7 @@
 
 ## Canonical Product Framing
 - Product: RobotX service rental marketplace (single provider: RobotX).
-- Primary domain: `robotxshare.com`.
+- Primary domain: `botsharing.us`.
 - Secondary commerce domain: `robotxshop.com`.
 
 ## Canonical Service Categories
