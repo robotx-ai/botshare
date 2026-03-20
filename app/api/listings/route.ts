@@ -4,6 +4,7 @@ import { canManageServices } from "@/lib/adminAuth";
 import { isServiceCategory } from "@/lib/serviceCategories";
 import { isServiceAreaValue } from "@/lib/serviceLocation";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
+import { getZipCentroid } from "@/lib/zipCentroid";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -89,6 +90,13 @@ export async function POST(request: Request) {
     );
   }
 
+  let geoFields: { lat?: number; lng?: number } = {};
+  const normalizedZip = zipCode ? String(zipCode).trim() : "";
+  if (/^\d{5}$/.test(normalizedZip)) {
+    const centroid = await getZipCentroid(normalizedZip);
+    if (centroid) geoFields = { lat: centroid.lat, lng: centroid.lng };
+  }
+
   const listing = await prisma.listing.create({
     data: {
       title,
@@ -100,7 +108,8 @@ export async function POST(request: Request) {
       bathroomCount: parsedBathroomCount,
       guestCount: parsedGuestCount,
       locationValue: location.value,
-      ...(zipCode ? { zipCode: String(zipCode) } : {}),
+      ...(normalizedZip ? { zipCode: normalizedZip } : {}),
+      ...geoFields,
       price: Math.floor(parsedPrice),
       userId: currentUser.id,
     },

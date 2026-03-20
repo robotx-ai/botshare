@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 
 import Container from "./Container";
 import ListingCTA from "./listing/ListingCTA";
-import ListingFeatureCards from "./listing/ListingFeatureCards";
 import ListingHead from "./listing/ListingHead";
 import ListingInfo from "./listing/ListingInfo";
 import ListingReservation from "./listing/ListingReservation";
@@ -136,9 +135,6 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
             id={listing.id}
             currentUser={currentUser}
           />
-          {listing.category && (
-            <ListingFeatureCards category={listing.category} />
-          )}
           <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6">
             <ListingInfo
               user={listing.user}

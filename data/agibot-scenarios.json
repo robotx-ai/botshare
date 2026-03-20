@@ -2,9 +2,9 @@
   {
     "id": "party",
     "title": "Party",
-    "description": "Bring your party to life with AGIBot robots performing dynamic dances, crowd interactions, and entertainment routines. Perfect for corporate celebrations, product launches, and private events.",
+    "description": "Bring your party to life with AGIBOT robots performing dynamic dances, crowd interactions, and entertainment routines. Perfect for corporate celebrations, product launches, and private events.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/party",
-    "primaryRobot": "AGIBot X2",
+    "primaryRobot": "AGIBOT X2",
     "pricing": {
       "silver": 2000,
       "gold": 2500,
@@ -12,7 +12,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -22,7 +22,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -33,7 +33,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -52,7 +52,7 @@
     "title": "Exhibition",
     "description": "Captivate exhibition attendees with cutting-edge humanoid robots that demonstrate AI capabilities, engage visitors, and serve as a stunning centerpiece for your booth or display.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/exhibition",
-    "primaryRobot": "AGIBot X2 Ultra",
+    "primaryRobot": "AGIBOT X2 Ultra",
     "pricing": {
       "silver": 2000,
       "gold": 2500,
@@ -60,7 +60,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -70,7 +70,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -81,7 +81,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -100,7 +100,7 @@
     "title": "Salesman",
     "description": "Deploy intelligent humanoid robots as proactive sales assistants. They approach potential customers, deliver tailored pitches, answer questions, and guide prospects through your product offerings.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/salesman",
-    "primaryRobot": "AGIBot X2 Ultra",
+    "primaryRobot": "AGIBOT X2 Ultra",
     "pricing": {
       "silver": 2000,
       "gold": 2500,
@@ -108,7 +108,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -118,7 +118,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -129,7 +129,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -148,7 +148,7 @@
     "title": "Showroom Guide",
     "description": "Transform your showroom with an intelligent robotic guide that welcomes visitors, explains product features, leads tours, and answers questions — delivering a memorable brand experience.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/showroom-guide",
-    "primaryRobot": "AGIBot A2 Ultra",
+    "primaryRobot": "AGIBOT A2 Ultra",
     "pricing": {
       "silver": 2500,
       "gold": 4000,
@@ -156,7 +156,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot A2 Lite",
+        "robot": "AGIBOT A2 Lite",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -166,7 +166,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot A2 Ultra",
+        "robot": "AGIBOT A2 Ultra",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -177,7 +177,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot A2 Ultra",
+        "robot": "AGIBOT A2 Ultra",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -194,9 +194,9 @@
   {
     "id": "show",
     "title": "Show",
-    "description": "Stage a breathtaking live performance with humanoid robots. From choreographed solo acts to ensemble shows, AGIBot robots deliver precision movement and dramatic presence on any stage.",
+    "description": "Stage a breathtaking live performance with humanoid robots. From choreographed solo acts to ensemble shows, AGIBOT robots deliver precision movement and dramatic presence on any stage.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/show",
-    "primaryRobot": "AGIBot X2",
+    "primaryRobot": "AGIBOT X2",
     "pricing": {
       "silver": 300,
       "gold": 2000,
@@ -204,7 +204,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot A2 Lite",
+        "robot": "AGIBOT A2 Lite",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -214,7 +214,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -225,7 +225,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -244,7 +244,7 @@
     "title": "Reception",
     "description": "Elevate your front-of-house experience with a sophisticated robotic receptionist. Greet guests, check them in, answer FAQs, and direct visitors — all with a cutting-edge AI personality.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/reception",
-    "primaryRobot": "AGIBot X2 Ultra",
+    "primaryRobot": "AGIBOT X2 Ultra",
     "pricing": {
       "silver": 2500,
       "gold": 4000,
@@ -252,7 +252,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -262,7 +262,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -273,7 +273,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -292,7 +292,7 @@
     "title": "Live Stream",
     "description": "Supercharge your live stream content with a humanoid robot co-host, performer, or interactive guest. Drive engagement, go viral, and give your audience a glimpse into the future of entertainment.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/live-stream",
-    "primaryRobot": "AGIBot X2",
+    "primaryRobot": "AGIBOT X2",
     "pricing": {
       "silver": 700,
       "gold": 2000,
@@ -300,7 +300,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h streaming window",
@@ -310,7 +310,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 6,
         "features": [
           "6h streaming window",
@@ -321,7 +321,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 8,
         "features": [
           "8h streaming window",
@@ -338,9 +338,9 @@
   {
     "id": "school",
     "title": "School",
-    "description": "Inspire the next generation with hands-on AI education. AGIBot robots conduct STEM demonstrations, assist teachers, and provide interactive learning experiences that make technology tangible.",
+    "description": "Inspire the next generation with hands-on AI education. AGIBOT robots conduct STEM demonstrations, assist teachers, and provide interactive learning experiences that make technology tangible.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/school",
-    "primaryRobot": "AGIBot D1 Edu",
+    "primaryRobot": "AGIBOT D1 Edu",
     "pricing": {
       "silver": 500,
       "gold": 2000,
@@ -348,7 +348,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot D1 Edu",
+        "robot": "AGIBOT D1 Edu",
         "hours": 4,
         "features": [
           "4h school session",
@@ -358,7 +358,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot D1 Edu",
+        "robot": "AGIBOT D1 Edu",
         "hours": 6,
         "features": [
           "6h school session",
@@ -369,7 +369,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot D1 Pro",
+        "robot": "AGIBOT D1 Pro",
         "hours": 8,
         "features": [
           "8h school program",
@@ -386,9 +386,9 @@
   {
     "id": "security",
     "title": "Security",
-    "description": "Enhance your security operations with intelligent robotic patrol units. AGIBot security robots monitor premises, detect anomalies, alert staff, and provide a visible deterrent — 24/7.",
+    "description": "Enhance your security operations with intelligent robotic patrol units. AGIBOT security robots monitor premises, detect anomalies, alert staff, and provide a visible deterrent — 24/7.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/security",
-    "primaryRobot": "AGIBot D1 Ultra",
+    "primaryRobot": "AGIBOT D1 Ultra",
     "pricing": {
       "silver": 700,
       "gold": 1500,
@@ -396,7 +396,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot D1 Pro",
+        "robot": "AGIBOT D1 Pro",
         "hours": 4,
         "features": [
           "4h patrol window",
@@ -406,7 +406,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot D1 Ultra",
+        "robot": "AGIBOT D1 Ultra",
         "hours": 6,
         "features": [
           "6h patrol window",
@@ -417,7 +417,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot D1 Ultra",
+        "robot": "AGIBOT D1 Ultra",
         "hours": 8,
         "features": [
           "8h patrol window",
@@ -436,7 +436,7 @@
     "title": "Athlete",
     "description": "Showcase the physical capabilities of humanoid robotics with athletic demonstrations — running, jumping, lifting, and sports performances that blur the line between machine and human.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/athlete",
-    "primaryRobot": "AGIBot X2",
+    "primaryRobot": "AGIBOT X2",
     "pricing": {
       "silver": 700,
       "gold": 2000,
@@ -444,7 +444,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h performance window",
@@ -454,7 +454,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 6,
         "features": [
           "6h performance window",
@@ -465,7 +465,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 8,
         "features": [
           "8h performance window",
@@ -484,7 +484,7 @@
     "title": "Retail",
     "description": "Revolutionize the in-store experience with robotic retail assistants that help customers find products, answer questions, manage queues, and create buzz that drives foot traffic and sales.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/retail",
-    "primaryRobot": "AGIBot X2",
+    "primaryRobot": "AGIBOT X2",
     "pricing": {
       "silver": 2000,
       "gold": 2500,
@@ -492,7 +492,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 4,
         "features": [
           "4h in-store deployment",
@@ -502,7 +502,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot X2",
+        "robot": "AGIBOT X2",
         "hours": 6,
         "features": [
           "6h in-store deployment",
@@ -513,7 +513,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot X2 Ultra",
+        "robot": "AGIBOT X2 Ultra",
         "hours": 8,
         "features": [
           "8h in-store deployment",
@@ -530,9 +530,9 @@
   {
     "id": "showcase-a2-lite",
     "title": "Showcase A2 Lite",
-    "description": "Deploy the AGIBot A2 Lite for live showcase events — demonstrations, meet-and-greets, and interactive experiences that highlight next-generation humanoid robotics.",
+    "description": "Deploy the AGIBOT A2 Lite for live showcase events — demonstrations, meet-and-greets, and interactive experiences that highlight next-generation humanoid robotics.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/showcase-a2-lite",
-    "primaryRobot": "AGIBot A2 Lite",
+    "primaryRobot": "AGIBOT A2 Lite",
     "pricing": {
       "silver": 500,
       "gold": 700,
@@ -540,7 +540,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot A2 Lite",
+        "robot": "AGIBOT A2 Lite",
         "hours": 4,
         "features": [
           "4h deployment window",
@@ -550,7 +550,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot A2 Lite",
+        "robot": "AGIBOT A2 Lite",
         "hours": 6,
         "features": [
           "6h deployment window",
@@ -561,7 +561,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot A2 Lite",
+        "robot": "AGIBOT A2 Lite",
         "hours": 8,
         "features": [
           "8h deployment window",
@@ -577,9 +577,9 @@
   {
     "id": "cleaning",
     "title": "Cleaning",
-    "description": "Deploy AGIBot cleaning robots to handle routine floor care with consistent coverage, remote support, and operational reporting for commercial environments.",
+    "description": "Deploy AGIBOT cleaning robots to handle routine floor care with consistent coverage, remote support, and operational reporting for commercial environments.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/cleaning",
-    "primaryRobot": "AGIBot C5",
+    "primaryRobot": "AGIBOT C5",
     "pricing": {
       "silver": 1000,
       "gold": 1800,
@@ -587,7 +587,7 @@
     },
     "tiers": {
       "silver": {
-        "robot": "AGIBot C5",
+        "robot": "AGIBOT C5",
         "hours": 4,
         "features": [
           "One hour 1-1 consultation video conference",
@@ -596,7 +596,7 @@
         ]
       },
       "gold": {
-        "robot": "AGIBot C5",
+        "robot": "AGIBOT C5",
         "hours": 6,
         "features": [
           "One hour 1-1 consultation video conference",
@@ -606,7 +606,7 @@
         ]
       },
       "platinum": {
-        "robot": "AGIBot C5",
+        "robot": "AGIBOT C5",
         "hours": 8,
         "features": [
           "One hour 1-1 consultation video conference",

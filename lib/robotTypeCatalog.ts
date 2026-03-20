@@ -5,13 +5,21 @@ import {
   slugifyRobotModel,
 } from "./robotModel";
 
+const CLD = "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto";
+
+const ROBOT_TYPE_IMAGES: Record<string, string> = {
+  "AGIBOT D1 Edu": `${CLD}/listing-agibot-d1-edu`,
+};
+
 const ROBOT_TYPE_DAY_PRICES: Record<string, number> = {
-  "AGIBot X2": 300,
-  "AGIBot X2 Ultra": 500,
-  "AGIBot A2 Lite": 500,
-  "AGIBot A2 Ultra": 800,
-  "AGIBot D1 Edu": 100,
-  "AGIBot D1 Ultra": 200,
+  "AGIBOT G2": 450,
+  "AGIBOT A2": 580,
+  "AGIBOT X2": 300,
+  "AGIBOT X2 Ultra": 500,
+  "AGIBOT A2 Lite": 500,
+  "AGIBOT A2 Ultra": 800,
+  "AGIBOT D1 Edu": 100,
+  "AGIBOT D1 Ultra": 200,
 };
 
 export type RobotTypeCardData = {
@@ -67,7 +75,7 @@ export function buildRobotTypeCatalog(listings: safeListing[]): RobotTypeCardDat
       return {
         model,
         modelSlug: slugifyRobotModel(model),
-        imageSrc: value.imageSrc,
+        imageSrc: ROBOT_TYPE_IMAGES[model] ?? value.imageSrc,
         categories: Array.from(value.categories).sort(),
         dayPrice: ROBOT_TYPE_DAY_PRICES[model] ?? value.dayPrice,
         listingCount: value.listingCount,

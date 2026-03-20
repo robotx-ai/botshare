@@ -1,6 +1,8 @@
 import prisma from "@/lib/prismadb";
+import { Prisma } from "@prisma/client";
 import { isServiceCategory } from "@/lib/serviceCategories";
 import { isServiceAreaValue } from "@/lib/serviceLocation";
+import { getZipCentroid } from "@/lib/zipCentroid";
 
 export interface IListingsParams {
   userId?: string;
@@ -10,6 +12,7 @@ export interface IListingsParams {
   startDate?: string;
   endDate?: string;
   locationValue?: string;
+  zipCode?: string;
   category?: string;
   robotModel?: string;
 }
@@ -22,6 +25,7 @@ export default async function getListings(params: IListingsParams) {
       guestCount,
       bathroomCount,
       locationValue,
+      zipCode,
       startDate,
       endDate,
       category,
@@ -63,6 +67,31 @@ export default async function getListings(params: IListingsParams) {
       query.locationValue = locationValue;
     }
 
+    if (zipCode) {
+      const centroid = await getZipCentroid(zipCode);
+      if (centroid) {
+        const nearbyRows = await prisma.$queryRaw<{ id: string }[]>(
+          Prisma.sql`
+            SELECT id FROM "Listing"
+            WHERE lat IS NOT NULL AND lng IS NOT NULL
+              AND (
+                3959 * acos(
+                  LEAST(1.0,
+                    cos(radians(${centroid.lat})) * cos(radians(lat)) *
+                    cos(radians(lng) - radians(${centroid.lng})) +
+                    sin(radians(${centroid.lat})) * sin(radians(lat))
+                  )
+                )
+              ) <= 100
+          `
+        );
+        if (nearbyRows.length === 0) return [];
+        query.id = { in: nearbyRows.map((r) => r.id) };
+      } else {
+        query.zipCode = zipCode;
+      }
+    }
+
     if (startDate && endDate) {
       query.NOT = {
         reservations: {
@@ -87,11 +116,15 @@ export default async function getListings(params: IListingsParams) {
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        user: { select: { name: true, businessName: true } },
+      },
     });
 
-    const safeListings = listing.map((list) => ({
+    const safeListings = listing.map(({ user, ...list }) => ({
       ...list,
       createdAt: list.createdAt.toISOString(),
+      operatorName: user?.businessName || user?.name || undefined,
     }));
 
     if (!category) {

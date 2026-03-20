@@ -94,7 +94,9 @@ function ListingCard({
           </div>
         </div>
         <div className="font-semibold text-lg">{serviceDetail}</div>
-        <div className="font-light text-neutral-500">{serviceLocation}</div>
+        <div className="font-light text-neutral-500">
+          {serviceLocation}{data.operatorName ? ` - By ${data.operatorName}` : ""}
+        </div>
         <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
             ${price} {!reservation && <div className="font-light"> / day</div>}

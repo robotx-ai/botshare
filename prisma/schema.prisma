@@ -67,6 +67,8 @@ model Listing {
   guestCount    Int
   locationValue String
   zipCode       String?
+  lat           Float?
+  lng           Float?
   userId        String
   price         Int
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)

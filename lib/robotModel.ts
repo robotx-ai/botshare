@@ -31,7 +31,10 @@ function getScenarioRobotByListingTitle(listingTitle: string): string | null {
 
 export function getRobotModelFromListing(listing: safeListing): string {
   if (/^agibot\s+/i.test(listing.title)) {
-    return getScenarioRobotByListingTitle(listing.title) ?? "AGIBot";
+    const scenarioRobot = getScenarioRobotByListingTitle(listing.title);
+    if (scenarioRobot) return scenarioRobot;
+    const [modelPart] = listing.title.split("—");
+    return modelPart?.trim() || "AGIBOT";
   }
 
   const [modelPart] = listing.title.split("—");
