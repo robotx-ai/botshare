@@ -15,6 +15,13 @@ export type SafeReservation = Omit<
   listing: safeListing;
 };
 
+export type SafeAdminReservation = SafeReservation & {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string | null;
+  customerBusinessName: string | null;
+};
+
 export type SafeUser = Omit<
   User,
   "createdAt" | "updatedAt" | "emailVerified"
