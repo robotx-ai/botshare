@@ -24,6 +24,7 @@ BotShare has no global view of rental bookings. Admins can only see bookings on 
     if (!isAdminEmail(currentUser.email)) return <EmptyState title="Admin access required" />;
     ```
     Both branches are required. The middleware does not check `isAdminEmail` — a logged-in non-admin user passes middleware and must be blocked here.
+    > **Note:** `currentUser.email` is `string | null`. `isAdminEmail` accepts `string | null | undefined` and returns `false` for null — no additional null guard needed. Do not add a redundant `if (!currentUser.email)` check between the two branches.
 - **Nav entry:** Add "Orders" link in `components/navbar/UserMenu.tsx`, rendered only when `currentUser` is an admin.
 
 ---
@@ -47,7 +48,7 @@ interface IAdminReservationParams {
 
 **Prisma query:**
 - Includes `user` relation: `name`, `email`, `phone`, `businessName`
-- Includes `listing` relation: full listing fields only (no nested `listing.user` include — operator identity is not needed on this page)
+- Includes `listing` relation: `include: { listing: true }` — full listing fields, **no** `listing: { include: { user: true } }`. The listing's owner (operator) is not needed. Do not add a nested `user` include on `listing`, as it would create a naming conflict with the reservation's `user` relation in the serializer.
 - Ordered by `createdAt` descending
 
 **Serialization / flattening:** After the Prisma query, map results to `SafeAdminReservation`. The raw `user` relation **must be destructured out** before spreading — it contains `DateTime` objects that are not serializable for RSC prop passing and would cause a Next.js serialization error. The flattened customer fields are promoted to the top level instead. Because the query does not include `listing.user`, `operatorName` on the returned `safeListing` is intentionally `undefined` (it is an optional field on `safeListing`). The admin orders table does not display it.
@@ -124,11 +125,11 @@ const result = await prisma.reservation.deleteMany({ where });
 **Date filter semantics:** `startDate` / `endDate` filter bookings whose service window **overlaps** the given range. The Prisma `where` clause is:
 
 ```ts
-...(startDate && { startDate: { lte: new Date(endDate ?? "9999") } }),
-...(endDate   && { endDate:   { gte: new Date(startDate ?? "0000") } }),
+...(startDate && { startDate: { lte: new Date(endDate   ?? "9999-12-31") } }),
+...(endDate   && { endDate:   { gte: new Date(startDate ?? "0001-01-01") } }),
 ```
 
-This returns any booking that has at least one day within the selected window. If only `startDate` is provided, all bookings that start on or before that date and haven't ended yet are included. If only `endDate` is provided, all bookings that end on or after that date are included.
+Use full ISO date strings as fallbacks (`"9999-12-31"`, `"0001-01-01"`), not bare year strings — bare strings like `"9999"` produce `Invalid Date` in JavaScript. This returns any booking with at least one day within the selected window.
 
 ---
 
@@ -207,6 +208,8 @@ Standard `<table>` columns:
 3. `axios.delete('/api/reservations/' + id)` fires
 4. Success → `toast.success("Booking cancelled")` + `router.refresh()` + `setDeletingId(null)`
 5. Error → `toast.error("Something went wrong")` + `setDeletingId(null)`
+
+> **Why `router.refresh()`:** In Next.js 13 App Router, `router.refresh()` re-runs the server RSC (`page.tsx`) with the current URL search params. This re-executes `getAllReservations` with the active filters and pushes fresh data down to `OrdersClient` as props. The cancelled booking will disappear from the table after the refresh completes. This is the correct approach — do not splice local state manually.
 
 ---
 
