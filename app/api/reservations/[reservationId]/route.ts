@@ -1,4 +1,5 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import { isAdminEmail } from "@/lib/adminAuth";
 import prisma from "@/lib/prismadb";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 import { NextResponse } from "next/server";
@@ -26,12 +27,18 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid booking id." }, { status: 400 });
   }
 
-  const reservation = await prisma.reservation.deleteMany({
-    where: {
-      id: reservationId,
-      OR: [{ userId: currentUser.id }, { listing: { userId: currentUser.id } }],
-    },
-  });
+  // Admins can cancel any booking; others can only cancel their own or bookings on their services
+  const where = isAdminEmail(currentUser.email)
+    ? { id: reservationId }
+    : {
+        id: reservationId,
+        OR: [
+          { userId: currentUser.id },
+          { listing: { userId: currentUser.id } },
+        ],
+      };
+
+  const reservation = await prisma.reservation.deleteMany({ where });
 
   return NextResponse.json(reservation);
 }
