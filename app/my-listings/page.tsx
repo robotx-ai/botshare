@@ -3,11 +3,9 @@ import EmptyState from "@/components/EmptyState";
 import { isAdminEmail } from "@/lib/adminAuth";
 import getCurrentUser from "../actions/getCurrentUser";
 import getListings from "../actions/getListings";
-import PropertiesClient from "./PropertiesClient";
+import MyListingsClient from "./MyListingsClient";
 
-type Props = {};
-
-const PropertiesPage = async (props: Props) => {
+const MyListingsPage = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -18,12 +16,12 @@ const PropertiesPage = async (props: Props) => {
     );
   }
 
-  if (!isAdminEmail(currentUser.email)) {
+  if (currentUser.userType !== "PROVIDER" && !isAdminEmail(currentUser.email)) {
     return (
       <ClientOnly>
         <EmptyState
-          title="Admin access required"
-          subtitle="Only admins can manage service publishing."
+          title="Access required"
+          subtitle="Only service providers and admins can view this page."
         />
       </ClientOnly>
     );
@@ -41,11 +39,12 @@ const PropertiesPage = async (props: Props) => {
       </ClientOnly>
     );
   }
+
   return (
     <ClientOnly>
-      <PropertiesClient listings={listings} currentUser={currentUser} />
+      <MyListingsClient listings={listings} currentUser={currentUser} />
     </ClientOnly>
   );
 };
 
-export default PropertiesPage;
+export default MyListingsPage;

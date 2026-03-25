@@ -22,13 +22,13 @@ npm run db:migrate:verify
 - `app/actions/`: server-side data loaders (`getListings`, `getListingById`, `getReservations`, `getFavoriteListings`, `getCurrentUser`).
 - `app/listings/[listingId]/`: service detail page.
 - `app/services/`: service catalog browsing/filtering.
-- `app/trips/`, `app/reservations/`, `app/favorites/`, `app/properties/`: authenticated pages protected by `middleware.ts`.
+- `app/trips/`, `app/reservations/`, `app/favorites/`, `app/my-listings/`: authenticated pages protected by `middleware.ts`.
 - `components/modals/`: modal dialogs (Login, Register, RentModal, Search).
 - `components/navbar/`: navbar, categories filter, search, user menu.
 - `components/listing/`: service card/detail UI.
 - `lib/`: shared utilities including `adminAuth.ts`, `serviceCategories.ts`, `writeGuard.ts`, `prismadb.ts`.
 - Database: Supabase Postgres via Prisma (`prisma/schema.prisma`).
-- Auth: NextAuth with Prisma adapter and admin allowlist by `ADMIN_EMAILS`.
+- Auth: NextAuth with Prisma adapter, customer/provider roles, and admin override by `ADMIN_EMAILS`.
 
 ## Canonical Service Taxonomy
 - Allowed service categories (exact labels):
@@ -70,11 +70,14 @@ Hard rule:
 - Prefer UI/copy/validation remap over DB migration during MVP.
 
 ## Access Control Rules
-- Catalog is admin-managed only in MVP.
-- Non-admin users must not create, edit, or delete services.
+- Catalog supports provider-owned services in MVP, with admin oversight.
+- Providers may view, create, edit, and delete only their own services.
+- Providers may view and manage bookings placed on their own services.
+- Customers must not create, edit, or delete services they do not own.
 - Admin gating default: `ADMIN_EMAILS` environment variable (comma-separated email allowlist).
+- Admins retain full cross-catalog visibility and override access.
 - Enforce authorization at API layer even if UI hides controls.
-- Keep `RentModal` mounted for admins only (currently controlled from `app/layout.tsx`).
+- Keep service-management UI mounted only for users allowed to manage services.
 
 ## Supabase Control Contract
 - Codex can operate Supabase for this repo when the following environment variables are set:
@@ -142,7 +145,9 @@ Hard rule:
 ## Definition of Done for Rebrand Tasks
 - All visible Airbnb wording removed.
 - Category filters show exactly 3 service categories.
-- Non-admin cannot access create/edit/delete service flows.
+- Customers cannot access create/edit/delete service flows.
+- Providers can access only their own service-management and incoming-booking flows.
+- Admins retain cross-catalog management access.
 - Theme colors use only white/gray/black across user-facing UI in MVP scope.
 - `npm run lint` passes.
 - `npm run build` passes.
@@ -150,12 +155,11 @@ Hard rule:
 
 ## Out of Scope (MVP)
 - Hourly/time-slot scheduling.
-- Multi-provider marketplace model.
+- Marketplace expansion beyond provider self-service ownership and admin oversight.
 - DB schema migration for service-specific fields.
 
 ## Working Defaults
 - Booking model: date range + day rate.
-- Catalog model: admin-managed.
+- Catalog model: provider-owned services with admin oversight.
 - Service area model: city/region coverage.
-- Any role model beyond `ADMIN_EMAILS` is deferred to phase 2.
-
+- Role model stays limited to customer/provider semantics plus `ADMIN_EMAILS` admin overrides.

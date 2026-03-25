@@ -295,7 +295,7 @@ git commit -m "feat: allow admins to cancel any booking in DELETE reservation ro
 export { default } from "next-auth/middleware";
 
 export const config = {
-  matcher: ["/trips", "/reservations", "/properties", "/favorites", "/admin/orders"],
+  matcher: ["/trips", "/reservations", "/my-listings", "/favorites", "/admin/orders"],
 };
 ```
 
@@ -743,7 +743,7 @@ In the `{isAdmin && ...}` block (around line 97–103), add a new `MenuItem` for
 ```tsx
 {isAdmin && (
   <MenuItem
-    onClick={() => { setIsOpen(false); router.push("/properties"); }}
+    onClick={() => { setIsOpen(false); router.push("/my-listings"); }}
     label="My services"
   />
 )}

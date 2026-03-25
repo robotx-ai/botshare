@@ -82,21 +82,30 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
-                <MenuItem
-                  onClick={() => { setIsOpen(false); router.push("/trips"); }}
-                  label="My scheduled services"
-                />
-                <MenuItem
-                  onClick={() => { setIsOpen(false); router.push("/favorites"); }}
-                  label="Saved services"
-                />
+                {currentUser.userType === "PROVIDER" && (
+                  <div className="px-4 py-2 text-xs font-semibold bg-black text-white uppercase tracking-wide">
+                    Service Provider
+                  </div>
+                )}
+                {currentUser.userType !== "PROVIDER" && (
+                  <MenuItem
+                    onClick={() => { setIsOpen(false); router.push("/trips"); }}
+                    label="My scheduled services"
+                  />
+                )}
+                {currentUser.userType !== "PROVIDER" && (
+                  <MenuItem
+                    onClick={() => { setIsOpen(false); router.push("/favorites"); }}
+                    label="Saved services"
+                  />
+                )}
                 <MenuItem
                   onClick={() => { setIsOpen(false); router.push("/reservations"); }}
                   label="Service bookings"
                 />
-                {isAdmin && (
+                {(isAdmin || currentUser.userType === "PROVIDER") && (
                   <MenuItem
-                    onClick={() => { setIsOpen(false); router.push("/properties"); }}
+                    onClick={() => { setIsOpen(false); router.push("/my-listings"); }}
                     label="My services"
                   />
                 )}

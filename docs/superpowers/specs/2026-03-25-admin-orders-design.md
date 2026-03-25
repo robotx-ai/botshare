@@ -18,7 +18,7 @@ BotShare has no global view of rental bookings. Admins can only see bookings on 
 - **File:** `app/admin/orders/page.tsx` (Next.js App Router server component)
 - **Auth guard (two levels, distinct purposes):**
   - **Level 1 — `middleware.ts`:** Add `"/admin/orders"` to the `matcher` array (same plain-string style as `"/trips"`, `"/reservations"`, etc.). This only gates **unauthenticated** access — it redirects users with no NextAuth session to the sign-in page. It does **not** enforce admin status. Prefix match behaviour is acceptable (no sub-routes).
-  - **Level 2 — `page.tsx`:** This is the **real admin gate**. Two separate branches, matching the pattern in `app/properties/page.tsx`:
+  - **Level 2 — `page.tsx`:** This is the **real admin gate**. Two separate branches, matching the pattern in `app/my-listings/page.tsx`:
     ```ts
     if (!currentUser) return <EmptyState title="Unauthorized" />;                     // defensive fallback (middleware should catch this first)
     if (!isAdminEmail(currentUser.email)) return <EmptyState title="Admin access required" />;
