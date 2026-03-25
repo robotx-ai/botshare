@@ -100,6 +100,12 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                     label="My services"
                   />
                 )}
+                {isAdmin && (
+                  <MenuItem
+                    onClick={() => { setIsOpen(false); router.push("/admin/orders"); }}
+                    label="Orders"
+                  />
+                )}
                 {isAdmin && <MenuItem onClick={() => { setIsOpen(false); onRent(); }} label="List a service" />}
                 <MenuItem
                   onClick={() => {
