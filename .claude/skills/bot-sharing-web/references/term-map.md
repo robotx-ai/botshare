@@ -1,9 +1,8 @@
-# RobotX Term Map
+# BotShare Term Map
 
 ## Canonical Product Framing
-- Product: RobotX service rental marketplace (single provider: RobotX).
-- Primary domain: `robotxshare.com`.
-- Secondary commerce domain: `robotxshop.com`.
+- Product: BotShare robot service rental marketplace (single provider: BotShare).
+- Primary domain: `botsharing.us`.
 
 ## Canonical Service Categories
 - `Showcase & Performance` (`showcase-performance`)
@@ -14,12 +13,12 @@
 | Legacy term | Canonical term | Usage guidance |
 | --- | --- | --- |
 | listing | service | Use in all customer-facing copy. |
-| host | RobotX or service operator | Avoid marketplace/host language in MVP. |
+| host | service operator | Avoid marketplace/host language in MVP. |
 | guest | customer | Use for booking actor. |
 | home/place/property | service package or deployment | Choose based on sentence context. |
 | reservation | booking | Use in visible labels and messages. |
 | per night | per day | Pricing semantics are daily in MVP. |
-| AirCover | RobotX Service Assurance | Placeholder policy name for UI text. |
+| AirCover | BotSharing US Service Assurance | Use in policy/assurance UI text. |
 
 ## Banned customer-facing terms
 These should not appear in new user-facing copy:

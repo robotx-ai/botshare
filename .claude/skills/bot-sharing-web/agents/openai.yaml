@@ -1,0 +1,7 @@
+interface:
+  display_name: "BotShare Web"
+  short_description: "BotShare platform standards: terminology, theme colors, admin policy, Supabase safety checks"
+  default_prompt: "Use $bot-sharing-web to enforce BotShare service rental standards, normalize UI colors to white/gray/black, and run Supabase-safe policy checks."
+
+policy:
+  allow_implicit_invocation: true

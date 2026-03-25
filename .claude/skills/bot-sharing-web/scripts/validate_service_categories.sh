@@ -29,7 +29,7 @@ if [[ -z "$ACTUAL" ]]; then
 fi
 
 if [[ "$ACTUAL" != "$EXPECTED" ]]; then
-  echo "error: categories do not match canonical RobotX taxonomy" >&2
+  echo "error: categories do not match canonical BotShare taxonomy" >&2
   echo "expected:" >&2
   echo "$EXPECTED" >&2
   echo "actual:" >&2

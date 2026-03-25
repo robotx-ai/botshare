@@ -1,17 +1,17 @@
 # QA Checklist
 
-Run these checks for each migration PR.
+Run these checks for each task PR.
 
 ## Automated checks
 - `npm run lint`
 - `npm run build`
-- `scripts/find_legacy_terms.sh /Users/jasonliu/Github/robotx-share`
-- `scripts/validate_service_categories.sh /Users/jasonliu/Github/robotx-share`
-- `scripts/check_supabase_env.sh /Users/jasonliu/Github/robotx-share`
+- `scripts/find_legacy_terms.sh /Users/jasonliu/Github/botshare`
+- `scripts/validate_service_categories.sh /Users/jasonliu/Github/botshare`
+- `scripts/check_supabase_env.sh /Users/jasonliu/Github/botshare`
 
 ## Manual smoke checks
 1. Home page
-- Category chips render exactly 4 services.
+- Category chips render exactly 3 services.
 - No Airbnb/property/host wording visible.
 
 2. Search flow
@@ -20,7 +20,7 @@ Run these checks for each migration PR.
 
 3. Service detail
 - Pricing language is per day.
-- Assurance copy is RobotX-branded.
+- Assurance copy is BotSharing US Service Assurance branded.
 
 4. Create-service flow
 - Non-admin users cannot create or mutate service records.
@@ -31,8 +31,7 @@ Run these checks for each migration PR.
 - Reservation/trips/favorites pages render without regressions.
 
 6. Navigation and branding
-- Navbar/footer include `robotxshop.com` CTA.
-- Metadata and major page headings reflect RobotX branding.
+- Metadata and major page headings reflect BotShare (botsharing.us) branding.
 
 7. Supabase control readiness
 - Required Supabase env vars report as set.

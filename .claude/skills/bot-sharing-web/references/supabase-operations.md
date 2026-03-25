@@ -22,10 +22,10 @@ Use `scripts/check_supabase_env.sh <repo_path>` before Supabase actions.
 - Production-impacting operations require explicit in-thread approval.
 
 ## Project
-This repo targets Supabase project `ncqmdyjchvmksxprgiut` (`robotxshare.com`).
-Local `.env` should point to this project. Production env vars live in the Netlify dashboard for site `288834e5`.
+This repo targets Supabase project `jylxrvwxsjehthsqswib` (`botsharing.us`).
+Local `.env` should point to this project. Production env vars live in the Netlify dashboard for site `147defb9`.
 
-- When running Supabase CLI or MCP operations, confirm `SUPABASE_PROJECT_REF=ncqmdyjchvmksxprgiut` is active before executing.
+- When running Supabase CLI or MCP operations, confirm `SUPABASE_PROJECT_REF=jylxrvwxsjehthsqswib` is active before executing.
 
 ## Integration notes for this repo
 - Prisma remains the schema source of truth in MVP.

@@ -1,16 +1,15 @@
 ---
-name: robotx-rebrand-migration
-description: Deterministic workflow for maintaining RobotX service rental platform standards, including terminology enforcement, category constraints, white/gray/black theme color normalization, admin-write policy, and regression validation.
+name: bot-sharing-web
+description: Use when working on the BotShare (botsharing.us) Next.js web app — enforcing terminology, category constraints, white/gray/black theme colors, admin-only write policy, Supabase operations, and regression validation.
 ---
 
-# RobotX Platform Standards
+# BotShare Web Standards
 
 ## When to use this skill
 Use this skill when any request includes:
 - Updating service taxonomy, category filters, booking copy, or service detail text.
 - Updating or normalizing UI theme colors to white/gray/black.
-- Adding or validating `robotxshop.com` cross-link placements.
-- Enforcing RobotX admin-only mutation rules for service catalog endpoints.
+- Enforcing BotShare admin-only mutation rules for service catalog endpoints.
 - Running Supabase checks/migrations/policies for this repo.
 - Running QA checks to detect regressions in wording, taxonomy, or authorization.
 
@@ -47,15 +46,11 @@ Follow this sequence unless the user requests a narrower scope.
 - Verify there are no non-neutral color regressions in updated files.
 
 ### 5. Enforce catalog ownership rules
-- RobotX-managed catalog only in MVP.
+- BotShare-managed catalog only in MVP.
 - Non-admin users cannot create/edit/delete services.
-- Enforce at API layer with `ROBOTX_ADMIN_EMAILS` allowlist, even if UI is hidden.
+- Enforce at API layer with `ADMIN_EMAILS` allowlist, even if UI is hidden.
 
-### 6. Add or verify cross-domain CTA
-- Ensure visible `robotxshop.com` link exists in navbar and footer.
-- Keep it as marketing cross-link only (no unified checkout or identity assumptions).
-
-### 7. Validate
+### 6. Validate
 - Run quality checks:
   - `npm run lint`
   - `npm run build`
@@ -64,13 +59,13 @@ Follow this sequence unless the user requests a narrower scope.
   - `npm run deploy:preview` — preview deploy
   - `npm run deploy:prod` — production deploy (only after preview is verified)
 
-### 8. Supabase operations (when requested)
+### 7. Supabase operations (when requested)
 - Confirm env readiness with `scripts/check_supabase_env.sh <repo_path>`.
 - Use `SUPABASE_URL` if present, otherwise use `NEXT_PUBLIC_SUPABASE_URL`.
 - Apply non-destructive checks first (introspection, policy verification, migration dry checks).
 - Treat destructive/production-impacting actions as confirmation-required.
 
-### 9. Report
+### 8. Report
 Provide:
 - file-level patch summary
 - validation evidence
@@ -80,7 +75,7 @@ Provide:
 - Preserve existing route and API paths.
 - Do not run schema migrations unless explicitly requested.
 - Keep Prisma models structurally unchanged unless explicitly requested.
-- `Listing.category` must map to one of the 3 RobotX service categories.
+- `Listing.category` must map to one of the 3 BotShare service categories.
 - `Listing.price` is per-day service pricing.
 - `locationValue` is service coverage area.
 - No banned terms in user-facing copy (see `references/term-map.md`).

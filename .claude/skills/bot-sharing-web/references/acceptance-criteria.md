@@ -1,6 +1,6 @@
 # Acceptance Criteria
 
-A migration task is complete only if all criteria below pass.
+A task is complete only if all criteria below pass.
 
 ## 1. Taxonomy
 - Service taxonomy is constrained to:
@@ -12,12 +12,12 @@ A migration task is complete only if all criteria below pass.
 
 ## 2. Copy integrity
 - No new Airbnb terms in customer-facing copy.
-- Search, listing card, listing detail, and create-service modal use RobotX service vocabulary.
+- Search, listing card, listing detail, and create-service modal use BotShare service vocabulary.
 - Pricing text uses per-day semantics.
 
 ## 3. Authorization
 - Non-admin users receive 403 on service create/edit/delete endpoints.
-- Admin authorization is controlled by `ROBOTX_ADMIN_EMAILS` allowlist.
+- Admin authorization is controlled by `ADMIN_EMAILS` allowlist.
 - API authorization exists regardless of UI visibility.
 
 ## 4. Booking behavior
@@ -30,16 +30,11 @@ A migration task is complete only if all criteria below pass.
 - `npm run build` passes.
 - Home, detail, booking, favorites, trips/reservations, and auth flows continue to work.
 
-## 6. Branding and domain linkage
-- `robotxshare.com` branding is visible in primary app framing.
-- `robotxshop.com` appears as a visible CTA in navbar/footer.
-- Integration is cross-link only (no shared auth/cart).
-
-## 7. Scope compliance
+## 6. Scope compliance
 - No Prisma schema redesign included unless explicitly requested.
 - No multi-provider marketplace features added.
 
-## 8. Supabase operational readiness
+## 7. Supabase operational readiness
 - `SUPABASE_PROJECT_REF`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, and `SUPABASE_SERVICE_ROLE_KEY` are configured.
 - A base URL is configured via `SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_URL`.
 - Secret values are not exposed in task summaries.
