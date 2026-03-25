@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Git worktrees
+.worktrees/
+
 # Large video assets (host on Cloudinary instead)
 /public/videos/*.mp4
 /public/videos/*.mov
