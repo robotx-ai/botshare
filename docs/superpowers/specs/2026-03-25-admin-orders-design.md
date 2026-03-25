@@ -16,11 +16,15 @@ BotShare has no global view of rental bookings. Admins can only see bookings on 
 
 - **URL:** `/admin/orders`
 - **File:** `app/admin/orders/page.tsx` (Next.js App Router server component)
-- **Auth guard:** `isAdminEmail(currentUser.email)` from `lib/adminAuth.ts` — same pattern as `app/properties/page.tsx`
-  - Not authenticated → redirected to login by `middleware.ts`
-  - Authenticated but not admin → `<EmptyState title="Unauthorized" />`
-- **Middleware:** Add `/admin/orders` to the `matcher` array in `middleware.ts`
-- **Nav entry:** Add "Orders" link in `components/navbar/UserMenu.tsx`, rendered only when the current user is an admin
+- **Auth guard (two levels, distinct purposes):**
+  - **Level 1 — `middleware.ts`:** Add `"/admin/orders"` to the `matcher` array (same plain-string style as `"/trips"`, `"/reservations"`, etc.). This only gates **unauthenticated** access — it redirects users with no NextAuth session to the sign-in page. It does **not** enforce admin status. Prefix match behaviour is acceptable (no sub-routes).
+  - **Level 2 — `page.tsx`:** This is the **real admin gate**. Two separate branches, matching the pattern in `app/properties/page.tsx`:
+    ```ts
+    if (!currentUser) return <EmptyState title="Unauthorized" />;                     // defensive fallback (middleware should catch this first)
+    if (!isAdminEmail(currentUser.email)) return <EmptyState title="Admin access required" />;
+    ```
+    Both branches are required. The middleware does not check `isAdminEmail` — a logged-in non-admin user passes middleware and must be blocked here.
+- **Nav entry:** Add "Orders" link in `components/navbar/UserMenu.tsx`, rendered only when `currentUser` is an admin.
 
 ---
 
@@ -33,22 +37,45 @@ Admin-scoped fetch of all reservations. Filters are applied at the Prisma query 
 ```ts
 interface IAdminReservationParams {
   search?: string;    // case-insensitive match on customer name or email
-  category?: string;  // service category slug (e.g. "warehouse")
+  category?: string;  // full display name as stored in DB: "Warehouse" | "Restaurant" | "Showcase & Performance"
   startDate?: string; // ISO date — include bookings with startDate >= this
   endDate?: string;   // ISO date — include bookings with endDate <= this
 }
 ```
 
-**Prisma query includes:**
-- `user` relation: `name`, `email`, `phone`, `businessName`
-- `listing` relation: `title`, `category`, `userId`
+> **Note on `category`:** `Listing.category` stores the full display name (e.g. `"Warehouse"`), not a slug. The FilterBar select options must use display name values.
+
+**Prisma query:**
+- Includes `user` relation: `name`, `email`, `phone`, `businessName`
+- Includes `listing` relation: full listing fields only (no nested `listing.user` include — operator identity is not needed on this page)
 - Ordered by `createdAt` descending
 
-**No schema changes required** — all fields exist on current User and Listing models.
+**Serialization / flattening:** After the Prisma query, map results to `SafeAdminReservation`. The raw `user` relation **must be destructured out** before spreading — it contains `DateTime` objects that are not serializable for RSC prop passing and would cause a Next.js serialization error. The flattened customer fields are promoted to the top level instead. Because the query does not include `listing.user`, `operatorName` on the returned `safeListing` is intentionally `undefined` (it is an optional field on `safeListing`). The admin orders table does not display it.
+
+```ts
+return reservations.map((r) => {
+  const { user, ...rest } = r; // drop raw user object (contains DateTime — not serializable)
+  return {
+    ...rest,
+    createdAt: r.createdAt.toISOString(),
+    startDate: r.startDate.toISOString(),
+    endDate: r.endDate.toISOString(),
+    listing: {
+      ...r.listing,
+      createdAt: r.listing.createdAt.toISOString(),
+      // operatorName intentionally omitted — listing.user not included in query
+    },
+    customerName: user.name ?? "",
+    customerEmail: user.email ?? "",
+    customerPhone: user.phone ?? null,
+    customerBusinessName: user.businessName ?? null,
+  };
+});
+```
+
+**No schema changes required.**
 
 ### New type: `SafeAdminReservation` (in `types.ts`)
-
-Extends the existing `SafeReservation` with flattened customer contact fields:
 
 ```ts
 export type SafeAdminReservation = SafeReservation & {
@@ -59,9 +86,49 @@ export type SafeAdminReservation = SafeReservation & {
 };
 ```
 
+`SafeReservation` already includes the full `safeListing` object (with `operatorName?: string` as an optional field — its absence is type-safe). The raw `user` object is not included on the returned type.
+
 ### API modification: `app/api/reservations/[reservationId]/route.ts`
 
-Add `isAdminEmail(currentUser.email)` as an additional OR condition in the existing delete guard, so admins can cancel any booking regardless of listing ownership.
+Admin users must be able to cancel any booking. **Only the `where` clause changes** — the existing `getWritesBlockedResponse()` guard at the top of the handler must be retained as-is.
+
+Replace only the `where` clause used in `deleteMany`:
+
+```ts
+// Keep all existing code above (getWritesBlockedResponse, auth checks, etc.)
+// Only change the where clause:
+const where = isAdminEmail(currentUser.email)
+  ? { id: reservationId }
+  : {
+      id: reservationId,
+      OR: [{ userId: currentUser.id }, { listing: { userId: currentUser.id } }],
+    };
+const result = await prisma.reservation.deleteMany({ where });
+```
+
+> **Pre-existing behaviour:** `deleteMany` returns `{ count: 0 }` with a 200 on double-cancel. The client will show `toast.success` on any 2xx. Fixing this is out of scope.
+
+---
+
+## URL Search Param Names
+
+`page.tsx` parses these from the `searchParams` RSC prop and passes them to `getAllReservations`. `OrdersClient` reads and writes these same names via `useSearchParams` / `router.push`.
+
+| Param | Type | Example |
+|-------|------|---------|
+| `search` | string | `?search=acme` |
+| `category` | string | `?category=Warehouse` |
+| `startDate` | ISO date string | `?startDate=2026-01-01` |
+| `endDate` | ISO date string | `?endDate=2026-12-31` |
+
+**Date filter semantics:** `startDate` / `endDate` filter bookings whose service window **overlaps** the given range. The Prisma `where` clause is:
+
+```ts
+...(startDate && { startDate: { lte: new Date(endDate ?? "9999") } }),
+...(endDate   && { endDate:   { gte: new Date(startDate ?? "0000") } }),
+```
+
+This returns any booking that has at least one day within the selected window. If only `startDate` is provided, all bookings that start on or before that date and haven't ended yet are included. If only `endDate` is provided, all bookings that end on or after that date are included.
 
 ---
 
@@ -69,11 +136,16 @@ Add `isAdminEmail(currentUser.email)` as an additional OR condition in the exist
 
 ```
 app/admin/orders/
-  page.tsx           ← server RSC: auth check, filter param parsing, data fetch
-  OrdersClient.tsx   ← "use client": filter state, URL search params, router
-  OrdersTable.tsx    ← "use client": table rows, expandable detail, cancel action
-  FilterBar.tsx      ← "use client": search input, category select, date inputs
+  page.tsx           ← server RSC: auth check, searchParams parsing, getAllReservations call
+  OrdersClient.tsx   ← "use client": owns URL search param state; renders FilterBar + OrdersTable
+  OrdersTable.tsx    ← "use client": table rows, expandable detail row, cancel action
+  FilterBar.tsx      ← "use client": pure controlled component — no internal state, props only
 ```
+
+**Component responsibility split:**
+- `OrdersClient` reads URL params via `useSearchParams`, builds the filter object, calls `router.push` on any filter change. Renders `<FilterBar>` (current values + onChange handlers) and `<OrdersTable>` (reservation data + cancel handler).
+- `FilterBar` is a controlled component — all state lives in `OrdersClient`.
+- `OrdersTable` owns only `deletingId` local state (for per-row loading state during cancel).
 
 ---
 
@@ -82,37 +154,40 @@ app/admin/orders/
 ```
 <Container>
   <Heading title="Rental Orders" subtitle="Manage all service bookings" />
-  <FilterBar />           ← search · category · start date · end date
-  <OrdersTable />         ← table with expandable rows
-  <EmptyState />          ← shown when no results match filters
+  <OrdersClient reservations={reservations} />
+    ├── <FilterBar
+    │     search, category, startDate, endDate (values)
+    │     onSearchChange, onCategoryChange, onStartDateChange, onEndDateChange />
+    └── <OrdersTable reservations={...} deletingId onCancel />
+          ← when empty: single full-width row "No bookings found."
 ```
 
 ### FilterBar
 
 Four controls in a single row (wraps on mobile):
-- **Search** — text input, placeholder "Search customer name or email"
-- **Category** — `<select>`: All / Showcase & Performance / Warehouse / Restaurant
+- **Search** — `<input type="text">`, placeholder `"Search by name or email"`
+- **Category** — `<select>`: `""` (All) / `"Showcase & Performance"` / `"Warehouse"` / `"Restaurant"` — option values match DB display names
 - **Start date** — `<input type="date">`
 - **End date** — `<input type="date">`
 
-Filter state lives in URL search params. On any change, `router.push` with updated params. The server component re-fetches on navigation, so no client-side data management is needed.
-
 ### OrdersTable
 
-Standard HTML `<table>` with these columns:
+Standard `<table>` columns:
 
 | Customer | Service | Dates | Total | Booked On | Actions |
 |----------|---------|-------|-------|-----------|---------|
 
-- **Customer** — `customerName` (primary), click to expand row
-- **Service** — `listing.title` + category badge
-- **Dates** — `startDate → endDate`
+- **Customer** — `customerName`; click toggles expandable detail row
+- **Service** — `listing.title` + category text
+- **Dates** — `startDate → endDate` (formatted)
 - **Total** — `$totalPrice`
 - **Booked On** — `createdAt` date
-- **Actions** — "Cancel" button
+- **Actions** — "Cancel" button (`disabled` when `deletingId === id`)
 
-**Expandable row:** Clicking a customer name toggles a sub-row showing:
-`Email: ... · Phone: ... · Business: ...`
+**Expandable row:** Toggles a `<tr>` sub-row spanning all columns:
+`Email: {customerEmail}` · `Phone: {customerPhone ?? "—"}` · `Business: {customerBusinessName ?? "—"}`
+
+**Zero-results state:** Handled client-side in `OrdersTable`. When `reservations.length === 0`, render a single full-width `<td>` row: `"No bookings found."`
 
 **Styling:** white/gray/black only
 - Table: `border border-gray-200`, `divide-y divide-gray-200`
@@ -124,15 +199,14 @@ Standard HTML `<table>` with these columns:
 
 ## Cancel/Delete Action
 
-**Endpoint:** Reuse `DELETE /api/reservations/[reservationId]` — no new route needed.
+**Endpoint:** `DELETE /api/reservations/[reservationId]` (modified per Data Layer section above)
 
-**Client flow:**
-1. Admin clicks "Cancel" on a row
-2. `window.confirm("Cancel this booking?")` — if dismissed, stop
+**Client flow in `OrdersTable`:**
+1. Admin clicks "Cancel" → `window.confirm("Cancel this booking?")` — dismissed → stop
+2. `setDeletingId(id)` → button enters disabled state
 3. `axios.delete('/api/reservations/' + id)` fires
-4. Button enters disabled/loading state via `deletingId` state variable
-5. Success → `toast.success("Booking cancelled")` + `router.refresh()`
-6. Error → `toast.error("Something went wrong")` + loading clears
+4. Success → `toast.success("Booking cancelled")` + `router.refresh()` + `setDeletingId(null)`
+5. Error → `toast.error("Something went wrong")` + `setDeletingId(null)`
 
 ---
 
@@ -141,7 +215,9 @@ Standard HTML `<table>` with these columns:
 - Email notification to customer on cancellation
 - Booking status field (`pending` / `completed` / `cancelled`) — requires schema change
 - Revenue/stats summary header
-- Pagination — filter + refresh sufficient for MVP booking volume
+- Pagination
+- Double-cancel 200 fix (pre-existing behaviour)
+- Displaying operator name on orders table
 
 ---
 
@@ -155,8 +231,8 @@ Standard HTML `<table>` with these columns:
 | Create | `app/admin/orders/FilterBar.tsx` |
 | Create | `app/actions/getAllReservations.ts` |
 | Modify | `types.ts` — add `SafeAdminReservation` |
-| Modify | `middleware.ts` — add `/admin/orders` to matcher |
-| Modify | `app/api/reservations/[reservationId]/route.ts` — admin bypass |
+| Modify | `middleware.ts` — add `"/admin/orders"` to matcher |
+| Modify | `app/api/reservations/[reservationId]/route.ts` — admin bypass in delete guard |
 | Modify | `components/navbar/UserMenu.tsx` — add Orders link for admins |
 
 ---
@@ -166,14 +242,16 @@ Standard HTML `<table>` with these columns:
 - [ ] `npm run lint` passes
 - [ ] `npm run build` passes
 - [ ] Unauthenticated user visiting `/admin/orders` is redirected to login
-- [ ] Non-admin authenticated user sees "Unauthorized" empty state
+- [ ] Authenticated non-admin user sees "Admin access required" empty state
 - [ ] Admin sees all reservations across all customers
 - [ ] Search by customer name filters results
 - [ ] Search by customer email filters results
-- [ ] Category filter narrows to correct services
+- [ ] Category filter uses display names and narrows results correctly
 - [ ] Date range filter returns only bookings within range
-- [ ] Expanding a row shows email, phone, businessName
+- [ ] Expanding a customer name row shows email, phone, businessName
 - [ ] Cancel: confirm dialog appears; dismissing does nothing
-- [ ] Cancel: confirmed → booking removed, toast shown
+- [ ] Cancel: confirmed → booking removed from table, success toast shown
+- [ ] Admin can cancel a booking they do not own (admin bypass verified)
 - [ ] "Orders" link visible in UserMenu for admin users only
 - [ ] "Orders" link not visible for non-admin users
+- [ ] Zero-results state shows "No bookings found." in table
