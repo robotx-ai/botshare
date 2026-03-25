@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  getServiceAreaByValue,
-  SOUTHERN_CALIFORNIA_LABEL,
-} from "@/lib/serviceLocation";
 import useSearchModal from "@/hook/useSearchModal";
 import { differenceInDays } from "date-fns";
 import { useSearchParams } from "next/navigation";
@@ -18,20 +14,13 @@ function Search({ transparent = false }: Props) {
   const searchModel = useSearchModal();
   const params = useSearchParams();
 
-  const locationValue = params?.get("locationValue");
+  const zipCode = params?.get("zipCode");
   const startDate = params?.get("startDate");
   const endDate = params?.get("endDate");
 
   const locationLabel = useMemo(() => {
-    if (locationValue) {
-      return (
-        getServiceAreaByValue(locationValue as string)?.label ||
-        SOUTHERN_CALIFORNIA_LABEL
-      );
-    }
-
-    return SOUTHERN_CALIFORNIA_LABEL;
-  }, [locationValue]);
+    return zipCode ? zipCode : "Any Area";
+  }, [zipCode]);
 
   const durationLabel = useMemo(() => {
     if (startDate && endDate) {
