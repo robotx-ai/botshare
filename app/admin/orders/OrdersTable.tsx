@@ -40,15 +40,27 @@ export default function OrdersTable({ reservations }: Props) {
 
   if (reservations.length === 0) {
     return (
-      <table className="w-full border border-gray-200 rounded-lg text-sm">
-        <tbody>
-          <tr>
-            <td className="px-4 py-8 text-center text-gray-500" colSpan={6}>
-              No bookings found.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full border border-gray-200 rounded-lg text-sm divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Customer</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Service</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Dates</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Total</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Booked On</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="px-4 py-8 text-center text-gray-500" colSpan={6}>
+                No bookings found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     );
   }
 
@@ -72,6 +84,7 @@ export default function OrdersTable({ reservations }: Props) {
                 <td className="px-4 py-3">
                   <button
                     onClick={() => setExpandedId(expandedId === r.id ? null : r.id)}
+                    aria-expanded={expandedId === r.id}
                     className="text-gray-900 font-medium hover:underline text-left"
                   >
                     {r.customerName || "(no name)"}
