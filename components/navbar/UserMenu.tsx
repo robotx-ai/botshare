@@ -25,6 +25,8 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
   const loginModel = useLoginModel();
   const rentModel = useRentModal();
   const [isOpen, setIsOpen] = useState(false);
+  const isProvider = currentUser?.userType === "PROVIDER";
+  const isCustomer = currentUser?.userType === "CUSTOMER";
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -82,49 +84,59 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
-                {currentUser.userType === "PROVIDER" && (
+                {isProvider && (
                   <div className="px-4 py-2 text-xs font-semibold bg-black text-white uppercase tracking-wide">
                     Service Provider
                   </div>
                 )}
-                {currentUser.userType !== "PROVIDER" && (
-                  <MenuItem
-                    onClick={() => { setIsOpen(false); router.push("/trips"); }}
-                    label="My scheduled services"
-                  />
+                {isCustomer ? (
+                  <>
+                    <MenuItem
+                      onClick={() => { setIsOpen(false); router.push("/trips"); }}
+                      label="My scheduled services"
+                    />
+                    <MenuItem
+                      onClick={() => { setIsOpen(false); router.push("/favorites"); }}
+                      label="Saved services"
+                    />
+                    <MenuItem
+                      onClick={() => {
+                        setIsOpen(false);
+                        router.push("/robot-types");
+                      }}
+                      label="Browse robot types"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <MenuItem
+                      onClick={() => { setIsOpen(false); router.push("/reservations"); }}
+                      label="Service bookings"
+                    />
+                    {(isAdmin || isProvider) && (
+                      <MenuItem
+                        onClick={() => { setIsOpen(false); router.push("/my-listings"); }}
+                        label="My services"
+                      />
+                    )}
+                    {isAdmin && (
+                      <MenuItem
+                        onClick={() => { setIsOpen(false); router.push("/admin/orders"); }}
+                        label="Orders"
+                      />
+                    )}
+                    {isAdmin && <MenuItem onClick={() => { setIsOpen(false); onRent(); }} label="List a service" />}
+                    <MenuItem
+                      onClick={() => {
+                        setIsOpen(false);
+                        router.push("/robot-types");
+                      }}
+                      label="Browse robot types"
+                    />
+                    <hr />
+                    <MenuItem onClick={() => { setIsOpen(false); signOut(); }} label="Logout" />
+                  </>
                 )}
-                {currentUser.userType !== "PROVIDER" && (
-                  <MenuItem
-                    onClick={() => { setIsOpen(false); router.push("/favorites"); }}
-                    label="Saved services"
-                  />
-                )}
-                <MenuItem
-                  onClick={() => { setIsOpen(false); router.push("/reservations"); }}
-                  label="Service bookings"
-                />
-                {(isAdmin || currentUser.userType === "PROVIDER") && (
-                  <MenuItem
-                    onClick={() => { setIsOpen(false); router.push("/my-listings"); }}
-                    label="My services"
-                  />
-                )}
-                {isAdmin && (
-                  <MenuItem
-                    onClick={() => { setIsOpen(false); router.push("/admin/orders"); }}
-                    label="Orders"
-                  />
-                )}
-                {isAdmin && <MenuItem onClick={() => { setIsOpen(false); onRent(); }} label="List a service" />}
-                <MenuItem
-                  onClick={() => {
-                    setIsOpen(false);
-                    router.push("/robot-types");
-                  }}
-                  label="Browse robot types"
-                />
-                <hr />
-                <MenuItem onClick={() => { setIsOpen(false); signOut(); }} label="Logout" />
               </>
             ) : (
               <>
