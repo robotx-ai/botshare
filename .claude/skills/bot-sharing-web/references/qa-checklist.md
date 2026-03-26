@@ -23,8 +23,9 @@ Run these checks for each task PR.
 - Assurance copy is BotSharing US Service Assurance branded.
 
 4. Create-service flow
-- Non-admin users cannot create or mutate service records.
-- Admin users can create records with valid category values.
+- Customer users cannot create or mutate service records.
+- Provider users can create/edit/delete only their own services.
+- Admin users can create and mutate any service record with valid category values.
 
 5. Booking flow
 - Booking still requires date range and computes total price.

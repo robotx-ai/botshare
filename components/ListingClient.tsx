@@ -67,24 +67,27 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
     setIsLoading(true);
 
     axios
-      .post("/api/reservations", {
+      .post("/api/checkout", {
         totalPrice,
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
         listingId: listing?.id,
       })
-      .then(() => {
-        toast.success("Booking confirmed");
-        setDateRange(initialDateRange);
-        router.push("/trips");
+      .then((response) => {
+        if (response.data?.url) {
+          window.location.href = response.data.url;
+        } else {
+          toast.error("Could not start checkout. Please try again.");
+          setIsLoading(false);
+        }
       })
       .catch(() => {
         toast.error("Something went wrong");
-      })
-      .finally(() => {
         setIsLoading(false);
       });
-  }, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
+    // Note: setIsLoading(false) is intentionally omitted on the success path —
+    // the browser navigates away to Stripe, keeping the spinner visible.
+  }, [totalPrice, dateRange, listing?.id, currentUser, loginModal]);
 
   useEffect(() => {
     let perDayPrice: number;

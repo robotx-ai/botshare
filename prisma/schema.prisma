@@ -84,10 +84,11 @@ model Reservation {
   listingId  String
   startDate  DateTime
   endDate    DateTime
-  totalPrice Int
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  totalPrice      Int
+  createdAt       DateTime @default(now())
+  stripeSessionId String?  @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
   @@index([listingId])
   @@index([userId])

@@ -18,7 +18,11 @@ Prioritize these files for BotShare web tasks.
 
 ## App shell and metadata
 - `/Users/jasonliu/Github/botshare/app/layout.tsx`
-  - Update metadata title/description/icon branding; controls RentModal admin-only mount.
+  - Update metadata title/description/icon branding; controls RentModal mount (admin only).
+- `/Users/jasonliu/Github/botshare/app/my-listings/page.tsx` + `MyListingsClient.tsx`
+  - Provider/admin-only page for managing owned services. Access-gated by `userType === "PROVIDER"` or `isAdminEmail`.
+- `/Users/jasonliu/Github/botshare/components/navbar/UserMenu.tsx`
+  - Role-split menus: CUSTOMER sees trips/favorites/browse; PROVIDER and admin see service bookings, my services, orders, list-a-service.
 - `/Users/jasonliu/Github/botshare/README.md`
   - Remove Airbnb references for onboarding clarity.
 - `/Users/jasonliu/Github/botshare/.env.example`
@@ -26,9 +30,9 @@ Prioritize these files for BotShare web tasks.
 
 ## Backend policy points
 - `/Users/jasonliu/Github/botshare/app/api/listings/route.ts`
-  - Enforce category allowlist and admin-write policy (`ADMIN_EMAILS`).
+  - Enforce category allowlist and provider/admin-write policy (`ADMIN_EMAILS`).
 - `/Users/jasonliu/Github/botshare/app/api/listings/[listingId]/route.ts`
-  - Enforce admin-only delete/update behavior.
+  - Enforce provider-owns-own-service and admin-cross-catalog delete/update behavior.
 - `/Users/jasonliu/Github/botshare/app/api/reservations/route.ts`
   - Keep date-range booking semantics; wording updates only in response messages/UI.
 - `/Users/jasonliu/Github/botshare/app/actions/getListings.ts`

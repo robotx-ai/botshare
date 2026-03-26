@@ -106,6 +106,8 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                       }}
                       label="Browse robot types"
                     />
+                    <hr />
+                    <MenuItem onClick={() => { setIsOpen(false); signOut(); }} label="Logout" />
                   </>
                 ) : (
                   <>

@@ -1,6 +1,6 @@
 ---
 name: bot-sharing-web
-description: Use when working on the BotShare (botsharing.us) Next.js web app — enforcing terminology, category constraints, white/gray/black theme colors, admin-only write policy, Supabase operations, and regression validation.
+description: Use when working on the BotShare (botsharing.us) Next.js web app — enforcing terminology, category constraints, white/gray/black theme colors, provider/admin write policy, Supabase operations, and regression validation.
 ---
 
 # BotShare Web Standards
@@ -9,7 +9,7 @@ description: Use when working on the BotShare (botsharing.us) Next.js web app �
 Use this skill when any request includes:
 - Updating service taxonomy, category filters, booking copy, or service detail text.
 - Updating or normalizing UI theme colors to white/gray/black.
-- Enforcing BotShare admin-only mutation rules for service catalog endpoints.
+- Enforcing BotShare provider/admin mutation rules for service catalog endpoints.
 - Running Supabase checks/migrations/policies for this repo.
 - Running QA checks to detect regressions in wording, taxonomy, or authorization.
 
@@ -46,9 +46,12 @@ Follow this sequence unless the user requests a narrower scope.
 - Verify there are no non-neutral color regressions in updated files.
 
 ### 5. Enforce catalog ownership rules
-- BotShare-managed catalog only in MVP.
-- Non-admin users cannot create/edit/delete services.
-- Enforce at API layer with `ADMIN_EMAILS` allowlist, even if UI is hidden.
+- Catalog supports provider-owned services with admin oversight in MVP.
+- Customers cannot create/edit/delete any services.
+- Providers can create/edit/delete only their own services; cross-ownership mutations must be blocked.
+- Admins have full cross-catalog visibility and mutation access via `ADMIN_EMAILS` allowlist.
+- Enforce at API layer regardless of UI visibility.
+- Service-management UI (My services, List a service) is visible only to providers and admins.
 
 ### 6. Validate
 - Run quality checks:

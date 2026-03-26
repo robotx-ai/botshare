@@ -16,8 +16,9 @@ A task is complete only if all criteria below pass.
 - Pricing text uses per-day semantics.
 
 ## 3. Authorization
-- Non-admin users receive 403 on service create/edit/delete endpoints.
-- Admin authorization is controlled by `ADMIN_EMAILS` allowlist.
+- Customers receive 403 on service create/edit/delete endpoints.
+- Providers can create/edit/delete only their own services; cross-ownership mutations return 403.
+- Admins have full cross-catalog visibility and mutation access, controlled by `ADMIN_EMAILS` allowlist.
 - API authorization exists regardless of UI visibility.
 
 ## 4. Booking behavior
@@ -32,7 +33,7 @@ A task is complete only if all criteria below pass.
 
 ## 6. Scope compliance
 - No Prisma schema redesign included unless explicitly requested.
-- No multi-provider marketplace features added.
+- No marketplace expansion beyond provider self-service ownership and admin oversight.
 
 ## 7. Supabase operational readiness
 - `SUPABASE_PROJECT_REF`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, and `SUPABASE_SERVICE_ROLE_KEY` are configured.
