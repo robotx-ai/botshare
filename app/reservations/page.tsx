@@ -1,5 +1,6 @@
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
+import { isAdminEmail } from "@/lib/adminAuth";
 import React from "react";
 import getCurrentUser from "../actions/getCurrentUser";
 import getReservation from "../actions/getReservations";
@@ -18,9 +19,9 @@ const ReservationsPage = async (props: Props) => {
     );
   }
 
-  const reservations = await getReservation({
-    authorId: currentUser.id,
-  });
+  const reservations = await getReservation(
+    isAdminEmail(currentUser.email) ? {} : { authorId: currentUser.id }
+  );
 
   if (reservations.length === 0) {
     return (

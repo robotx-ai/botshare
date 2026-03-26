@@ -84,9 +84,9 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
-                {isProvider && (
+                {(isAdmin || isProvider) && (
                   <div className="px-4 py-2 text-xs font-semibold bg-black text-white uppercase tracking-wide">
-                    Service Provider
+                    {isAdmin ? "Administrator" : "Service Provider"}
                   </div>
                 )}
                 {isCustomer ? (
@@ -113,7 +113,7 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                   <>
                     <MenuItem
                       onClick={() => { setIsOpen(false); router.push("/reservations"); }}
-                      label="Service bookings"
+                      label={isAdmin ? "Service bookings (ADMIN)" : "Service bookings"}
                     />
                     {(isAdmin || isProvider) && (
                       <MenuItem
@@ -124,7 +124,7 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                     {isAdmin && (
                       <MenuItem
                         onClick={() => { setIsOpen(false); router.push("/admin/orders"); }}
-                        label="Orders"
+                        label="Orders (ADMIN)"
                       />
                     )}
                     {isAdmin && <MenuItem onClick={() => { setIsOpen(false); onRent(); }} label="List a service" />}

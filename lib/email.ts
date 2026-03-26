@@ -135,12 +135,13 @@ export async function sendAdminBookingNotification(data: BookingEmailData) {
     ${ctaButton("View Orders", `${SITE_URL}/admin/orders`)}
   `;
 
-  await getResend().emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM,
     to: adminEmails,
     subject: `New Booking — ${title} | BotShare`,
     html: emailLayout(body),
   });
+  if (error) throw new Error(`Resend admin email failed: ${JSON.stringify(error)}`);
 }
 
 export async function sendCustomerBookingConfirmation(data: BookingEmailData) {
@@ -174,10 +175,11 @@ export async function sendCustomerBookingConfirmation(data: BookingEmailData) {
     ${ctaButton("View My Bookings", `${SITE_URL}/trips`)}
   `;
 
-  await getResend().emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM,
     to: customer.email,
     subject: `Booking Confirmed — ${title} | BotShare`,
     html: emailLayout(body),
   });
+  if (error) throw new Error(`Resend customer email failed: ${JSON.stringify(error)}`);
 }
