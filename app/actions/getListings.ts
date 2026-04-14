@@ -72,7 +72,8 @@ export default async function getListings(params: IListingsParams) {
       if (centroid) {
         const nearbyRows = await prisma.$queryRaw<{ id: string }[]>(
           Prisma.sql`
-            SELECT id FROM "Listing"
+            SELECT DISTINCT ON (title) id
+            FROM "Listing"
             WHERE lat IS NOT NULL AND lng IS NOT NULL
               AND (
                 3959 * acos(
@@ -83,6 +84,14 @@ export default async function getListings(params: IListingsParams) {
                   )
                 )
               ) <= 100
+            ORDER BY title,
+              (3959 * acos(
+                LEAST(1.0,
+                  cos(radians(${centroid.lat})) * cos(radians(lat)) *
+                  cos(radians(lng) - radians(${centroid.lng})) +
+                  sin(radians(${centroid.lat})) * sin(radians(lat))
+                )
+              )) ASC
           `
         );
         if (nearbyRows.length === 0) return [];
@@ -132,6 +141,17 @@ export default async function getListings(params: IListingsParams) {
         const aIsShowcase = a.category === "Showcase & Performance" ? 0 : 1;
         const bIsShowcase = b.category === "Showcase & Performance" ? 0 : 1;
         return aIsShowcase - bIsShowcase;
+      });
+    }
+
+    // Catalog browse (no userId): deduplicate by title so each service
+    // appears once regardless of how many locations it's listed in.
+    if (!userId) {
+      const seen = new Set<string>();
+      return safeListings.filter((l) => {
+        if (seen.has(l.title)) return false;
+        seen.add(l.title);
+        return true;
       });
     }
 

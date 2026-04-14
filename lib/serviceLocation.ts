@@ -8,6 +8,7 @@ export type ServiceAreaOption = {
 };
 
 export const SOUTHERN_CALIFORNIA_LABEL = "Southern California";
+export const FLORIDA_LABEL = "Florida";
 export const DEFAULT_SERVICE_AREA_VALUE = "los-angeles";
 
 export const SERVICE_AREAS: ServiceAreaOption[] = [
@@ -66,6 +67,87 @@ export const SERVICE_AREAS: ServiceAreaOption[] = [
     latlng: [32.8475, -115.5720],
     region: SOUTHERN_CALIFORNIA_LABEL,
     bbox: [-116.10, 32.50, -114.47, 33.51],
+  },
+  // --- Florida ---
+  {
+    value: "miami",
+    label: "Miami",
+    flag: "US",
+    latlng: [25.7617, -80.1918],
+    region: FLORIDA_LABEL,
+    bbox: [-80.88, 25.14, -80.03, 26.00],
+  },
+  {
+    value: "fort-lauderdale",
+    label: "Fort Lauderdale",
+    flag: "US",
+    latlng: [26.1224, -80.1373],
+    region: FLORIDA_LABEL,
+    bbox: [-80.44, 25.96, -80.04, 26.39],
+  },
+  {
+    value: "west-palm-beach",
+    label: "West Palm Beach",
+    flag: "US",
+    latlng: [26.7153, -80.0534],
+    region: FLORIDA_LABEL,
+    bbox: [-80.69, 26.32, -80.03, 27.03],
+  },
+  {
+    value: "orlando",
+    label: "Orlando",
+    flag: "US",
+    latlng: [28.5383, -81.3792],
+    region: FLORIDA_LABEL,
+    bbox: [-81.86, 28.17, -80.82, 28.79],
+  },
+  {
+    value: "tampa",
+    label: "Tampa",
+    flag: "US",
+    latlng: [27.9506, -82.4572],
+    region: FLORIDA_LABEL,
+    bbox: [-82.83, 27.57, -82.05, 28.17],
+  },
+  {
+    value: "jacksonville",
+    label: "Jacksonville",
+    flag: "US",
+    latlng: [30.3322, -81.6557],
+    region: FLORIDA_LABEL,
+    bbox: [-82.05, 30.10, -81.31, 30.59],
+  },
+  {
+    value: "naples",
+    label: "Naples",
+    flag: "US",
+    latlng: [26.1420, -81.7948],
+    region: FLORIDA_LABEL,
+    bbox: [-82.03, 25.84, -81.18, 26.52],
+  },
+  {
+    value: "fort-myers",
+    label: "Fort Myers",
+    flag: "US",
+    latlng: [26.6406, -81.8723],
+    region: FLORIDA_LABEL,
+    bbox: [-82.27, 26.34, -81.56, 26.85],
+  },
+  {
+    value: "st-petersburg",
+    label: "St. Petersburg",
+    flag: "US",
+    latlng: [27.7676, -82.6403],
+    region: FLORIDA_LABEL,
+    bbox: [-82.85, 27.63, -82.53, 27.89],
+  },
+  {
+    value: "tallahassee",
+    label: "Tallahassee",
+    flag: "US",
+    latlng: [30.4383, -84.2807],
+    region: FLORIDA_LABEL,
+    bbox: [-84.68, 30.13, -83.82, 30.76],
   },
 ];
 
