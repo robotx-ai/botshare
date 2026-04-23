@@ -30,24 +30,45 @@ Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the s
 ## Architecture
 
 **Framework**: Next.js 13 (App Router + Pages Router hybrid)
-- `app/` — React Server Components (App Router): layout, page routes, server actions
-- `pages/api/` — API routes (Pages Router): currently only `auth/[...nextauth].ts`
-- The main CRUD API endpoints (listings, reservations, favorites, register) appear to live in the `app/` directory or are legacy routes
+- `app/` — React Server Components (App Router): layout, page routes, server actions, API routes
+- `pages/api/` — Pages Router API: only `auth/[...nextauth].ts` (NextAuth requires Pages Router)
+- All other API endpoints live under `app/api/`
 
 **Key directories**:
-- `app/actions/` — Server-side data fetchers: `getListings`, `getListingById`, `getReservations`, `getFavoriteListings`, `getCurrentUser`
+- `app/actions/` — Server-side data fetchers: `getListings`, `getListingById`, `getReservations`, `getAllReservations` (admin), `getFavoriteListings`, `getCurrentUser`
+- `app/api/` — `listings/`, `reservations/`, `favorites/`, `register/`, `checkout/` (Stripe session), `upload/` (Cloudinary signatures)
 - `app/listings/[listingId]/` — Service detail page
 - `app/services/` — Browse/filter services catalog
 - `app/trips/`, `app/reservations/`, `app/favorites/`, `app/my-listings/` — Authenticated user pages (protected by `middleware.ts`)
-- `components/models/` — Modal dialogs: Login, Register, RentModal (admin-only: create service), Search
-- `components/navbar/` — Navbar with Categories filter, Search, UserMenu
+- `app/admin/orders/` — Admin-only orders dashboard with filter/cancel
+- `app/checkout/success/` — Stripe post-payment landing
+- `app/robot-types/` — Static marketing pages for robot models
+- `components/models/` — Modal dialogs: Login, Register, RentModal (provider/admin: create service), Search
+- `components/navbar/` — Navbar with Categories filter, Search (incl. zip proximity), UserMenu (role-aware)
 - `components/listing/` — Service card and detail sub-components
-- `lib/` — Shared utilities: `adminAuth.ts` (admin check), `serviceCategories.ts` (category constants), `writeGuard.ts` (migration read-only lock), `prismadb.ts` (Prisma singleton)
+- `components/robot-types/` — Robot type landing components
+- `lib/` — Shared utilities:
+  - `adminAuth.ts` — admin email allowlist check
+  - `prismadb.ts` — Prisma singleton
+  - `stripe.ts` — Stripe client
+  - `email.ts` — transactional email helpers
+  - `serviceCategories.ts` — category constants
+  - `serviceLocation.ts`, `zipCentroid.ts` — zip-code proximity search
+  - `scenarioPricing.ts`, `agibotScenarioDetails.ts` — scenario-based pricing model
+  - `robotModel.ts`, `robotTypeCatalog.ts` — robot taxonomy
+  - `writeGuard.ts` — migration read-only lock
 - `hook/` — Zustand modal stores and utility hooks
+- `scripts/` — one-off data scripts (e.g. `duplicate-ca-to-fl.js`, `expand-fl-listings.js`, migration helpers)
 
-**Database**: Supabase Postgres via Prisma (migrated from MongoDB). Schema in `prisma/schema.prisma`. Models: `User`, `Account`, `Listing`, `Reservation`, `UserFavorite`.
+**Database**: Supabase Postgres via Prisma (migrated from MongoDB). Schema in `prisma/schema.prisma`. Models: `User`, `Account`, `Listing`, `Reservation`, `UserFavorite`. Enum `UserType { CUSTOMER, PROVIDER }`.
 
-**Auth**: NextAuth with Google + Facebook providers, Prisma adapter. Admin access gated by `ADMIN_EMAILS` env var (comma-separated email allowlist).
+**Auth**: NextAuth with Google + Facebook providers, Prisma adapter. Two role axes:
+- `User.userType` (CUSTOMER | PROVIDER) — product role; determines UserMenu options and MyListings access
+- `ADMIN_EMAILS` env allowlist (via `isAdminEmail()` in `lib/adminAuth.ts`) — elevated ops role for admin routes and cross-tenant cancel
+
+**Payments**: Stripe Checkout Sessions. Booking flow: `POST /api/checkout` creates session → redirect to Stripe → `/checkout/success` finalizes `Reservation` with `stripeSessionId`.
+
+**Maps**: MapLibre GL (migrated from Leaflet). Zip-code proximity search powered by `lib/serviceLocation.ts` + `lib/zipCentroid.ts`.
 
 ## Mandatory Terminology (User-Facing Copy)
 
@@ -75,9 +96,12 @@ Source of truth: `lib/serviceCategories.ts`
 
 ## Access Control
 
-- Service catalog is admin-managed only. Non-admin users must not create/edit/delete services.
-- Admin check: `isAdminEmail()` from `lib/adminAuth.ts` — reads `ADMIN_EMAILS` env var.
-- Enforce at API layer regardless of UI visibility. `RentModal` (create service) is only mounted for admins in `app/layout.tsx`.
+- Service catalog write access is gated to **providers and admins**. Customers must not create/edit/delete services.
+  - Provider check: `session.user.userType === 'PROVIDER'`
+  - Admin check: `isAdminEmail()` from `lib/adminAuth.ts` — reads `ADMIN_EMAILS` env var
+- Enforce at API layer regardless of UI visibility. `RentModal` (create service) is mounted conditionally in `app/layout.tsx` for eligible roles.
+- **Admin-only surfaces**: `/admin/orders` (all bookings, filter, cross-tenant cancel). Middleware matcher in `middleware.ts` gates `/admin/*`.
+- **Reservation cancellation**: owners can cancel their own; admins can cancel any (DELETE `/api/reservations/[id]`).
 
 ## Theme Colors (MVP Constraint)
 
@@ -86,22 +110,30 @@ User-facing UI must use only **white, gray, and black**. Replace any legacy rose
 ## Schema Guardrails
 
 - Do not redesign the Prisma schema without explicit request.
-- Keep existing route shapes (`/listings/[listingId]`, `/api/listings`, `/api/reservations`, etc.).
+- Keep existing route shapes (`/listings/[listingId]`, `/api/listings`, `/api/reservations`, `/api/checkout`, etc.).
 - `Listing.category` → one of the 3 service categories.
 - `Listing.price` → per-day service price.
-- `locationValue` → service coverage city/region.
-- `guestCount`, `roomCount`, `bathroomCount` are legacy compatibility fields; do not repurpose.
+- `Listing.locationValue` → service coverage city/region.
+- `Listing.zipCode`, `Listing.lat`, `Listing.lng` → nullable; populated for zip proximity search.
+- `Listing.videoSrc` → nullable Cloudinary video delivery URL.
+- `Reservation.stripeSessionId` → unique; set after successful Stripe checkout.
+- `guestCount`, `roomCount`, `bathroomCount` on `Listing` are legacy compatibility fields; do not repurpose.
+- `User.userType` is the canonical role flag — don't add parallel role booleans.
 
 ## Environment Variables
 
 Copy `.env.example` to `.env` and fill in values. Key vars:
-- `DATABASE_URL` — Supabase Postgres connection string
+- `DATABASE_URL` — Supabase Postgres connection string (pooled)
+- `DIRECT_URL` — direct Supabase connection for migrations
 - `ADMIN_EMAILS` — comma-separated admin email allowlist
 - `NEXTAUTH_SECRET`, `NEXTAUTH_URL` — NextAuth config
-- `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` — Cloudinary cloud name (used for image and video delivery)
-- `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — Cloudinary server-side credentials for uploads
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `FACEBOOK_CLIENT_ID`, `FACEBOOK_CLIENT_SECRET` — OAuth providers
+- `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` — Stripe payments
+- `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` — Cloudinary cloud name (image + video delivery)
+- `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — Cloudinary server-side credentials
 - `CLOUDINARY_URL` — shorthand `cloudinary://<key>:<secret>@<cloud>` (alternative to key/secret pair)
 - `SUPABASE_*` — for Supabase CLI operations
+- SMTP credentials (for `lib/email.ts`) as applicable
 
 ## Cloudinary Video Management
 
