@@ -1,3 +1,8 @@
+-- Prisma Migrate wraps migrations in an implicit transaction on Postgres,
+-- but we make the fence explicit so the destructive DELETEs cannot commit
+-- without the enum + column tightening also succeeding.
+BEGIN;
+
 -- Destructive: wipe reservations + listings before applying NOT NULL constraints
 DELETE FROM "Reservation";
 DELETE FROM "Listing";
@@ -18,3 +23,5 @@ ALTER TABLE "Listing" ALTER COLUMN "metro" SET NOT NULL;
 -- CreateIndex
 CREATE INDEX "Listing_metro_idx" ON "Listing"("metro");
 CREATE INDEX "Listing_zipCode_idx" ON "Listing"("zipCode");
+
+COMMIT;

@@ -64,8 +64,6 @@ export default async function getListings(params: IListingsParams) {
       const zipData = getZipData(zipCode);
       if (!zipData) return [];
 
-      query.metro = zipData.metro;
-
       const nearbyRows = await prisma.$queryRaw<{ id: string }[]>(
         Prisma.sql`
           SELECT DISTINCT ON (title) id

@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import React from "react";
 import { IconType } from "react-icons";
 import { AgibotScenarioDetails } from "@/lib/agibotScenarioDetails";
-import type { Metro } from "@/lib/zipMetro";
+import type { Metro } from "@/lib/metro";
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
 import Sleep from "../Sleep";

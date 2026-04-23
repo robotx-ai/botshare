@@ -7,7 +7,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import { useCallback, useMemo, useState } from "react";
 import { Range } from "react-date-range";
-import { getMetroCentroid, getZipData } from "@/lib/zipMetro";
+import { getMetroCentroid } from "@/lib/metro";
+import useZipCheck from "@/hook/useZipCheck";
 
 import Heading from "../Heading";
 import Calendar from "../inputs/Calendar";
@@ -28,11 +29,7 @@ function SearchModal({}: Props) {
 
   const [zipCode, setZipCode] = useState("");
   const [step, setStep] = useState(STEPS.LOCATION);
-  const zipData = useMemo(
-    () => (zipCode.length === 5 ? getZipData(zipCode) : null),
-    [zipCode]
-  );
-  const zipInvalid = zipCode.length === 5 && !zipData;
+  const { zipData, invalid: zipInvalid } = useZipCheck(zipCode);
   const [dateRange, setDateRange] = useState<Range>({
     startDate: new Date(),
     endDate: new Date(),
@@ -57,7 +54,7 @@ function SearchModal({}: Props) {
 
   const onSubmit = useCallback(() => {
     if (step === STEPS.LOCATION) {
-      if (zipCode && (zipCode.length !== 5 || !getZipData(zipCode))) {
+      if (zipCode && (zipCode.length !== 5 || !zipData)) {
         return;
       }
       return onNext();
@@ -108,6 +105,7 @@ function SearchModal({}: Props) {
     searchModel,
     router,
     zipCode,
+    zipData,
     dateRange,
     onNext,
     params,

@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { getMetroCentroid, getMetroLabel, getZipData } from "@/lib/zipMetro";
+import { getMetroCentroid, getMetroLabel } from "@/lib/metro";
+import useZipCheck from "@/hook/useZipCheck";
 
 import Heading from "../Heading";
 import CategoryInput from "../inputs/CategoryInput";
@@ -66,11 +67,7 @@ function RentModal({}: Props) {
   const imageSrc = watch("imageSrc");
   const videoSrc = watch("videoSrc");
 
-  const zipData = useMemo(
-    () => (zipCode.length === 5 ? getZipData(zipCode) : null),
-    [zipCode]
-  );
-  const zipInvalid = zipCode.length === 5 && !zipData;
+  const { zipData, invalid: zipInvalid } = useZipCheck(zipCode);
 
   const Map = useMemo(
     () =>
@@ -106,12 +103,6 @@ function RentModal({}: Props) {
 
     if (step !== STEPS.PRICE) {
       return onNext();
-    }
-
-    if (!zipData) {
-      toast.error("Please enter a serviceable zip code.");
-      setStep(STEPS.LOCATION);
-      return;
     }
 
     setIsLoading(true);

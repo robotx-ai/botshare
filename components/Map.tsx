@@ -5,7 +5,7 @@ import Map, { Marker, NavigationControl, Source, Layer } from "react-map-gl/mapl
 import type { MapRef, LayerProps } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Flag from "react-world-flags";
-import { getMetroBbox, type Metro } from "@/lib/zipMetro";
+import { getMetroBbox, type Metro } from "@/lib/metro";
 
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
 const MAP_STYLE = `https://api.maptiler.com/maps/dataviz/style.json?key=${MAPTILER_KEY}`;
