@@ -60,54 +60,6 @@ const TEMPLATES = [
     bathroomCount: 2,
     guestCount: 15,
   },
-  {
-    title: "PUDU FlashBot \u2014 Multi-Floor Courier",
-    description:
-      "Autonomous delivery robot engineered for multi-floor logistics in commercial buildings. Integrates with elevators and access control systems for seamless inter-department parcel and document transport.",
-    imageSrc: `${CLD}/listing-pudu-flashbot`,
-    videoSrc: null,
-    category: "Warehouse",
-    price: 260,
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 50,
-  },
-  {
-    title: "PUDU BellaBot \u2014 Dining Service Robot",
-    description:
-      "Premium food and beverage delivery robot for restaurants, hotels, and hospitality venues. Navigates dining rooms autonomously, delivers to tables, and handles plate retrieval.",
-    imageSrc: `${CLD}/listing-pudu-bellabot`,
-    videoSrc: `${VID}/hero-restaurant.mp4`,
-    category: "Restaurant",
-    price: 240,
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 80,
-  },
-  {
-    title: "PUDU KettyBot \u2014 Host & Receptionist",
-    description:
-      "Multi-purpose service robot combining front-desk reception, queue management, and promotional display. Features an integrated screen for menus, wayfinding, and brand content.",
-    imageSrc: `${CLD}/listing-pudu-kettybot`,
-    videoSrc: null,
-    category: "Restaurant",
-    price: 190,
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 100,
-  },
-  {
-    title: "PUDU CC1 Pro \u2014 Commercial Cleaning Unit",
-    description:
-      "4-in-1 autonomous cleaning robot handling sweeping, mopping, scrubbing, and drying in a single pass. Covers large commercial floor areas efficiently.",
-    imageSrc: `${CLD}/listing-pudu-cc1`,
-    videoSrc: null,
-    category: "Restaurant",
-    price: 175,
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 30,
-  },
 ];
 
 const METROS = ["SF", "LA", "VEGAS", "DALLAS", "NYC", "MIAMI"];
