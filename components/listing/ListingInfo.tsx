@@ -1,11 +1,11 @@
 "use client";
 
-import useCountries from "@/hook/useCountries";
 import { SafeUser } from "@/types";
 import dynamic from "next/dynamic";
 import React from "react";
 import { IconType } from "react-icons";
 import { AgibotScenarioDetails } from "@/lib/agibotScenarioDetails";
+import type { Metro } from "@/lib/zipMetro";
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
 import Sleep from "../Sleep";
@@ -28,8 +28,10 @@ type Props = {
         description: string;
       }
     | undefined;
-  locationValue: string;
-  zipCode?: string;
+  metro: Metro;
+  lat: number;
+  lng: number;
+  zipCode: string;
   agibotScenario?: AgibotScenarioDetails | null;
 };
 
@@ -40,14 +42,13 @@ function ListingInfo({
   roomCount,
   bathroomCount,
   category,
-  locationValue,
+  metro,
+  lat,
+  lng,
   zipCode,
   agibotScenario,
 }: Props) {
-  const { getByValue } = useCountries();
-  const location = getByValue(locationValue);
-  const coordinates = location?.latlng;
-  const flagCode = locationValue?.length === 2 ? locationValue : "US";
+  const coordinates: [number, number] = [lat, lng];
 
   return (
     <div className="col-span-4 flex flex-col gap-8">
@@ -167,7 +168,7 @@ function ListingInfo({
       <Offers />
       <hr />
       <p className="text-xl font-semibold">{`Service coverage area`}</p>
-      <Map center={coordinates} locationValue={locationValue} flagCode={flagCode} zipCode={zipCode} />
+      <Map center={coordinates} metro={metro} zipCode={zipCode} />
     </div>
   );
 }

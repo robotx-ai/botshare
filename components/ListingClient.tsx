@@ -146,8 +146,10 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
               roomCount={listing.roomCount}
               guestCount={listing.guestCount}
               bathroomCount={listing.bathroomCount}
-              locationValue={listing.locationValue}
-              zipCode={listing.zipCode ?? undefined}
+              metro={listing.metro}
+              lat={listing.lat}
+              lng={listing.lng}
+              zipCode={listing.zipCode}
               agibotScenario={agibotScenario}
             />
             <div className="order-first mb-10 md:order-last md:col-span-3">

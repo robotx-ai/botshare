@@ -5,7 +5,7 @@ import Map, { Marker, NavigationControl, Source, Layer } from "react-map-gl/mapl
 import type { MapRef, LayerProps } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Flag from "react-world-flags";
-import { getServiceAreaByValue } from "@/lib/serviceLocation";
+import { getMetroBbox, type Metro } from "@/lib/zipMetro";
 
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
 const MAP_STYLE = `https://api.maptiler.com/maps/dataviz/style.json?key=${MAPTILER_KEY}`;
@@ -31,13 +31,13 @@ const outlineLayer: LayerProps = {
 
 type Props = {
   center?: number[];
-  locationValue?: string;
+  metro?: Metro;
   flagCode?: string;
   zoom?: number;
   zipCode?: string;
 };
 
-function MapComponent({ center, locationValue, flagCode, zoom, zipCode }: Props) {
+function MapComponent({ center, metro, flagCode, zoom, zipCode }: Props) {
   const [lat, lng] = center ?? [20, 0];
   const [zipBoundary, setZipBoundary] = useState<GeoJSON.Feature | null>(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -53,7 +53,6 @@ function MapComponent({ center, locationValue, flagCode, zoom, zipCode }: Props)
         const feature = data.features?.[0];
         if (feature?.geometry?.type === "Polygon" || feature?.geometry?.type === "MultiPolygon") {
           setZipBoundary(feature);
-          // Fit map to zip boundary bounds
           const rings: number[][][] =
             feature.geometry.type === "Polygon"
               ? feature.geometry.coordinates
@@ -71,18 +70,18 @@ function MapComponent({ center, locationValue, flagCode, zoom, zipCode }: Props)
       .catch(() => {});
   }, [zipCode]);
 
-  const serviceArea = locationValue ? getServiceAreaByValue(locationValue) : undefined;
-  const bboxGeoJSON: GeoJSON.Feature<GeoJSON.Polygon> | null = serviceArea?.bbox
+  const metroBbox = metro ? getMetroBbox(metro) : null;
+  const bboxGeoJSON: GeoJSON.Feature<GeoJSON.Polygon> | null = metroBbox
     ? {
         type: "Feature",
         geometry: {
           type: "Polygon",
           coordinates: [[
-            [serviceArea.bbox[0], serviceArea.bbox[1]],
-            [serviceArea.bbox[2], serviceArea.bbox[1]],
-            [serviceArea.bbox[2], serviceArea.bbox[3]],
-            [serviceArea.bbox[0], serviceArea.bbox[3]],
-            [serviceArea.bbox[0], serviceArea.bbox[1]],
+            [metroBbox[0], metroBbox[1]],
+            [metroBbox[2], metroBbox[1]],
+            [metroBbox[2], metroBbox[3]],
+            [metroBbox[0], metroBbox[3]],
+            [metroBbox[0], metroBbox[1]],
           ]],
         },
         properties: {},
@@ -115,12 +114,10 @@ function MapComponent({ center, locationValue, flagCode, zoom, zipCode }: Props)
         {center && (
           <Marker latitude={lat} longitude={lng} anchor="bottom">
             <div className="flex flex-col items-center">
-              {locationValue && (
-                <Flag
-                  code={flagCode ?? "US"}
-                  className="w-8 shadow-md rounded-sm"
-                />
-              )}
+              <Flag
+                code={flagCode ?? "US"}
+                className="w-8 shadow-md rounded-sm"
+              />
               <div className="w-3 h-3 bg-black rounded-full border-2 border-white shadow-lg" />
             </div>
           </Marker>
