@@ -134,7 +134,6 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
             title={listing.title}
             imageSrc={listing.imageSrc}
             videoSrc={listing.videoSrc}
-            locationValue={listing.locationValue}
             id={listing.id}
             currentUser={currentUser}
           />
