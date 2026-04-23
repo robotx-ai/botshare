@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import { useCallback, useMemo, useState } from "react";
 import { Range } from "react-date-range";
-import { SERVICE_AREAS } from "@/lib/serviceLocation";
+import { getMetroCentroid, getZipData } from "@/lib/zipMetro";
 
 import Heading from "../Heading";
 import Calendar from "../inputs/Calendar";
@@ -21,13 +21,18 @@ enum STEPS {
 type Props = {};
 
 function SearchModal({}: Props) {
-  const defaultArea = SERVICE_AREAS[0];
+  const defaultCenter = getMetroCentroid("LA");
   const router = useRouter();
   const params = useSearchParams();
   const searchModel = useSearchModal();
 
   const [zipCode, setZipCode] = useState("");
   const [step, setStep] = useState(STEPS.LOCATION);
+  const zipData = useMemo(
+    () => (zipCode.length === 5 ? getZipData(zipCode) : null),
+    [zipCode]
+  );
+  const zipInvalid = zipCode.length === 5 && !zipData;
   const [dateRange, setDateRange] = useState<Range>({
     startDate: new Date(),
     endDate: new Date(),
@@ -51,6 +56,13 @@ function SearchModal({}: Props) {
   }, []);
 
   const onSubmit = useCallback(() => {
+    if (step === STEPS.LOCATION) {
+      if (zipCode && (zipCode.length !== 5 || !getZipData(zipCode))) {
+        return;
+      }
+      return onNext();
+    }
+
     if (step !== STEPS.DATE) {
       return onNext();
     }
@@ -130,11 +142,21 @@ function SearchModal({}: Props) {
         placeholder="Enter zip code"
         value={zipCode}
         onChange={(e) => setZipCode(e.target.value.replace(/\D/g, "").slice(0, 5))}
-        className="w-full p-4 font-light bg-white border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+        className={`w-full p-4 font-light bg-white border-2 rounded-md outline-none transition ${
+          zipInvalid
+            ? "border-red-500 focus:border-red-500"
+            : "border-neutral-300 focus:border-black"
+        }`}
       />
+      {zipInvalid && (
+        <p className="text-sm text-red-500 -mt-4">
+          We don&apos;t service that area yet.
+        </p>
+      )}
       <Map
-        center={defaultArea.latlng}
-        zipCode={zipCode.length === 5 ? zipCode : undefined}
+        center={zipData ? [zipData.lat, zipData.lng] : defaultCenter}
+        metro={zipData?.metro}
+        zipCode={zipData ? zipCode : undefined}
       />
     </div>
   );
