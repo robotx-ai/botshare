@@ -17,6 +17,15 @@ enum UserType {
   PROVIDER
 }
 
+enum Metro {
+  SF
+  LA
+  VEGAS
+  DALLAS
+  NYC
+  MIAMI
+}
+
 model User {
   id               String         @id @default(cuid())
   name             String?
@@ -66,9 +75,10 @@ model Listing {
   bathroomCount Int
   guestCount    Int
   locationValue String
-  zipCode       String?
-  lat           Float?
-  lng           Float?
+  metro         Metro
+  zipCode       String
+  lat           Float
+  lng           Float
   userId        String
   price         Int
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -76,14 +86,16 @@ model Listing {
   favoritedBy   UserFavorite[]
 
   @@index([userId])
+  @@index([metro])
+  @@index([zipCode])
 }
 
 model Reservation {
-  id         String   @id @default(cuid())
-  userId     String
-  listingId  String
-  startDate  DateTime
-  endDate    DateTime
+  id              String   @id @default(cuid())
+  userId          String
+  listingId       String
+  startDate       DateTime
+  endDate         DateTime
   totalPrice      Int
   createdAt       DateTime @default(now())
   stripeSessionId String?  @unique
