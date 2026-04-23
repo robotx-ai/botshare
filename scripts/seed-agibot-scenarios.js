@@ -4,8 +4,16 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const scenarios = require("../data/agibot-scenarios.json");
+const zipToMetro = require("../data/zip-to-metro.json");
 
-const LOCATION_VALUE = "Southern California";
+// LA anchor zip; scenarios are LA-based.
+const SCENARIO_METRO = "LA";
+const SCENARIO_ZIP = "90001";
+const SCENARIO_LOCATION_LABEL = "Los Angeles Metro";
+const scenarioZipData = zipToMetro[SCENARIO_ZIP];
+if (!scenarioZipData) {
+  throw new Error(`Anchor zip ${SCENARIO_ZIP} missing from zip-to-metro.json`);
+}
 
 const CLD =
   "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto";
@@ -85,7 +93,11 @@ async function main() {
         imageSrc: resolveScenarioImageSrc(scenario.imageSrc),
         category: "Showcase & Performance",
         price: scenario.pricing.silver,
-        locationValue: LOCATION_VALUE,
+        metro: SCENARIO_METRO,
+        zipCode: SCENARIO_ZIP,
+        lat: scenarioZipData.lat,
+        lng: scenarioZipData.lng,
+        locationValue: SCENARIO_LOCATION_LABEL,
         roomCount: 1,
         bathroomCount: 1,
         guestCount: 500,
