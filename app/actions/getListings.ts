@@ -1,8 +1,7 @@
 import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
 import { isServiceCategory } from "@/lib/serviceCategories";
-import { isServiceAreaValue } from "@/lib/serviceLocation";
-import { getZipCentroid } from "@/lib/zipCentroid";
+import { getZipData } from "@/lib/zipMetro";
 
 export interface IListingsParams {
   userId?: string;
@@ -11,7 +10,6 @@ export interface IListingsParams {
   bathroomCount?: number;
   startDate?: string;
   endDate?: string;
-  locationValue?: string;
   zipCode?: string;
   category?: string;
   robotModel?: string;
@@ -24,7 +22,6 @@ export default async function getListings(params: IListingsParams) {
       roomCount,
       guestCount,
       bathroomCount,
-      locationValue,
       zipCode,
       startDate,
       endDate,
@@ -63,42 +60,36 @@ export default async function getListings(params: IListingsParams) {
       };
     }
 
-    if (locationValue && isServiceAreaValue(locationValue)) {
-      query.locationValue = locationValue;
-    }
-
     if (zipCode) {
-      const centroid = await getZipCentroid(zipCode);
-      if (centroid) {
-        const nearbyRows = await prisma.$queryRaw<{ id: string }[]>(
-          Prisma.sql`
-            SELECT DISTINCT ON (title) id
-            FROM "Listing"
-            WHERE lat IS NOT NULL AND lng IS NOT NULL
-              AND (
-                3959 * acos(
-                  LEAST(1.0,
-                    cos(radians(${centroid.lat})) * cos(radians(lat)) *
-                    cos(radians(lng) - radians(${centroid.lng})) +
-                    sin(radians(${centroid.lat})) * sin(radians(lat))
-                  )
-                )
-              ) <= 100
-            ORDER BY title,
-              (3959 * acos(
+      const zipData = getZipData(zipCode);
+      if (!zipData) return [];
+
+      const nearbyRows = await prisma.$queryRaw<{ id: string }[]>(
+        Prisma.sql`
+          SELECT DISTINCT ON (title) id
+          FROM "Listing"
+          WHERE "metro"::text = ${zipData.metro}
+            AND (
+              3959 * acos(
                 LEAST(1.0,
-                  cos(radians(${centroid.lat})) * cos(radians(lat)) *
-                  cos(radians(lng) - radians(${centroid.lng})) +
-                  sin(radians(${centroid.lat})) * sin(radians(lat))
+                  cos(radians(${zipData.lat})) * cos(radians(lat)) *
+                  cos(radians(lng) - radians(${zipData.lng})) +
+                  sin(radians(${zipData.lat})) * sin(radians(lat))
                 )
-              )) ASC
-          `
-        );
-        if (nearbyRows.length === 0) return [];
-        query.id = { in: nearbyRows.map((r) => r.id) };
-      } else {
-        query.zipCode = zipCode;
-      }
+              )
+            ) <= 100
+          ORDER BY title,
+            (3959 * acos(
+              LEAST(1.0,
+                cos(radians(${zipData.lat})) * cos(radians(lat)) *
+                cos(radians(lng) - radians(${zipData.lng})) +
+                sin(radians(${zipData.lat})) * sin(radians(lat))
+              )
+            )) ASC
+        `
+      );
+      if (nearbyRows.length === 0) return [];
+      query.id = { in: nearbyRows.map((r) => r.id) };
     }
 
     if (startDate && endDate) {
@@ -144,8 +135,6 @@ export default async function getListings(params: IListingsParams) {
       });
     }
 
-    // Catalog browse (no userId): deduplicate by title so each service
-    // appears once regardless of how many locations it's listed in.
     if (!userId) {
       const seen = new Set<string>();
       return safeListings.filter((l) => {

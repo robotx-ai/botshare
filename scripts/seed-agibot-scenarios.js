@@ -4,8 +4,22 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const scenarios = require("../data/agibot-scenarios.json");
+const zipToMetro = require("../data/zip-to-metro.json");
 
-const LOCATION_VALUE = "Southern California";
+const METRO_ANCHORS = {
+  SF: { zip: "94102", label: "San Francisco Bay Area" },
+  LA: { zip: "90001", label: "Los Angeles Metro" },
+  VEGAS: { zip: "89101", label: "Las Vegas Metro" },
+  DALLAS: { zip: "75201", label: "Dallas\u2013Fort Worth Metro" },
+  NYC: { zip: "10001", label: "New York Metro" },
+  MIAMI: { zip: "33101", label: "Miami Metro" },
+};
+
+for (const [metro, anchor] of Object.entries(METRO_ANCHORS)) {
+  if (!zipToMetro[anchor.zip]) {
+    throw new Error(`Anchor zip ${anchor.zip} for ${metro} missing from zip-to-metro.json`);
+  }
+}
 
 const CLD =
   "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto";
@@ -41,7 +55,6 @@ function buildDescription(scenario) {
 }
 
 async function main() {
-  // Look up admin user
   const adminEmails = (process.env.ADMIN_EMAILS || "")
     .split(",")
     .map((e) => e.trim())
@@ -70,31 +83,39 @@ async function main() {
 
   for (const scenario of scenarios) {
     const title = `AGIBot ${scenario.title}`;
+    for (const [metro, anchor] of Object.entries(METRO_ANCHORS)) {
+      const existing = await prisma.listing.findFirst({
+        where: { title, metro },
+      });
+      if (existing) {
+        console.log(`  SKIP (${metro}): ${title}`);
+        skipped++;
+        continue;
+      }
 
-    const existing = await prisma.listing.findFirst({ where: { title } });
-    if (existing) {
-      console.log(`  SKIP (exists): ${title}`);
-      skipped++;
-      continue;
+      const zipData = zipToMetro[anchor.zip];
+      await prisma.listing.create({
+        data: {
+          title,
+          description: buildDescription(scenario),
+          imageSrc: resolveScenarioImageSrc(scenario.imageSrc),
+          category: "Showcase & Performance",
+          price: scenario.pricing.silver,
+          metro,
+          zipCode: anchor.zip,
+          lat: zipData.lat,
+          lng: zipData.lng,
+          locationValue: anchor.label,
+          roomCount: 1,
+          bathroomCount: 1,
+          guestCount: 500,
+          userId: adminUser.id,
+        },
+      });
+
+      console.log(`  CREATED (${metro}): ${title}`);
+      created++;
     }
-
-    await prisma.listing.create({
-      data: {
-        title,
-        description: buildDescription(scenario),
-        imageSrc: resolveScenarioImageSrc(scenario.imageSrc),
-        category: "Showcase & Performance",
-        price: scenario.pricing.silver,
-        locationValue: LOCATION_VALUE,
-        roomCount: 1,
-        bathroomCount: 1,
-        guestCount: 500,
-        userId: adminUser.id,
-      },
-    });
-
-    console.log(`  CREATED: ${title}`);
-    created++;
   }
 
   console.log(`\nDone. Created: ${created}, Skipped (already exist): ${skipped}`);

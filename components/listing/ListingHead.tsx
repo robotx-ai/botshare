@@ -1,6 +1,5 @@
 "use client";
 
-import useCountries from "@/hook/useCountries";
 import { SafeUser } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -9,7 +8,6 @@ import HeartButton from "../HeartButton";
 
 type Props = {
   title: string;
-  locationValue: string;
   imageSrc: string;
   videoSrc?: string | null;
   id: string;
@@ -18,21 +16,14 @@ type Props = {
 
 function ListingHead({
   title,
-  locationValue,
   imageSrc,
   videoSrc,
   id,
   currentUser,
 }: Props) {
-  const { getByValue } = useCountries();
-  const location = getByValue(locationValue);
-
   return (
     <>
-      <Heading
-        title={title}
-        subtitle={`${location?.region}, ${location?.label}`}
-      />
+      <Heading title={title} />
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}

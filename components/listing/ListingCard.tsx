@@ -1,6 +1,5 @@
 "use client";
 
-import useCountries from "@/hook/useCountries";
 import { SafeReservation, SafeUser, safeListing } from "@/types";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -30,14 +29,7 @@ function ListingCard({
   currentUser,
 }: Props) {
   const router = useRouter();
-  const { getByValue } = useCountries();
-
-  const location = getByValue(data.locationValue);
   const serviceDetail = data.title?.trim() || "BotSharing US Service";
-  const locationLabel = [location?.region, location?.label]
-    .filter(Boolean)
-    .join(", ");
-  const serviceLocation = locationLabel || data.locationValue || "Service area";
 
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,9 +86,11 @@ function ListingCard({
           </div>
         </div>
         <div className="font-semibold text-lg">{serviceDetail}</div>
-        <div className="font-light text-neutral-500">
-          {serviceLocation}{data.operatorName ? ` - By ${data.operatorName}` : ""}
-        </div>
+        {data.operatorName && (
+          <div className="font-light text-neutral-500">
+            By {data.operatorName}
+          </div>
+        )}
         <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
             ${price} {!reservation && <div className="font-light"> / day</div>}

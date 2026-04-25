@@ -58,3 +58,10 @@ deno.lock
 
 # Claude Agent
 /.superpowers/
+
+# generated data script caches (raw Census downloads; outputs in data/ are committed)
+/scripts/.cache/
+
+# Playwright MCP traces / smoke screenshots
+/.playwright-mcp/
+/smoke-*.png

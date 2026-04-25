@@ -7,16 +7,12 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import {
-  DEFAULT_SERVICE_AREA_VALUE,
-  getServiceAreaByValue,
-  SERVICE_AREAS,
-} from "@/lib/serviceLocation";
+import { getMetroCentroid, getMetroLabel } from "@/lib/metro";
+import useZipCheck from "@/hook/useZipCheck";
 
 import Heading from "../Heading";
 import CategoryInput from "../inputs/CategoryInput";
 import Counter from "../inputs/Counter";
-import CountrySelect from "../inputs/CountrySelect";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import VideoUpload from "../inputs/VideoUpload";
@@ -35,8 +31,7 @@ enum STEPS {
 }
 
 function RentModal({}: Props) {
-  const defaultServiceArea =
-    getServiceAreaByValue(DEFAULT_SERVICE_AREA_VALUE) || SERVICE_AREAS[0];
+  const defaultCenter = getMetroCentroid("LA");
   const router = useRouter();
   const rentModel = useRentModal();
   const [step, setStep] = useState(STEPS.CATEGORY);
@@ -52,7 +47,7 @@ function RentModal({}: Props) {
   } = useForm<FieldValues>({
     defaultValues: {
       category: "",
-      location: defaultServiceArea,
+      zipCode: "",
       guestCount: 1,
       roomCount: 1,
       bathroomCount: 1,
@@ -65,12 +60,14 @@ function RentModal({}: Props) {
   });
 
   const category = watch("category");
-  const location = watch("location");
+  const zipCode: string = watch("zipCode") ?? "";
   const guestCount = watch("guestCount");
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
   const videoSrc = watch("videoSrc");
+
+  const { zipData, invalid: zipInvalid } = useZipCheck(zipCode);
 
   const Map = useMemo(
     () =>
@@ -97,6 +94,13 @@ function RentModal({}: Props) {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    if (step === STEPS.LOCATION) {
+      if (!zipData) {
+        return;
+      }
+      return onNext();
+    }
+
     if (step !== STEPS.PRICE) {
       return onNext();
     }
@@ -162,22 +166,41 @@ function RentModal({}: Props) {
       <div className="flex flex-col gap-8">
         <Heading
           title="Where does this service operate?"
-          subtitle="Set the coverage area customers can book."
+          subtitle="Enter a zip code within one of our supported metros."
         />
-        <CountrySelect
-          value={location}
-          onChange={(value) => setCustomValue("location", value)}
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={5}
+          placeholder="Enter zip code"
+          value={zipCode}
+          onChange={(e) =>
+            setCustomValue(
+              "zipCode",
+              e.target.value.replace(/\D/g, "").slice(0, 5)
+            )
+          }
+          className={`w-full p-4 font-light bg-white border-2 rounded-md outline-none transition ${
+            zipInvalid
+              ? "border-red-500 focus:border-red-500"
+              : "border-neutral-300 focus:border-black"
+          }`}
         />
-        <Input
-          id="zipCode"
-          label="Zip Code (optional)"
-          register={register}
-          errors={errors}
-        />
+        {zipData && (
+          <div className="inline-flex self-start items-center gap-2 rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-800">
+            <span className="h-2 w-2 rounded-full bg-black" />
+            {getMetroLabel(zipData.metro)}
+          </div>
+        )}
+        {zipInvalid && (
+          <p className="text-sm text-red-500 -mt-4">
+            That zip isn&apos;t in a supported service area.
+          </p>
+        )}
         <Map
-          center={location?.latlng ?? defaultServiceArea.latlng}
-          locationValue={location?.value ?? defaultServiceArea.value}
-          flagCode={location?.flag ?? "US"}
+          center={zipData ? [zipData.lat, zipData.lng] : defaultCenter}
+          metro={zipData?.metro}
+          zipCode={zipData ? zipCode : undefined}
         />
       </div>
     );

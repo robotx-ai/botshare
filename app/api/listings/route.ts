@@ -2,9 +2,8 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { canManageServices } from "@/lib/adminAuth";
 import { isServiceCategory } from "@/lib/serviceCategories";
-import { isServiceAreaValue } from "@/lib/serviceLocation";
+import { getMetroLabel, getZipData } from "@/lib/zipMetro";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
-import { getZipCentroid } from "@/lib/zipCentroid";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -34,7 +33,6 @@ export async function POST(request: Request) {
     roomCount,
     bathroomCount,
     guestCount,
-    location,
     price,
     zipCode,
   } = body;
@@ -46,18 +44,18 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!location?.value) {
+  const normalizedZip = zipCode ? String(zipCode).trim() : "";
+  if (!/^\d{5}$/.test(normalizedZip)) {
     return NextResponse.json(
-      { error: "Service coverage area is required." },
+      { error: "A 5-digit zip code is required." },
       { status: 400 }
     );
   }
 
-  if (!isServiceAreaValue(location.value)) {
+  const zipData = getZipData(normalizedZip);
+  if (!zipData) {
     return NextResponse.json(
-      {
-        error: "Service coverage must be a supported Southern California area.",
-      },
+      { error: "Zip code is not in a supported service area." },
       { status: 400 }
     );
   }
@@ -90,13 +88,6 @@ export async function POST(request: Request) {
     );
   }
 
-  let geoFields: { lat?: number; lng?: number } = {};
-  const normalizedZip = zipCode ? String(zipCode).trim() : "";
-  if (/^\d{5}$/.test(normalizedZip)) {
-    const centroid = await getZipCentroid(normalizedZip);
-    if (centroid) geoFields = { lat: centroid.lat, lng: centroid.lng };
-  }
-
   const listing = await prisma.listing.create({
     data: {
       title,
@@ -107,9 +98,11 @@ export async function POST(request: Request) {
       roomCount: parsedRoomCount,
       bathroomCount: parsedBathroomCount,
       guestCount: parsedGuestCount,
-      locationValue: location.value,
-      ...(normalizedZip ? { zipCode: normalizedZip } : {}),
-      ...geoFields,
+      locationValue: getMetroLabel(zipData.metro),
+      metro: zipData.metro,
+      zipCode: normalizedZip,
+      lat: zipData.lat,
+      lng: zipData.lng,
       price: Math.floor(parsedPrice),
       userId: currentUser.id,
     },
