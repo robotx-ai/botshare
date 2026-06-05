@@ -4,6 +4,6 @@ export function clientIpFromHeaders(headers: Headers): string | null {
     const first = fwd.split(",")[0]?.trim();
     if (first) return first;
   }
-  const real = headers.get("x-real-ip");
-  return real?.trim() || null;
+  const real = headers.get("x-real-ip")?.trim();
+  return real ? real : null;
 }

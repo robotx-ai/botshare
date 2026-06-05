@@ -64,5 +64,10 @@ describe("buildFieldSnapshot", () => {
     expect(snap.pricing.totalDue).toBe(7000);
     expect(snap.governingState).toBe("Nevada");
     expect(snap.term.durationDays).toBe(7);
+
+    const before = PARTY_A.companyName;
+    // snapshot.partyA must be a copy, not the shared constant
+    expect(snap.partyA).not.toBe(PARTY_A);
+    expect(PARTY_A.companyName).toBe(before);
   });
 });

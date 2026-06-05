@@ -19,4 +19,10 @@ describe("clientIpFromHeaders", () => {
   it("returns null when no IP header is present", () => {
     expect(clientIpFromHeaders(h({}))).toBeNull();
   });
+
+  it("falls through to x-real-ip when x-forwarded-for is empty", () => {
+    expect(
+      clientIpFromHeaders(h({ "x-forwarded-for": "", "x-real-ip": "198.51.100.2" }))
+    ).toBe("198.51.100.2");
+  });
 });

@@ -46,7 +46,13 @@ export interface AgreementSnapshot {
   dateOfAgreement: string;
   partyA: PartySignatory;
   partyB: PartySignatory;
-  partyC: PartyCInput;
+  partyC: {
+    legalName: string;
+    taxId: string | null;
+    address: string;
+    contactName: string;
+    contactTitle: string;
+  };
   equipment: {
     model: string;
     serialNo: string;
@@ -75,8 +81,8 @@ export function buildFieldSnapshot(input: SnapshotInput): AgreementSnapshot {
     agreementNo: input.agreementNo,
     templateVersion: TEMPLATE_VERSION,
     dateOfAgreement: isoDate(input.signedAt),
-    partyA: PARTY_A,
-    partyB: PARTY_B,
+    partyA: { ...PARTY_A },
+    partyB: { ...PARTY_B },
     partyC: {
       legalName: input.partyC.legalName,
       taxId: input.partyC.taxId ?? null,
