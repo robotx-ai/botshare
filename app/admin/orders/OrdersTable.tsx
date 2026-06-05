@@ -49,12 +49,13 @@ export default function OrdersTable({ reservations }: Props) {
               <th className="px-4 py-3 text-left font-medium text-gray-500">Dates</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Total</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Booked On</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Agreement</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="px-4 py-8 text-center text-gray-500" colSpan={6}>
+              <td className="px-4 py-8 text-center text-gray-500" colSpan={7}>
                 No bookings found.
               </td>
             </tr>
@@ -74,6 +75,7 @@ export default function OrdersTable({ reservations }: Props) {
             <th className="px-4 py-3 text-left font-medium text-gray-500">Dates</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Total</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Booked On</th>
+            <th className="px-4 py-3 text-left font-medium text-gray-500">Agreement</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Actions</th>
           </tr>
         </thead>
@@ -100,6 +102,18 @@ export default function OrdersTable({ reservations }: Props) {
                 <td className="px-4 py-3 text-gray-900">${r.totalPrice}</td>
                 <td className="px-4 py-3 text-gray-500">{formatDate(r.createdAt)}</td>
                 <td className="px-4 py-3">
+                  {r.agreementId ? (
+                    <a
+                      href={`/agreements/${r.agreementId}`}
+                      className="text-black underline hover:text-gray-600"
+                    >
+                      View agreement
+                    </a>
+                  ) : (
+                    <span className="text-gray-400">—</span>
+                  )}
+                </td>
+                <td className="px-4 py-3">
                   <button
                     onClick={() => handleCancel(r.id)}
                     disabled={deletingId === r.id}
@@ -111,7 +125,7 @@ export default function OrdersTable({ reservations }: Props) {
               </tr>
               {expandedId === r.id && (
                 <tr className="bg-gray-50">
-                  <td colSpan={6} className="px-4 py-3 text-sm text-gray-600">
+                  <td colSpan={7} className="px-4 py-3 text-sm text-gray-600">
                     <span className="mr-4">
                       <span className="font-medium">Email:</span> {r.customerEmail || "—"}
                     </span>

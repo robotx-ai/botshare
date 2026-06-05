@@ -82,7 +82,15 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
       }),
     ]);
 
-    const emailData = { reservation, customer, listing };
+    const agreementForEmail =
+      agreementId
+        ? await prisma.agreement.findUnique({
+            where: { id: agreementId },
+            select: { id: true, agreementNo: true },
+          })
+        : null;
+
+    const emailData = { reservation, customer, listing, agreement: agreementForEmail };
 
     try {
       await Promise.all([

@@ -20,6 +20,7 @@ export type SafeAdminReservation = SafeReservation & {
   customerEmail: string;
   customerPhone: string | null;
   customerBusinessName: string | null;
+  agreementId: string | null;
 };
 
 export type SafeUser = Omit<

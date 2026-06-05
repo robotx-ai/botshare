@@ -96,6 +96,10 @@ export interface BookingEmailData {
     category?: string | null;
     locationValue?: string | null;
   } | null;
+  agreement?: {
+    id: string;
+    agreementNo: string;
+  } | null;
 }
 
 export async function sendAdminBookingNotification(data: BookingEmailData) {
@@ -122,6 +126,9 @@ export async function sendAdminBookingNotification(data: BookingEmailData) {
       { label: "Start date", value: formatDate(reservation.startDate) },
       { label: "End date", value: formatDate(reservation.endDate) },
       { label: "Total paid", value: `$${reservation.totalPrice.toLocaleString()}` },
+      ...(data.agreement
+        ? [{ label: "Agreement", value: data.agreement.agreementNo }]
+        : []),
     ])}
 
     <p style="margin:20px 0 8px;font-size:13px;font-weight:600;color:#111827;text-transform:uppercase;letter-spacing:0.05em;">Customer Info</p>
@@ -149,6 +156,13 @@ export async function sendCustomerBookingConfirmation(data: BookingEmailData) {
   if (!customer?.email) return;
 
   const title = listing?.title ?? "Service";
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://botsharing.us";
+  const agreementCta = data.agreement
+    ? ctaButton(
+        "View signed agreement",
+        `${baseUrl}/agreements/${data.agreement.id}`
+      )
+    : "";
 
   const body = `
     <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#111827;">Your Booking is Confirmed</h2>
@@ -173,6 +187,7 @@ export async function sendCustomerBookingConfirmation(data: BookingEmailData) {
     </p>
 
     ${ctaButton("View My Bookings", `${SITE_URL}/trips`)}
+    ${agreementCta}
   `;
 
   const { error } = await getResend().emails.send({

@@ -40,6 +40,7 @@ export default async function getAllReservations(
       include: {
         user: true,
         listing: true,        // NO listing.user — operator info not needed on this page
+        agreement: { select: { id: true } },
       },
       orderBy: {
         createdAt: "desc",
@@ -47,7 +48,7 @@ export default async function getAllReservations(
     });
 
     return reservations.map((r) => {
-      const { user, ...rest } = r; // drop raw user — contains DateTime, not RSC-serializable
+      const { user, agreement, ...rest } = r; // drop raw user — contains DateTime, not RSC-serializable
       return {
         ...rest,
         createdAt: r.createdAt.toISOString(),
@@ -62,6 +63,7 @@ export default async function getAllReservations(
         customerEmail: user.email ?? "",
         customerPhone: user.phone ?? null,
         customerBusinessName: user.businessName ?? null,
+        agreementId: agreement?.id ?? null,
       };
     });
   } catch (error: any) {
