@@ -1,10 +1,9 @@
 "use client";
 
 import useLoginModel from "@/hook/useLoginModal";
+import useAgreementModal from "@/hook/useAgreementModal";
 import { SafeReservation, SafeUser, safeListing } from "@/types";
-import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-toastify";
@@ -34,8 +33,8 @@ type Props = {
 };
 
 function ListingClient({ reservations = [], listing, currentUser }: Props) {
-  const router = useRouter();
   const loginModal = useLoginModel();
+  const agreementModal = useAgreementModal();
   const scenarioPricing = getScenarioPricing(listing.title);
 
   const disableDates = useMemo(() => {
@@ -64,30 +63,31 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
       return loginModal.onOpen();
     }
 
-    setIsLoading(true);
+    if (!dateRange.startDate || !dateRange.endDate) {
+      toast.error("Select your rental dates first.");
+      return;
+    }
 
-    axios
-      .post("/api/checkout", {
-        totalPrice,
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        listingId: listing?.id,
-      })
-      .then((response) => {
-        if (response.data?.url) {
-          window.location.href = response.data.url;
-        } else {
-          toast.error("Could not start checkout. Please try again.");
-          setIsLoading(false);
-        }
-      })
-      .catch(() => {
-        toast.error("Something went wrong");
-        setIsLoading(false);
-      });
-    // Note: setIsLoading(false) is intentionally omitted on the success path —
-    // the browser navigates away to Stripe, keeping the spinner visible.
-  }, [totalPrice, dateRange, listing?.id, currentUser, loginModal]);
+    agreementModal.onOpen({
+      listingId: listing.id,
+      listingTitle: listing.title,
+      startDate: dateRange.startDate.toISOString(),
+      endDate: dateRange.endDate.toISOString(),
+      totalPrice,
+      tierId: selectedTierId,
+      robotCount,
+    });
+  }, [
+    currentUser,
+    loginModal,
+    agreementModal,
+    dateRange,
+    listing.id,
+    listing.title,
+    totalPrice,
+    selectedTierId,
+    robotCount,
+  ]);
 
   useEffect(() => {
     let perDayPrice: number;

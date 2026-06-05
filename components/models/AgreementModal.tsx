@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Modal from "./Modal";
@@ -47,6 +47,21 @@ function AgreementModal() {
   const [signedName, setSignedName] = useState("");
   const [signedTitle, setSignedTitle] = useState("");
   const [agreed, setAgreed] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setLegalName("");
+      setTaxId("");
+      setAddress("");
+      setContactName("");
+      setContactTitle("");
+      setSignedName("");
+      setSignedTitle("");
+      setAgreed(false);
+      setScrolledToBottom(false);
+      setIsLoading(false);
+    }
+  }, [isOpen, booking?.listingId]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
