@@ -30,7 +30,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
     redirect("/");
   }
 
-  const { userId, listingId, startDate, endDate, totalPrice } =
+  const { userId, listingId, startDate, endDate, totalPrice, agreementId } =
     session.metadata ?? {};
 
   if (!userId || !listingId || !startDate || !endDate || !totalPrice) {
@@ -56,6 +56,18 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
         stripeSessionId: sessionId,
       },
     }));
+
+  if (isNewReservation && agreementId) {
+    try {
+      await prisma.agreement.update({
+        where: { id: agreementId },
+        data: { reservationId: reservation.id },
+      });
+    } catch {
+      // Non-fatal: reservation already succeeded. Agreement stays a signed
+      // orphan and can be reconciled by admin. Do not block the success page.
+    }
+  }
 
   // Send email notifications exactly once (skip on page refresh)
   if (isNewReservation) {
