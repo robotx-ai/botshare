@@ -42,6 +42,7 @@ model User {
   listings         Listing[]
   reservations     Reservation[]
   favoriteListings UserFavorite[]
+  agreements       Agreement[]
 }
 
 model Account {
@@ -83,6 +84,7 @@ model Listing {
   price         Int
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations  Reservation[]
+  agreements    Agreement[]
   favoritedBy   UserFavorite[]
 
   @@index([userId])
@@ -91,21 +93,62 @@ model Listing {
 }
 
 model Reservation {
-  id              String   @id @default(cuid())
+  id              String     @id @default(cuid())
   userId          String
   listingId       String
   startDate       DateTime
   endDate         DateTime
   totalPrice      Int
-  createdAt       DateTime @default(now())
-  stripeSessionId String?  @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt       DateTime   @default(now())
+  stripeSessionId String?    @unique
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing         Listing    @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  agreement       Agreement?
 
   @@index([listingId])
   @@index([userId])
   @@index([startDate])
   @@index([endDate])
+}
+
+model Agreement {
+  id              String @id @default(cuid())
+  agreementNo     String @unique
+  templateVersion String
+
+  userId        String
+  listingId     String
+  reservationId String? @unique
+
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Int
+  tierId     String
+  robotCount Int
+
+  partyCLegalName    String
+  partyCTaxId        String?
+  partyCAddress      String
+  partyCContactName  String
+  partyCContactTitle String
+
+  fieldSnapshot Json
+
+  signedName  String
+  signedTitle String
+  signedAt    DateTime @default(now())
+  signedIp    String?
+
+  status    String   @default("SIGNED")
+  createdAt DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing     Listing      @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reservation Reservation? @relation(fields: [reservationId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([listingId])
+  @@index([reservationId])
 }
 
 model UserFavorite {
