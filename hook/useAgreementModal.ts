@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { Metro } from "@/lib/metro";
 
 export interface AgreementBookingContext {
   listingId: string;
@@ -8,6 +9,7 @@ export interface AgreementBookingContext {
   totalPrice: number;
   tierId: string;
   robotCount: number;
+  metro: Metro;
 }
 
 interface AgreementModalStore {

@@ -76,6 +76,7 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
       totalPrice,
       tierId: selectedTierId,
       robotCount,
+      metro: listing.metro,
     });
   }, [
     currentUser,
@@ -84,6 +85,7 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
     dateRange,
     listing.id,
     listing.title,
+    listing.metro,
     totalPrice,
     selectedTierId,
     robotCount,

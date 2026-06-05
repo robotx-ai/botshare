@@ -8,7 +8,6 @@ import useAgreementModal from "@/hook/useAgreementModal";
 import AgreementDocument from "../agreement/AgreementDocument";
 import { buildFieldSnapshot } from "@/lib/agreementTemplate";
 import { isSignReady } from "@/lib/agreementSignGate";
-import type { Metro } from "@/lib/metro";
 
 function Field({
   label,
@@ -73,7 +72,7 @@ function AgreementModal() {
       listing: {
         title: booking.listingTitle,
         locationValue: "Deployment location on file",
-        metro: "SF" as Metro,
+        metro: booking.metro,
       },
       startDate: new Date(booking.startDate),
       endDate: new Date(booking.endDate),

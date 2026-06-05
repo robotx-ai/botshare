@@ -30,6 +30,16 @@ export async function POST(request: Request) {
     );
   }
 
+  if (agreementId) {
+    const agr = await prisma.agreement.findUnique({
+      where: { id: agreementId },
+      select: { userId: true },
+    });
+    if (!agr || agr.userId !== currentUser.id) {
+      return NextResponse.json({ error: "Invalid agreement." }, { status: 400 });
+    }
+  }
+
   const listing = await prisma.listing.findUnique({
     where: { id: listingId },
     select: { title: true },

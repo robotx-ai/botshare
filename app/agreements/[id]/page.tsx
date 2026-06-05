@@ -5,22 +5,10 @@ import { isAdminEmail } from "@/lib/adminAuth";
 import prisma from "@/lib/prismadb";
 import type { AgreementSnapshot } from "@/lib/agreementTemplate";
 import { redirect } from "next/navigation";
+import PrintButton from "./PrintButton";
 
 interface Props {
   params: { id: string };
-}
-
-function PrintButton() {
-  return (
-    <form action="javascript:window.print()">
-      <button
-        type="submit"
-        className="px-4 py-2 rounded-lg bg-black text-white text-sm hover:bg-gray-800 transition"
-      >
-        Download PDF
-      </button>
-    </form>
-  );
 }
 
 export default async function AgreementPage({ params }: Props) {

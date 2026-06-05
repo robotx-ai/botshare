@@ -17,12 +17,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: any;
+  let body: unknown;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
+  const b = (body ?? {}) as Record<string, any>;
   const {
     listingId,
     startDate,
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     partyC,
     signedName,
     signedTitle,
-  } = body ?? {};
+  } = b;
 
   const partyCValid =
     partyC &&

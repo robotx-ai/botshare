@@ -9,6 +9,7 @@ const ctx = {
   totalPrice: 7000,
   tierId: "gold",
   robotCount: 2,
+  metro: "VEGAS" as const,
 };
 
 describe("useAgreementModal", () => {

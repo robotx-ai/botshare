@@ -59,8 +59,8 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
 
   if (isNewReservation && agreementId) {
     try {
-      await prisma.agreement.update({
-        where: { id: agreementId },
+      await prisma.agreement.updateMany({
+        where: { id: agreementId, userId, reservationId: null },
         data: { reservationId: reservation.id },
       });
     } catch {
@@ -140,6 +140,14 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
               ${parseInt(totalPrice).toLocaleString()}
             </span>
           </div>
+          {agreementId && (
+            <div className="flex justify-between">
+              <span className="font-medium text-neutral-800">Agreement</span>
+              <Link href={`/agreements/${agreementId}`} className="text-sm underline text-neutral-600">
+                View signed agreement
+              </Link>
+            </div>
+          )}
         </div>
         <Link
           href="/trips"
