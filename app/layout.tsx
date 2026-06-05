@@ -1,6 +1,7 @@
 import ClientOnly from "@/components/ClientOnly";
 import Footer from "@/components/Footer";
 import ToastContainerBar from "@/components/ToastContainerBar";
+import AgreementModal from "@/components/models/AgreementModal";
 import LoginModal from "@/components/models/LoginModal";
 import RegisterModal from "@/components/models/RegisterModal";
 import RentModal from "@/components/models/RentModal";
@@ -34,6 +35,7 @@ export default async function RootLayout({
       <body className={font.className}>
         <ClientOnly>
           <ToastContainerBar />
+          <AgreementModal />
           <SearchModal />
           <RegisterModal />
           <LoginModal />
