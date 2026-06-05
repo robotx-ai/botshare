@@ -17,7 +17,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  }
   const {
     listingId,
     startDate,
@@ -77,6 +82,13 @@ export async function POST(request: Request) {
   const signedAt = new Date();
   const start = new Date(startDate);
   const end = new Date(endDate);
+
+  if (isNaN(start.getTime()) || isNaN(end.getTime()) || end <= start) {
+    return NextResponse.json(
+      { error: "Invalid rental dates." },
+      { status: 400 }
+    );
+  }
 
   const monthPrefix = formatAgreementNo(signedAt, 0).slice(0, -4);
   const monthCount = await prisma.agreement.count({

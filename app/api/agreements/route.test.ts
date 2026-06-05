@@ -77,6 +77,27 @@ describe("POST /api/agreements", () => {
     expect(res.status).toBe(404);
   });
 
+  it("rejects totalPrice <= 0 with 400", async () => {
+    const res = await POST(req({ ...validBody, totalPrice: 0 }));
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects invalid date ranges with 400", async () => {
+    const res = await POST(req({ ...validBody, startDate: "garbage" }));
+    expect(res.status).toBe(400);
+    const res2 = await POST(
+      req({ ...validBody, startDate: "2026-07-08", endDate: "2026-07-01" })
+    );
+    expect(res2.status).toBe(400);
+  });
+
+  it("stores partyCTaxId as null when taxId is omitted", async () => {
+    const { taxId, ...partyCNoTax } = validBody.partyC;
+    await POST(req({ ...validBody, partyC: partyCNoTax }));
+    const arg = create.mock.calls[0][0].data;
+    expect(arg.partyCTaxId).toBeNull();
+  });
+
   it("creates a signed agreement and returns its id + number", async () => {
     const res = await POST(
       req(validBody, { "x-forwarded-for": "203.0.113.5" })
