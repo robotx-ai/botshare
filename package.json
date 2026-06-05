@@ -14,7 +14,10 @@
     "db:seed": "prisma db seed",
     "build:netlify": "prisma generate && next build",
     "deploy:preview": "netlify build && netlify deploy --site 147defb9-131c-42ca-8375-37ebc8ba5531",
-    "deploy:prod": "netlify build && netlify deploy --prod --site 147defb9-131c-42ca-8375-37ebc8ba5531"
+    "deploy:prod": "netlify build && netlify deploy --prod --site 147defb9-131c-42ca-8375-37ebc8ba5531",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -58,15 +61,23 @@
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.8",
+    "@playwright/test": "^1.60.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/react-date-range": "^1.4.4",
     "@types/react-world-flags": "^1.4.2",
+    "@vitejs/plugin-react": "^4.3.4",
     "adm-zip": "^0.5.17",
     "autoprefixer": "^10.4.14",
     "dotenv": "^17.3.1",
+    "jsdom": "^29.1.1",
     "postcss": "^8.4.21",
     "prisma": "^4.12.0",
-    "tailwindcss": "^3.3.1"
+    "tailwindcss": "^3.3.1",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.1.9"
   }
 }
