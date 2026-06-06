@@ -16,6 +16,8 @@ import AuthModal from "../auth/AuthModal";
 import RoleCard from "../auth/RoleCard";
 import FloatingInput from "../inputs/FloatingInput";
 import CodeInput from "../inputs/CodeInput";
+import PasswordRules from "../auth/PasswordRules";
+import { validatePassword } from "@/lib/passwordPolicy";
 
 type UserType = "CUSTOMER" | "PROVIDER";
 type Step = "role" | "form" | "verify" | "success";
@@ -51,6 +53,8 @@ function RegisterModal() {
 
   const email = watch("email");
   const agreed = watch("agreed");
+  const password = watch("password");
+  const pwValid = validatePassword(password).valid;
 
   // Resend cooldown tick.
   useEffect(() => {
@@ -81,6 +85,7 @@ function RegisterModal() {
   // Step 2 → create the (unverified) account and trigger the code email.
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (userType === "CUSTOMER" && !data.agreed) return;
+    if (!validatePassword(data.password).valid) return;
     setIsLoading(true);
 
     const payload: Record<string, unknown> = { ...data, userType };
@@ -194,6 +199,7 @@ function RegisterModal() {
             <FloatingInput id="email" label="Email address" type="email" required disabled={isLoading} register={register} errors={errors} />
             <FloatingInput id="name" label="Username" required disabled={isLoading} register={register} errors={errors} />
             <FloatingInput id="password" label="Password" type="password" required disabled={isLoading} register={register} errors={errors} />
+            {(password?.length ?? 0) > 0 && <PasswordRules password={password} />}
             {isProvider && (
               <>
                 <FloatingInput id="phone" label="Phone number" type="tel" optional disabled={isLoading} register={register} errors={errors} />
@@ -219,7 +225,7 @@ function RegisterModal() {
             )}
             <Button
               label="Create account"
-              disabled={isLoading || (!isProvider && !agreed)}
+              disabled={isLoading || (!isProvider && !agreed) || !pwValid}
               onClick={handleSubmit(onSubmit)}
             />
             <p className="text-center text-[14px] text-brand-muted">

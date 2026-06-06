@@ -2,6 +2,7 @@ import prisma from "@/lib/prismadb";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 import { issueVerificationCode } from "@/lib/emailVerification";
 import { sendVerificationCode } from "@/lib/email";
+import { validatePassword, PASSWORD_RULE_MESSAGE } from "@/lib/passwordPolicy";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
@@ -23,6 +24,11 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+  }
+
+  // Enforce the password policy server-side (the client gate is bypassable).
+  if (!validatePassword(password).valid) {
+    return NextResponse.json({ error: PASSWORD_RULE_MESSAGE }, { status: 400 });
   }
 
   // Reject duplicate emails up-front for a clean client message.
