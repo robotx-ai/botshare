@@ -2,6 +2,7 @@
 
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
+import { TERMS_VERSION } from "@/lib/termsContent";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -28,6 +29,7 @@ function RegisterModal() {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<FieldValues>({
     defaultValues: {
       name: "",
@@ -35,8 +37,11 @@ function RegisterModal() {
       password: "",
       phone: "",
       businessName: "",
+      agreed: false,
     },
   });
+
+  const agreed = watch("agreed");
 
   const handleClose = useCallback(() => {
     setStep(1);
@@ -57,10 +62,17 @@ function RegisterModal() {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (!userType) return;
+    if (userType === "CUSTOMER" && !data.agreed) return;
     setIsLoading(true);
 
+    const payload: Record<string, unknown> = { ...data, userType };
+    delete payload.agreed;
+    if (userType === "CUSTOMER") {
+      payload.termsVersion = TERMS_VERSION;
+    }
+
     axios
-      .post("/api/register", { ...data, userType })
+      .post("/api/register", payload)
       .then(() => {
         toast.success("Account created! Please log in.");
         loginModel.onOpen();
@@ -159,6 +171,28 @@ function RegisterModal() {
           />
         </>
       )}
+      {userType === "CUSTOMER" && (
+        <label className="flex items-start gap-3 text-sm text-neutral-700 mt-1">
+          <input
+            type="checkbox"
+            disabled={isLoading}
+            className="mt-1 h-4 w-4 accent-black"
+            {...register("agreed")}
+          />
+          <span>
+            I have read and agree to the{" "}
+            <a
+              href="/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-neutral-900 hover:text-black"
+            >
+              BotSharing Terms
+            </a>
+            .
+          </span>
+        </label>
+      )}
     </div>
   );
 
@@ -191,9 +225,12 @@ function RegisterModal() {
     );
   }
 
+  const submitDisabled =
+    isLoading || (userType === "CUSTOMER" && !agreed);
+
   return (
     <Modal
-      disabled={isLoading}
+      disabled={submitDisabled}
       isOpen={registerModel.isOpen}
       title="Sign Up"
       actionLabel="Create Account"
