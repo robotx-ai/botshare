@@ -122,3 +122,14 @@ model UserFavorite {
   @@index([userId])
   @@index([listingId])
 }
+
+// Stores a short-lived, hashed 6-digit code per email. `email` is unique so
+// registering / resending upserts a single active code.
+model EmailVerificationCode {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+}

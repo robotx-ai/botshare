@@ -1,5 +1,7 @@
 import prisma from "@/lib/prismadb";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
+import { issueVerificationCode } from "@/lib/emailVerification";
+import { sendVerificationCode } from "@/lib/email";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
@@ -23,6 +25,15 @@ export async function POST(request: Request) {
     }
   }
 
+  // Reject duplicate emails up-front for a clean client message.
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    return NextResponse.json(
+      { error: "An account with this email already exists." },
+      { status: 409 }
+    );
+  }
+
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const user = await prisma.user.create({
@@ -31,6 +42,7 @@ export async function POST(request: Request) {
       name,
       hashedPassword,
       userType,
+      // emailVerified stays null until the code is confirmed.
       ...(phone ? { phone } : {}),
       ...(businessName ? { businessName } : {}),
       ...(userType === "CUSTOMER"
@@ -39,5 +51,15 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(user);
+  // Issue + email the verification code. Storing the code is what matters for
+  // the flow; if the email transport hiccups we still return ok and let the
+  // user hit "Resend".
+  try {
+    const code = await issueVerificationCode(email);
+    await sendVerificationCode(email, code, name);
+  } catch (err) {
+    console.error("[register] verification email failed:", err);
+  }
+
+  return NextResponse.json({ ok: true, id: user.id });
 }
