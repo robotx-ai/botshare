@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BotShare — Dev Helper &amp; Knowledge Base</title>
+    <style>
+      :root {
+        --ink: #111827;
+        --muted: #6b7280;
+        --subtle: #e5e7eb;
+        --surface: #f3f4f6;
+        --accent: #111827;
+        --danger: #b42318;
+        --ok: #067647;
+        --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        line-height: 1.6;
+      }
+      .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+      /* Sidebar */
+      aside {
+        position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+        background: var(--ink); color: #fff; padding: 24px 18px;
+      }
+      aside h1 { font-size: 16px; margin: 0 0 2px; letter-spacing: .02em; }
+      aside .tag { font-size: 11px; color: #9ca3af; margin: 0 0 18px; }
+      #filter {
+        width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #374151;
+        background: #1f2937; color: #fff; font: inherit; font-size: 13px; margin-bottom: 14px;
+      }
+      aside nav a {
+        display: block; color: #d1d5db; text-decoration: none; font-size: 13px;
+        padding: 5px 8px; border-radius: 6px;
+      }
+      aside nav a:hover { background: #1f2937; color: #fff; }
+      aside nav .group { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #6b7280; margin: 14px 0 4px 8px; }
+      /* Main */
+      main { padding: 40px 48px 120px; max-width: 920px; }
+      section { margin-bottom: 44px; scroll-margin-top: 20px; }
+      h2 { font-size: 22px; margin: 0 0 6px; padding-bottom: 8px; border-bottom: 2px solid var(--subtle); }
+      h3 { font-size: 15px; margin: 22px 0 8px; }
+      p, li { font-size: 14px; }
+      .lead { color: var(--muted); margin-top: 0; }
+      code { background: #fff; border: 1px solid var(--subtle); padding: 1px 6px; border-radius: 5px; font-size: 12.5px; }
+      pre {
+        background: var(--ink); color: #e5e7eb; padding: 14px 16px; border-radius: var(--radius);
+        overflow-x: auto; font-size: 12.5px; line-height: 1.6;
+      }
+      pre code { background: none; border: none; padding: 0; color: inherit; }
+      table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; margin: 10px 0; }
+      th, td { text-align: left; padding: 9px 12px; font-size: 13px; border-bottom: 1px solid var(--subtle); vertical-align: top; }
+      th { background: var(--surface); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+      tr:last-child td { border-bottom: none; }
+      .note { background: #fff; border-left: 3px solid var(--ink); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+      .warn { border-left-color: var(--danger); }
+      .ok { border-left-color: var(--ok); }
+      .pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--subtle); }
+      a.anchor { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+      footer { color: var(--muted); font-size: 12px; border-top: 1px solid var(--subtle); padding-top: 16px; }
+      @media (max-width: 800px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { position: static; height: auto; }
+        main { padding: 24px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside>
+        <h1>BotShare Dev Helper</h1>
+        <p class="tag">botsharing.us · knowledge base</p>
+        <input id="filter" placeholder="Filter sections…" />
+        <nav id="nav">
+          <div class="group">Start</div>
+          <a href="#overview">Overview</a>
+          <a href="#setup">Local setup</a>
+          <a href="#commands">Commands</a>
+          <div class="group">Build &amp; ship</div>
+          <a href="#testing">Testing &amp; checks</a>
+          <a href="#deploy">Deployment</a>
+          <a href="#db">Database &amp; Prisma</a>
+          <a href="#supabase">Supabase</a>
+          <a href="#cloudinary">Cloudinary video</a>
+          <div class="group">Product</div>
+          <a href="#auth">Auth &amp; signup flow</a>
+          <a href="#password">Password policy</a>
+          <a href="#terminology">Terminology</a>
+          <a href="#categories">Service categories</a>
+          <a href="#access">Access control</a>
+          <a href="#theme">Theme colors</a>
+          <a href="#schema">Schema guardrails</a>
+          <a href="#env">Environment vars</a>
+          <div class="group">Tools</div>
+          <a href="#user-admin">User admin tool</a>
+          <a href="#claude">Claude Code workflow</a>
+        </nav>
+      </aside>
+
+      <main>
+        <section id="overview">
+          <h2>Overview</h2>
+          <p class="lead">
+            <strong>BotShare</strong> (<code>botsharing.us</code>) is a robot service rental booking platform.
+            Next.js 13 (App Router + a single Pages-Router route for NextAuth), Tailwind, Prisma on Supabase Postgres,
+            Stripe Checkout, Cloudinary media, Resend email, MapLibre maps. Deployed to Netlify.
+          </p>
+          <div class="note">
+            <strong>AGENTS.md / CLAUDE.md are the source of truth</strong> for product copy, terminology, and guardrails.
+            This page is a quick operational reference, not a replacement.
+          </div>
+        </section>
+
+        <section id="setup">
+          <h2>Local setup</h2>
+          <pre><code>git clone &lt;repo&gt; &amp;&amp; cd botshare
+npm install
+cp .env.example .env        # fill in values (see Environment vars)
+npx prisma generate         # generate the Prisma client
+npm run dev                 # http://localhost:3000</code></pre>
+          <div class="note warn">
+            <strong>Node version:</strong> use <strong>Node 20</strong> (Netlify builds on 20). The production
+            <code>next build</code> can stall on newer majors in some shells — match the deploy runtime.
+          </div>
+        </section>
+
+        <section id="commands">
+          <h2>Commands</h2>
+          <p class="lead">From <code>package.json</code>.</p>
+          <table>
+            <thead><tr><th>Command</th><th>Does</th></tr></thead>
+            <tbody>
+              <tr><td><code>npm run dev</code></td><td>Dev server on :3000</td></tr>
+              <tr><td><code>npm run build</code></td><td>Production build (<code>next build</code>)</td></tr>
+              <tr><td><code>npm run start</code></td><td>Serve a built app</td></tr>
+              <tr><td><code>npm run lint</code></td><td>ESLint — <strong>must pass before any PR/merge</strong></td></tr>
+              <tr><td><code>npm run build:netlify</code></td><td><code>prisma generate &amp;&amp; next build</code> (Netlify build cmd)</td></tr>
+              <tr><td><code>npm run deploy:preview</code></td><td>Netlify <strong>preview</strong> deploy (safe, no live impact)</td></tr>
+              <tr><td><code>npm run deploy:prod</code></td><td>Netlify <strong>production</strong> deploy → botsharing.us</td></tr>
+              <tr><td><code>npm run db:seed</code></td><td>Seed via <code>prisma/seed.js</code></td></tr>
+              <tr><td><code>npm run db:migrate:sql</code></td><td>Generate init SQL from schema (diff from empty)</td></tr>
+              <tr><td><code>npm run db:migrate:data</code></td><td>Mongo→Postgres data migration helper</td></tr>
+              <tr><td><code>npm run db:migrate:verify</code></td><td>Verify a data migration</td></tr>
+              <tr><td><code>npm run supabase</code></td><td>Run the Supabase CLI (<code>npx supabase@latest</code>)</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="testing">
+          <h2>Testing &amp; checks</h2>
+          <p class="lead">There is no <code>npm test</code> script. The pre-merge gate is lint + types + build, plus manual UI verification.</p>
+          <pre><code>npm run lint                      # ESLint (zero warnings expected)
+npx tsc --noEmit -p tsconfig.json # type-check the whole project
+npm run build                     # full production build (Node 20)</code></pre>
+          <h3>Manual UI verification</h3>
+          <p>For visual/flow changes, run the dev server and drive it in a browser (Playwright works well). Check key breakpoints (320 / 768 / 1024 / 1440) and the console for hydration errors.</p>
+          <div class="note">
+            Known benign warning: a next/font hydration notice on the homepage hero (Barlow) in dev — clears in a clean production build.
+          </div>
+        </section>
+
+        <section id="deploy">
+          <h2>Deployment</h2>
+          <p class="lead">Netlify site <code>botsharing-us</code> (<code>147defb9-…</code>). Deploys are CLI/API based (not git-linked), so a push alone does <strong>not</strong> deploy.</p>
+          <pre><code>npm run deploy:preview   # build locally + upload a preview (verify first)
+npm run deploy:prod      # build locally + publish to botsharing.us</code></pre>
+          <table>
+            <thead><tr><th>Step</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Default</td><td>Always preview first; only <code>deploy:prod</code> once verified.</td></tr>
+              <tr><td>Build source</td><td><code>deploy:*</code> builds your <strong>local working tree</strong>, not <code>main</code>. Checkout + pull main first.</td></tr>
+              <tr><td>Env vars</td><td>Managed in the Netlify dashboard (DATABASE_URL, SUPABASE_*, NEXTAUTH_*, STRIPE_*, RESEND_*, CLOUDINARY_*). <code>.env</code> is local only.</td></tr>
+              <tr><td>If build fails</td><td>Nothing uploads — the live site is untouched.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="db">
+          <h2>Database &amp; Prisma</h2>
+          <p class="lead">Supabase Postgres via Prisma. Schema in <code>prisma/schema.prisma</code>. Models: User, Account, Listing, Reservation, UserFavorite, EmailVerificationCode. Enums: UserType, Metro.</p>
+          <h3>Schema-change workflow</h3>
+          <pre><code>1. edit prisma/schema.prisma
+2. create the migration SQL under prisma/migrations/&lt;ts&gt;_&lt;name&gt;/migration.sql
+3. npx prisma generate          # update the client/types (local)
+4. apply to Supabase (see below)
+5. npm run lint &amp;&amp; npx tsc --noEmit</code></pre>
+          <div class="note">
+            Migrations here are <strong>hand-authored SQL</strong> applied out-of-band (Supabase), not via <code>prisma migrate deploy</code>.
+            Singleton client: <code>lib/prismadb.ts</code>. Reads dominate; never instantiate <code>PrismaClient</code> ad-hoc.
+          </div>
+        </section>
+
+        <section id="supabase">
+          <h2>Supabase</h2>
+          <p class="lead">Project <code>botsharing-us</code> · ref <code>jylxrvwxsjehthsqswib</code> · region us-east-2.</p>
+          <h3>Apply a migration</h3>
+          <pre><code># via Supabase CLI
+npm run supabase -- db push        # or run the migration SQL directly
+
+# or run the raw SQL in the Supabase SQL editor / MCP apply_migration</code></pre>
+          <p>New tables: enable RLS (<code>ALTER TABLE "X" ENABLE ROW LEVEL SECURITY;</code>) with no policies — the app reaches the DB through the privileged Prisma connection, so RLS locks the table away from anon/PostgREST.</p>
+        </section>
+
+        <section id="cloudinary">
+          <h2>Cloudinary video</h2>
+          <p class="lead">Cloud name <code>dmrhtzqyx</code>. Images + video. <strong>Never commit video files</strong> (<code>public/videos/*.mp4|mov|webm</code> is gitignored).</p>
+          <pre><code># upload
+curl -X POST \
+  -F "file=@public/videos/&lt;file&gt;.mp4" \
+  -F "public_id=&lt;asset-name&gt;" -F "resource_type=video" -F "overwrite=true" \
+  -u "$CLOUDINARY_API_KEY:$CLOUDINARY_API_SECRET" \
+  "https://api.cloudinary.com/v1_1/$NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME/video/upload"
+
+# delivery URL
+https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/&lt;public_id&gt;.mp4</code></pre>
+          <table>
+            <thead><tr><th>public_id</th><th>Component</th></tr></thead>
+            <tbody>
+              <tr><td><code>showcase-bg</code></td><td>ServiceShowcase.tsx</td></tr>
+              <tr><td><code>pepsi-bg</code></td><td>HeroCarousel.tsx (slot 1)</td></tr>
+              <tr><td><code>paris-performance-bg</code></td><td>HeroCarousel.tsx (slot 2)</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="auth">
+          <h2>Auth &amp; signup flow</h2>
+          <p class="lead">NextAuth <strong>CredentialsProvider</strong> (email + password), Prisma adapter, JWT sessions. The "Aire" signup is a 4-step modal.</p>
+          <h3>Flow</h3>
+          <p><strong>Role select → Create account → Verify email → Success</strong>, then a restyled Login.</p>
+          <table>
+            <thead><tr><th>Route</th><th>Body</th><th>Behavior</th></tr></thead>
+            <tbody>
+              <tr><td><code>POST /api/register</code></td><td>email, name, password, userType, phone?, businessName?, termsVersion?</td><td>Creates user (emailVerified: null), enforces password policy, issues + emails a hashed 6-digit code. 409 on duplicate email.</td></tr>
+              <tr><td><code>POST /api/verify-email</code></td><td>email, code</td><td>Validates code (10-min TTL, 6-attempt cap); sets emailVerified; deletes code.</td></tr>
+              <tr><td><code>POST /api/verify-email/resend</code></td><td>email</td><td>Re-issues a code for an unverified account; always returns ok (no account-existence leak).</td></tr>
+            </tbody>
+          </table>
+          <div class="note warn">
+            <strong>Unverified-login guard is OFF.</strong> Existing accounts have <code>emailVerified = null</code>; enabling the guard in
+            <code>[...nextauth].ts</code> would lock them out. Backfill before enabling.
+          </div>
+          <p>Verification emails need <code>RESEND_API_KEY</code> + <code>RESEND_FROM_EMAIL</code> on Netlify. Without them, signup still creates the account and login works — the user just gets no code.</p>
+        </section>
+
+        <section id="password">
+          <h2>Password policy</h2>
+          <p class="lead">Enforced client (live checklist + disabled submit) and server (<code>/api/register</code> 400). Source of truth: <code>lib/passwordPolicy.ts</code> → <code>validatePassword()</code>.</p>
+          <p>Rule: <strong>at least 8 characters, with a letter, a number, and one uppercase letter.</strong> Login is not affected (only new account creation).</p>
+        </section>
+
+        <section id="terminology">
+          <h2>Terminology (user-facing copy)</h2>
+          <table>
+            <thead><tr><th>Use</th><th>Avoid</th></tr></thead>
+            <tbody>
+              <tr><td>service</td><td>listing</td></tr>
+              <tr><td>booking</td><td>reservation</td></tr>
+              <tr><td>customer</td><td>guest</td></tr>
+              <tr><td>service package / deployment</td><td>home / place / property</td></tr>
+              <tr><td>per day</td><td>per night</td></tr>
+              <tr><td>BotSharing US Service Assurance</td><td>AirCover</td></tr>
+              <tr><td>service operator</td><td>host</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Banned in new copy:</strong> Airbnb, host, guest, property, per night, AirCover. Internal variable/route names may keep legacy terms during MVP.</p>
+        </section>
+
+        <section id="categories">
+          <h2>Service categories</h2>
+          <p class="lead">Canonical — do not add without explicit request. Source: <code>lib/serviceCategories.ts</code>.</p>
+          <ul>
+            <li><code>Showcase &amp; Performance</code> (slug <code>showcase-performance</code>)</li>
+            <li><code>Warehouse</code> (slug <code>warehouse</code>)</li>
+            <li><code>Restaurant</code> (slug <code>restaurant</code>)</li>
+          </ul>
+        </section>
+
+        <section id="access">
+          <h2>Access control</h2>
+          <ul>
+            <li>Service catalog writes gated to <strong>providers and admins</strong>. Customers must not create/edit/delete services. Enforce at the API layer, not just UI.</li>
+            <li>Provider check: <code>session.user.userType === 'PROVIDER'</code>.</li>
+            <li>Admin check: <code>isAdminEmail()</code> in <code>lib/adminAuth.ts</code> (reads <code>ADMIN_EMAILS</code>).</li>
+            <li>Admin-only: <code>/admin/orders</code> (all bookings, filter, cross-tenant cancel) — gated by <code>middleware.ts</code>.</li>
+            <li>Cancellation: owners cancel their own; admins cancel any (<code>DELETE /api/reservations/[id]</code>).</li>
+          </ul>
+        </section>
+
+        <section id="theme">
+          <h2>Theme colors</h2>
+          <p class="lead">MVP constraint: user-facing UI uses only <strong>white, gray, black</strong>. Prefer the centralized Tailwind <code>brand</code> tokens.</p>
+          <pre><code>brand.DEFAULT  #111827   // ink / navy
+brand.muted    #6b7280
+brand.subtle   #e5e7eb
+brand.surface  #f3f4f6
+font-display   Anton (headings)   // body: Nunito</code></pre>
+        </section>
+
+        <section id="schema">
+          <h2>Schema guardrails</h2>
+          <ul>
+            <li>Don't redesign the Prisma schema without explicit request.</li>
+            <li>Keep route shapes: <code>/listings/[listingId]</code>, <code>/api/listings</code>, <code>/api/reservations</code>, <code>/api/checkout</code>.</li>
+            <li><code>Listing.category</code> ∈ the 3 categories · <code>Listing.price</code> = per-day · <code>Listing.locationValue</code> = coverage region.</li>
+            <li><code>Reservation.stripeSessionId</code> unique, set after checkout.</li>
+            <li><code>guestCount</code>/<code>roomCount</code>/<code>bathroomCount</code> are legacy compat fields — don't repurpose.</li>
+            <li><code>User.userType</code> is the canonical role flag — no parallel role booleans.</li>
+          </ul>
+        </section>
+
+        <section id="env">
+          <h2>Environment variables</h2>
+          <p class="lead">Copy <code>.env.example</code> → <code>.env</code> for local. Production values live in Netlify.</p>
+          <table>
+            <thead><tr><th>Group</th><th>Vars</th></tr></thead>
+            <tbody>
+              <tr><td>Database</td><td><code>DATABASE_URL</code> (pooled), <code>DIRECT_URL</code> (migrations)</td></tr>
+              <tr><td>Auth</td><td><code>NEXTAUTH_SECRET</code>, <code>NEXTAUTH_URL</code>, <code>ADMIN_EMAILS</code></td></tr>
+              <tr><td>Stripe</td><td><code>STRIPE_SECRET_KEY</code>, <code>NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code></td></tr>
+              <tr><td>Email</td><td><code>RESEND_API_KEY</code>, <code>RESEND_FROM_EMAIL</code></td></tr>
+              <tr><td>Cloudinary</td><td><code>NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME</code>, <code>CLOUDINARY_API_KEY</code>, <code>CLOUDINARY_API_SECRET</code></td></tr>
+              <tr><td>Supabase</td><td><code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_*</code> (CLI)</td></tr>
+              <tr><td>Maps</td><td><code>NEXT_PUBLIC_MAPTILER_KEY</code></td></tr>
+            </tbody>
+          </table>
+          <div class="note warn"><code>.env</code> is gitignored. Never commit secrets or paste them into served files.</div>
+        </section>
+
+        <section id="user-admin">
+          <h2>User admin tool</h2>
+          <p class="lead">Local-only UI to list and delete users (cleanup of test accounts). Lives in <code>docs/user-admin/</code>.</p>
+          <pre><code>node docs/user-admin/server.js
+# open http://127.0.0.1:4500</code></pre>
+          <table>
+            <thead><tr><th>Aspect</th><th>Detail</th></tr></thead>
+            <tbody>
+              <tr><td>Creds</td><td>Read from <code>.env</code> at runtime — never in any served/committed file.</td></tr>
+              <tr><td>Reach</td><td>Binds <code>127.0.0.1</code> only. Not a deployed endpoint. Refuses <code>NODE_ENV=production</code>.</td></tr>
+              <tr><td>Delete</td><td>Cascades to the user's listings / reservations / favorites. Counts shown first; type <code>DELETE</code> to confirm. <strong>No undo.</strong></td></tr>
+              <tr><td>Port</td><td>Override with <code>USER_ADMIN_PORT</code>.</td></tr>
+            </tbody>
+          </table>
+          <div class="note warn">
+            This runs against the <strong>live database</strong>. It is a developer tool — keep it local; do not expose it.
+          </div>
+        </section>
+
+        <section id="claude">
+          <h2>Claude Code workflow</h2>
+          <p class="lead">This repo is developed with Claude Code. Slash commands are skills, not repo scripts — a few that fit this project:</p>
+          <table>
+            <thead><tr><th>Command</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td><code>/code-review</code></td><td>Review the current diff / a PR for bugs and cleanups.</td></tr>
+              <tr><td><code>/verify</code></td><td>Run the app and confirm a change actually works.</td></tr>
+              <tr><td><code>/plan</code></td><td>Plan a feature before implementing.</td></tr>
+              <tr><td><code>/save-session</code> · <code>/resume-session</code></td><td>Persist / restore working context.</td></tr>
+            </tbody>
+          </table>
+          <p>Per-task convention: research &amp; reuse → plan → implement → <code>lint</code> + <code>tsc --noEmit</code> + manual verify → commit (conventional) → PR → preview deploy → prod.</p>
+        </section>
+
+        <footer>
+          BotShare dev helper · open this file in a browser. Authoritative rules live in CLAUDE.md / AGENTS.md.
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      // Sidebar filter: hide nav links that don't match.
+      const filter = document.getElementById("filter");
+      const links = [...document.querySelectorAll("#nav a")];
+      filter.addEventListener("input", () => {
+        const q = filter.value.trim().toLowerCase();
+        links.forEach((a) => {
+          a.style.display = !q || a.textContent.toLowerCase().includes(q) ? "" : "none";
+        });
+      });
+    </script>
+  </body>
+</html>

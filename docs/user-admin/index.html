@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Admin — local tool</title>
+    <style>
+      :root {
+        --ink: #111827;
+        --muted: #6b7280;
+        --subtle: #e5e7eb;
+        --surface: #f3f4f6;
+        --danger: #b42318;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        padding: 32px;
+      }
+      .wrap { max-width: 1000px; margin: 0 auto; }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+      .bar {
+        display: flex; align-items: center; gap: 12px;
+        margin-bottom: 14px; flex-wrap: wrap;
+      }
+      button {
+        font: inherit; cursor: pointer; border-radius: 8px;
+        border: 1.5px solid var(--subtle); background: #fff; color: var(--ink);
+        padding: 8px 14px; transition: background .12s, opacity .12s;
+      }
+      button:hover { background: var(--surface); }
+      button.danger {
+        background: var(--danger); border-color: var(--danger); color: #fff;
+      }
+      button.danger:disabled { opacity: .4; cursor: not-allowed; }
+      table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }
+      th, td { text-align: left; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--subtle); }
+      th { background: var(--surface); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+      tr:last-child td { border-bottom: none; }
+      .pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--surface); }
+      .verified { color: #067647; }
+      .count { color: var(--muted); font-variant-numeric: tabular-nums; }
+      .count.warn { color: var(--danger); font-weight: 700; }
+      .status { font-size: 13px; color: var(--muted); margin-left: auto; }
+      code { background: var(--surface); padding: 1px 5px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>User Admin <span class="pill">local only · 127.0.0.1</span></h1>
+      <p class="sub">
+        Select users and delete them. Deleting a user also removes their listings,
+        reservations, and favorites. This runs against your live database — there is no undo.
+      </p>
+
+      <div class="bar">
+        <button id="refresh">Refresh</button>
+        <button id="delete" class="danger" disabled>Delete selected</button>
+        <span class="status" id="status">Loading…</span>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="all" /></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Verified</th>
+            <th>Listings</th>
+            <th>Bookings</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <script>
+      const rowsEl = document.getElementById("rows");
+      const statusEl = document.getElementById("status");
+      const deleteBtn = document.getElementById("delete");
+      const allBox = document.getElementById("all");
+
+      function selectedIds() {
+        return [...document.querySelectorAll(".row-check:checked")].map((c) => c.value);
+      }
+      function syncButton() {
+        const n = selectedIds().length;
+        deleteBtn.disabled = n === 0;
+        deleteBtn.textContent = n ? `Delete selected (${n})` : "Delete selected";
+      }
+      function fmtDate(s) {
+        if (!s) return "—";
+        const d = new Date(s);
+        return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+      }
+
+      async function load() {
+        statusEl.textContent = "Loading…";
+        const res = await fetch("/api/users");
+        const { users, error } = await res.json();
+        if (error) { statusEl.textContent = "Error: " + error; return; }
+        rowsEl.innerHTML = "";
+        for (const u of users) {
+          const tr = document.createElement("tr");
+          const listings = u._count.listings;
+          const bookings = u._count.reservations;
+          tr.innerHTML = `
+            <td><input type="checkbox" class="row-check" value="${u.id}" /></td>
+            <td>${escapeHtml(u.name) || "—"}</td>
+            <td>${escapeHtml(u.email) || "—"}</td>
+            <td><span class="pill">${u.userType}</span></td>
+            <td>${u.emailVerified ? '<span class="verified">✓</span>' : "—"}</td>
+            <td class="count ${listings ? "warn" : ""}">${listings}</td>
+            <td class="count ${bookings ? "warn" : ""}">${bookings}</td>
+            <td>${fmtDate(u.createdAt)}</td>`;
+          rowsEl.appendChild(tr);
+        }
+        document.querySelectorAll(".row-check").forEach((c) => c.addEventListener("change", syncButton));
+        allBox.checked = false;
+        syncButton();
+        statusEl.textContent = users.length + " users";
+      }
+
+      function escapeHtml(s) {
+        return String(s ?? "").replace(/[&<>"']/g, (ch) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+        }[ch]));
+      }
+
+      allBox.addEventListener("change", () => {
+        document.querySelectorAll(".row-check").forEach((c) => (c.checked = allBox.checked));
+        syncButton();
+      });
+
+      deleteBtn.addEventListener("click", async () => {
+        const ids = selectedIds();
+        if (!ids.length) return;
+        const phrase = prompt(
+          `Permanently delete ${ids.length} user(s) and all their listings/bookings/favorites?\n\nType DELETE to confirm:`
+        );
+        if (phrase !== "DELETE") { statusEl.textContent = "Cancelled."; return; }
+        deleteBtn.disabled = true;
+        statusEl.textContent = "Deleting…";
+        const res = await fetch("/api/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids, confirm: "DELETE" }),
+        });
+        const out = await res.json();
+        if (out.error) { statusEl.textContent = "Error: " + out.error; return; }
+        statusEl.textContent = `Deleted ${out.deleted}.`;
+        await load();
+      });
+
+      document.getElementById("refresh").addEventListener("click", load);
+      load();
+    </script>
+  </body>
+</html>
