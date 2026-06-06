@@ -27,21 +27,23 @@ enum Metro {
 }
 
 model User {
-  id               String         @id @default(cuid())
-  name             String?
-  email            String?        @unique
-  emailVerified    DateTime?
-  image            String?
-  hashedPassword   String?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  userType         UserType       @default(CUSTOMER)
-  phone            String?
-  businessName     String?
-  accounts         Account[]
-  listings         Listing[]
-  reservations     Reservation[]
-  favoriteListings UserFavorite[]
+  id                   String         @id @default(cuid())
+  name                 String?
+  email                String?        @unique
+  emailVerified        DateTime?
+  image                String?
+  hashedPassword       String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  userType             UserType       @default(CUSTOMER)
+  phone                String?
+  businessName         String?
+  termsAcceptedAt      DateTime?
+  termsAcceptedVersion String?
+  accounts             Account[]
+  listings             Listing[]
+  reservations         Reservation[]
+  favoriteListings     UserFavorite[]
 }
 
 model Account {
