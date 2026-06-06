@@ -1,137 +1,81 @@
 "use client";
 
-import useLoginModel from "@/hook/useLoginModal";
+import useLoginModal from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { AiFillFacebook, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 
 import Button from "../Button";
-import Heading from "../Heading";
-import Input from "../inputs/Input";
-import Modal from "./Modal";
+import AuthModal from "../auth/AuthModal";
+import FloatingInput from "../inputs/FloatingInput";
 
-type Props = {};
-
-function LoginModal({}: Props) {
+function LoginModal() {
   const router = useRouter();
-  const registerModel = useRegisterModal();
-  const loginModel = useLoginModel();
+  const loginModal = useLoginModal();
+  const registerModal = useRegisterModal();
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
+
+  const handleClose = useCallback(() => {
+    reset();
+    loginModal.onClose();
+  }, [loginModal, reset]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-
-    signIn("credentials", {
-      ...data,
-      redirect: false,
-    }).then((callback) => {
+    signIn("credentials", { ...data, redirect: false }).then((callback) => {
       setIsLoading(false);
-
       if (callback?.ok) {
-        toast.success("Login Successfully");
+        toast.success("Logged in successfully.");
         router.refresh();
-        loginModel.onClose();
+        handleClose();
       } else if (callback?.error) {
-        toast.error("Something Went Wrong");
+        toast.error("Invalid email or password.");
       }
     });
   };
 
-  const toggle = useCallback(() => {
-    loginModel.onClose();
-    registerModel.onOpen();
-  }, [loginModel, registerModel]);
+  const toRegister = useCallback(() => {
+    handleClose();
+    registerModal.onOpen();
+  }, [handleClose, registerModal]);
 
-  const bodyContent = (
-    <div className="flex flex-col gap-4">
-      <Heading title="Welcome Back" subtitle="Login to your Account!" center />
-      <Input
-        id="email"
-        label="Email Address"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <div className="relative">
-        <Input
-          id="password"
-          label="Password"
-          type={showPassword ? "text" : "password"}
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword((v) => !v)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700"
-          tabIndex={-1}
-        >
-          {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-        </button>
+  return (
+    <AuthModal isOpen={loginModal.isOpen} onClose={handleClose} disabled={isLoading}>
+      <div className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand">
+        Sign in
       </div>
-    </div>
-  );
+      <h2 className="font-display mt-3 text-[34px] leading-[1.16] text-brand">Welcome back</h2>
+      <p className="mt-1.5 text-[15px] text-brand-muted">Log in to your BotShare account.</p>
 
-  const footerContent = (
-    <div className="flex flex-col gap-4 mt-3">
-      <hr />
-      {/* <Button
-        outline
-        label="Continue with Google"
-        icon={FcGoogle}
-        onClick={() => signIn("google")}
-      />
-      <Button
-        outline
-        label="Continue with Facebook"
-        icon={AiFillFacebook}
-        onClick={() => signIn("facebook")}
-        isColor
-      /> */}
-      <div className="text-neutral-500 text-center mt-4 font-light">
-        <div>
-          {`Didn't have an Account?`}{" "}
-          <span
-            onClick={toggle}
-            className="text-neutral-800 cursor-pointer hover:underline"
-          >
-            Create an Account
+      <div className="mt-6 flex flex-col gap-3.5">
+        <FloatingInput id="email" label="Email address" type="email" required disabled={isLoading} register={register} errors={errors} />
+        <FloatingInput id="password" label="Password" type="password" required disabled={isLoading} register={register} errors={errors} />
+        <div className="-mt-0.5 text-right">
+          <span className="cursor-pointer text-[14px] font-extrabold text-brand underline decoration-brand-subtle underline-offset-[3px]">
+            Forgot password?
           </span>
         </div>
+        <Button label="Log in" disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+        <p className="text-center text-[14px] text-brand-muted">
+          New to BotShare?{" "}
+          <span onClick={toRegister} className="cursor-pointer font-extrabold text-brand underline decoration-brand-subtle underline-offset-[3px]">
+            Create an account
+          </span>
+        </p>
       </div>
-    </div>
-  );
-  return (
-    <Modal
-      disabled={isLoading}
-      isOpen={loginModel.isOpen}
-      title="Login"
-      actionLabel="Continue"
-      onClose={loginModel.onClose}
-      onSubmit={handleSubmit(onSubmit)}
-      body={bodyContent}
-      footer={footerContent}
-    />
+    </AuthModal>
   );
 }
 

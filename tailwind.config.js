@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ["var(--font-anton)", "sans-serif"],
+      },
       colors: {
         brand: {
           DEFAULT: "#111827",

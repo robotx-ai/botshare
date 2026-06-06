@@ -7,7 +7,7 @@ import RentModal from "@/components/models/RentModal";
 import SearchModal from "@/components/models/SearchModal";
 import Navbar from "@/components/navbar/Navbar";
 import { canManageServices } from "@/lib/adminAuth";
-import { Nunito } from "next/font/google";
+import { Nunito, Anton } from "next/font/google";
 import "../styles/globals.css";
 import getCurrentUser from "./actions/getCurrentUser";
 
@@ -21,6 +21,12 @@ const font = Nunito({
   subsets: ["latin"],
 });
 
+const anton = Anton({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-anton",
+});
+
 export default async function RootLayout({
   children,
 }: {
@@ -31,7 +37,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body className={`${font.className} ${anton.variable}`}>
         <ClientOnly>
           <ToastContainerBar />
           <SearchModal />
