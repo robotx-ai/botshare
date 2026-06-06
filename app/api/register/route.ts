@@ -1,5 +1,4 @@
 import prisma from "@/lib/prismadb";
-import { TERMS_VERSION } from "@/lib/termsContent";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
