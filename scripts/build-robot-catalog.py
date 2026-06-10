@@ -290,6 +290,7 @@ def main():
                 "Product name": product_name, "Model": model, "Description": description,
                 "MSRP (USD)": fmt_msrp(msrp), "ServiceCategory": cat,
                 "CapabilityTag": cap, "NeedsReview": "TRUE" if needs_review else "FALSE",
+                "_slug": slug(ad["brand"], model),
             })
             count += 1
         log.append(f"  - {name}: {count} products, {len(images)} images on sheet")
@@ -300,7 +301,7 @@ def main():
     sh.title = "Robots"
     sh.append(COLUMNS)
     for r in rows_out:
-        sh.append([r[c] for c in COLUMNS])
+        sh.append([r[c] for c in COLUMNS])  # _slug intentionally excluded from xlsx
     # light formatting: header bold, freeze, widths, wrap description
     from openpyxl.styles import Font, Alignment
     for c in sh[1]:
@@ -314,6 +315,26 @@ def main():
         row[5].alignment = Alignment(wrap_text=True, vertical="top")  # Description
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out.save(OUT_XLSX)
+
+    # machine-readable JSON for the DB seed (scripts/seed-robot-catalog.mjs)
+    import json
+    catalog = []
+    for r in rows_out:
+        catalog.append({
+            "slug": r["_slug"],
+            "brand": r["BrandName"],
+            "model": r["Model"],
+            "productName": r["Product name"],
+            "sku": r["SKU"] or None,
+            "description": r["Description"],
+            "msrp": r["MSRP (USD)"] if r["MSRP (USD)"] != "" else None,
+            "serviceCategory": r["ServiceCategory"],
+            "capabilityTag": r["CapabilityTag"],
+            "needsReview": r["NeedsReview"] == "TRUE",
+            "image": r["Picture"] or None,  # path relative to data/robot-catalog/
+        })
+    with open(OUT_DIR / "robot-catalog.json", "w", encoding="utf-8") as fh:
+        json.dump(catalog, fh, ensure_ascii=False, indent=2)
 
     # summary
     print("Per-sheet extraction:")

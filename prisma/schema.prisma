@@ -133,3 +133,26 @@ model EmailVerificationCode {
   attempts  Int      @default(0)
   createdAt DateTime @default(now())
 }
+
+// Curated catalog of robots a provider can pick from when creating a listing.
+// Seeded from data/robot-catalog/ via scripts/seed-robot-catalog.mjs.
+model RobotModel {
+  id              String   @id @default(cuid())
+  slug            String   @unique // "<brand>-<model>"; stable upsert key + Cloudinary public_id
+  brand           String
+  model           String
+  productName     String
+  sku             String?
+  description     String
+  msrp            Int? // USD purchase price — reference only, never a listing's rental price
+  serviceCategory String // one of the 3 canonical service categories
+  capabilityTag   String // humanoid | quadruped | delivery | cleaning | reception | industrial | education
+  imageUrl        String? // Cloudinary delivery URL, null if no source image
+  needsReview     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([brand])
+  @@index([serviceCategory])
+  @@index([model])
+}
