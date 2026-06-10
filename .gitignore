@@ -65,3 +65,5 @@ deno.lock
 # Playwright MCP traces / smoke screenshots
 /.playwright-mcp/
 /smoke-*.png
+# Robot catalog: extracted images are regenerable, keep out of git
+data/robot-catalog/robot-images/
