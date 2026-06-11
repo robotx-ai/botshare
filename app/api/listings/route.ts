@@ -2,6 +2,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { canManageServices } from "@/lib/adminAuth";
 import { isServiceCategory } from "@/lib/serviceCategories";
+import { isProviderProfileComplete } from "@/lib/providerProfile";
 import { getMetroLabel, getZipData } from "@/lib/zipMetro";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 import { NextResponse } from "next/server";
@@ -20,6 +21,14 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Forbidden: service provider access required." },
       { status: 403 }
+    );
+  }
+
+  // Anyone listing must have a complete provider profile (name, phone, company).
+  if (!isProviderProfileComplete(currentUser)) {
+    return NextResponse.json(
+      { error: "Complete your provider profile (name, phone, company) before listing." },
+      { status: 400 }
     );
   }
 

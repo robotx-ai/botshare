@@ -38,6 +38,7 @@ model User {
   userType             UserType       @default(CUSTOMER)
   phone                String?
   businessName         String?
+  verified             Boolean        @default(false)
   termsAcceptedAt      DateTime?
   termsAcceptedVersion String?
   accounts             Account[]
