@@ -83,13 +83,16 @@ model Listing {
   lng           Float
   userId        String
   price         Int
+  robotModelId  String?
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  robotModel    RobotModel?    @relation(fields: [robotModelId], references: [id])
   reservations  Reservation[]
   favoritedBy   UserFavorite[]
 
   @@index([userId])
   @@index([metro])
   @@index([zipCode])
+  @@index([robotModelId])
 }
 
 model Reservation {
@@ -151,6 +154,7 @@ model RobotModel {
   needsReview     Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  listings        Listing[]
 
   @@index([brand])
   @@index([serviceCategory])

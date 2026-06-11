@@ -15,27 +15,31 @@ import CategoryInput from "../inputs/CategoryInput";
 import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
+import RobotPicker from "../inputs/RobotPicker";
 import VideoUpload from "../inputs/VideoUpload";
 import { categories } from "../navbar/Categories";
 import Modal from "./Modal";
+import type { RobotModelOption } from "@/hook/useRobotModels";
 
 type Props = {};
 
 enum STEPS {
-  CATEGORY = 0,
-  LOCATION = 1,
-  INFO = 2,
-  IMAGES = 3,
-  DESCRIPTION = 4,
-  PRICE = 5,
+  ROBOT = 0,
+  CATEGORY = 1,
+  LOCATION = 2,
+  INFO = 3,
+  IMAGES = 4,
+  DESCRIPTION = 5,
+  PRICE = 6,
 }
 
 function RentModal({}: Props) {
   const defaultCenter = getMetroCentroid("LA");
   const router = useRouter();
   const rentModel = useRentModal();
-  const [step, setStep] = useState(STEPS.CATEGORY);
+  const [step, setStep] = useState(STEPS.ROBOT);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRobot, setSelectedRobot] = useState<RobotModelOption | null>(null);
 
   const {
     register,
@@ -46,6 +50,7 @@ function RentModal({}: Props) {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
+      robotModelId: null,
       category: "",
       zipCode: "",
       guestCount: 1,
@@ -85,6 +90,21 @@ function RentModal({}: Props) {
     });
   };
 
+  // Picking a catalog robot pre-fills category/title/description/image (all still
+  // editable downstream); choosing "manual" clears the link. Price is never set here.
+  const onSelectRobot = (robot: RobotModelOption | null) => {
+    setSelectedRobot(robot);
+    setCustomValue("robotModelId", robot ? robot.id : null);
+    if (robot) {
+      setCustomValue("category", robot.serviceCategory);
+      setCustomValue("title", robot.productName);
+      setCustomValue("description", robot.description ?? "");
+      if (robot.imageUrl) {
+        setCustomValue("imageSrc", robot.imageUrl);
+      }
+    }
+  };
+
   const onBack = () => {
     setStep((value) => value - 1);
   };
@@ -113,7 +133,8 @@ function RentModal({}: Props) {
         toast.success("Service created!");
         router.refresh();
         reset();
-        setStep(STEPS.CATEGORY);
+        setSelectedRobot(null);
+        setStep(STEPS.ROBOT);
         rentModel.onClose();
       })
       .catch(() => {
@@ -133,7 +154,7 @@ function RentModal({}: Props) {
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === STEPS.CATEGORY) {
+    if (step === STEPS.ROBOT) {
       return undefined;
     }
 
@@ -141,25 +162,41 @@ function RentModal({}: Props) {
   }, [step]);
 
   let bodyContent = (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <Heading
-        title="Which service type are you publishing?"
-        subtitle="Select a service category."
+        title="Choose your robot"
+        subtitle="Pick a robot from our catalog to auto-fill its details, or enter them manually."
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700">
-        {categories.map((item, index) => (
-          <div key={index} className="col-span-1">
-            <CategoryInput
-              onClick={(category) => setCustomValue("category", category)}
-              selected={category === item.label}
-              label={item.label}
-              icon={item.icon}
-            />
-          </div>
-        ))}
-      </div>
+      <RobotPicker selectedId={selectedRobot?.id ?? null} onSelect={onSelectRobot} />
     </div>
   );
+
+  if (step === STEPS.CATEGORY) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Which service type are you publishing?"
+          subtitle={
+            selectedRobot
+              ? "Pre-selected from your chosen robot — change it if needed."
+              : "Select a service category."
+          }
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700">
+          {categories.map((item, index) => (
+            <div key={index} className="col-span-1">
+              <CategoryInput
+                onClick={(category) => setCustomValue("category", category)}
+                selected={category === item.label}
+                label={item.label}
+                icon={item.icon}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (step === STEPS.LOCATION) {
     bodyContent = (
@@ -291,6 +328,12 @@ function RentModal({}: Props) {
           title="Now, set your price"
           subtitle="How much do you charge per day?"
         />
+        {selectedRobot?.msrp != null && (
+          <p className="-mt-4 text-sm text-neutral-500">
+            Reference purchase price (MSRP): ${selectedRobot.msrp.toLocaleString()} — this
+            is the robot&apos;s retail cost, not a rental rate. Set your daily price below.
+          </p>
+        )}
         <Input
           id="price"
           label="Price"
@@ -313,7 +356,7 @@ function RentModal({}: Props) {
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
+      secondaryAction={step === STEPS.ROBOT ? undefined : onBack}
       onClose={rentModel.onClose}
       body={bodyContent}
     />

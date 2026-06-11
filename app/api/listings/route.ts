@@ -35,6 +35,7 @@ export async function POST(request: Request) {
     guestCount,
     price,
     zipCode,
+    robotModelId,
   } = body;
 
   if (!title || !description || !imageSrc) {
@@ -65,6 +66,22 @@ export async function POST(request: Request) {
       { error: "Invalid service category." },
       { status: 400 }
     );
+  }
+
+  // Optional link to a catalog robot — validate it exists when provided.
+  let validRobotModelId: string | null = null;
+  if (robotModelId) {
+    const robot = await prisma.robotModel.findUnique({
+      where: { id: String(robotModelId) },
+      select: { id: true },
+    });
+    if (!robot) {
+      return NextResponse.json(
+        { error: "Selected robot model was not found." },
+        { status: 400 }
+      );
+    }
+    validRobotModelId = robot.id;
   }
 
   const parsedGuestCount = Number(guestCount);
@@ -105,6 +122,7 @@ export async function POST(request: Request) {
       lng: zipData.lng,
       price: Math.floor(parsedPrice),
       userId: currentUser.id,
+      ...(validRobotModelId ? { robotModelId: validRobotModelId } : {}),
     },
   });
 
