@@ -26,6 +26,17 @@ enum Metro {
   MIAMI
 }
 
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  RETURN_INITIATED
+  RETURN_RECEIVED
+  COMPLETED
+  CANCELLED
+}
+
 model User {
   id                   String         @id @default(cuid())
   name                 String?
@@ -101,13 +112,27 @@ model Reservation {
   totalPrice      Int
   createdAt       DateTime @default(now())
   stripeSessionId String?  @unique
+  status          OrderStatus       @default(PLACED)
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  events          ReservationEvent[]
 
   @@index([listingId])
   @@index([userId])
   @@index([startDate])
   @@index([endDate])
+}
+
+model ReservationEvent {
+  id            String      @id @default(cuid())
+  reservationId String
+  status        OrderStatus
+  actorId       String
+  note          String?
+  createdAt     DateTime    @default(now())
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+
+  @@index([reservationId])
 }
 
 model UserFavorite {
