@@ -17,7 +17,7 @@ import RoleCard from "../auth/RoleCard";
 import FloatingInput from "../inputs/FloatingInput";
 import CodeInput from "../inputs/CodeInput";
 import PasswordRules from "../auth/PasswordRules";
-import { validatePassword } from "@/lib/passwordPolicy";
+import { validatePassword, PASSWORD_RULE_MESSAGE } from "@/lib/passwordPolicy";
 
 type UserType = "CUSTOMER" | "PROVIDER";
 type Step = "role" | "form" | "verify" | "success";
@@ -52,9 +52,7 @@ function RegisterModal() {
   });
 
   const email = watch("email");
-  const agreed = watch("agreed");
   const password = watch("password");
-  const pwValid = validatePassword(password).valid;
 
   // Resend cooldown tick.
   useEffect(() => {
@@ -83,9 +81,9 @@ function RegisterModal() {
   }, []);
 
   // Step 2 → create the (unverified) account and trigger the code email.
+  // react-hook-form validates the fields (and surfaces inline errors) before
+  // this runs, so we only handle the happy path here.
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (userType === "CUSTOMER" && !data.agreed) return;
-    if (!validatePassword(data.password).valid) return;
     setIsLoading(true);
 
     const payload: Record<string, unknown> = { ...data, userType };
@@ -196,9 +194,9 @@ function RegisterModal() {
             {isProvider ? "Start listing your robot services." : "Book robot services in minutes."}
           </p>
           <div className="mt-6 flex flex-col gap-3.5">
-            <FloatingInput id="email" label="Email address" type="email" required disabled={isLoading} register={register} errors={errors} />
-            <FloatingInput id="name" label="Username" required disabled={isLoading} register={register} errors={errors} />
-            <FloatingInput id="password" label="Password" type="password" required disabled={isLoading} register={register} errors={errors} />
+            <FloatingInput id="email" label="Email address" type="email" required disabled={isLoading} register={register} errors={errors} registerOptions={{ required: "Enter your email address" }} />
+            <FloatingInput id="name" label="Username" required disabled={isLoading} register={register} errors={errors} registerOptions={{ required: "Choose a username" }} />
+            <FloatingInput id="password" label="Password" type="password" required disabled={isLoading} register={register} errors={errors} registerOptions={{ required: "Create a password", validate: (v) => validatePassword(v).valid || PASSWORD_RULE_MESSAGE }} />
             {(password?.length ?? 0) > 0 && <PasswordRules password={password} />}
             {isProvider && (
               <>
@@ -207,25 +205,32 @@ function RegisterModal() {
               </>
             )}
             {!isProvider && (
-              <label className="flex cursor-pointer items-start gap-3 text-[13px] leading-relaxed text-brand-muted">
-                <input
-                  type="checkbox"
-                  disabled={isLoading}
-                  className="mt-0.5 h-5 w-5 shrink-0 accent-brand"
-                  {...register("agreed")}
-                />
-                <span>
-                  I agree to the{" "}
-                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="font-bold text-brand underline underline-offset-2">
-                    BotShare Terms
-                  </a>{" "}
-                  &amp; Privacy Policy.
-                </span>
-              </label>
+              <div>
+                <label className="flex cursor-pointer items-start gap-3 text-[13px] leading-relaxed text-brand-muted">
+                  <input
+                    type="checkbox"
+                    disabled={isLoading}
+                    className="mt-0.5 h-5 w-5 shrink-0 accent-brand"
+                    {...register("agreed", { required: "Please accept the Terms to continue", shouldUnregister: true })}
+                  />
+                  <span>
+                    I agree to the{" "}
+                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="font-bold text-brand underline underline-offset-2">
+                      BotShare Terms
+                    </a>{" "}
+                    &amp; Privacy Policy.
+                  </span>
+                </label>
+                {errors.agreed && (
+                  <p className="mt-1.5 px-1 text-[12.5px] font-semibold text-rose-500">
+                    {errors.agreed.message as string}
+                  </p>
+                )}
+              </div>
             )}
             <Button
               label="Create account"
-              disabled={isLoading || (!isProvider && !agreed) || !pwValid}
+              disabled={isLoading}
               onClick={handleSubmit(onSubmit)}
             />
             <p className="text-center text-[14px] text-brand-muted">

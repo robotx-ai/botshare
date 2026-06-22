@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import {
+  FieldErrors,
+  FieldValues,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 type Props = {
@@ -13,6 +18,8 @@ type Props = {
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
+  /** Extra react-hook-form validation rules (e.g. a custom message or validator). */
+  registerOptions?: RegisterOptions;
 };
 
 /**
@@ -29,11 +36,13 @@ function FloatingInput({
   required,
   register,
   errors,
+  registerOptions,
 }: Props) {
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
   const resolvedType = isPassword && show ? "text" : type;
   const hasError = Boolean(errors[id]);
+  const errorMessage = errors[id]?.message as string | undefined;
 
   return (
     <div className="relative w-full">
@@ -42,7 +51,7 @@ function FloatingInput({
         type={resolvedType}
         placeholder=" "
         disabled={disabled}
-        {...register(id, { required })}
+        {...register(id, { required, ...registerOptions })}
         className={`peer h-14 w-full rounded-xl border-[1.5px] bg-white px-4 pb-2 pt-6 text-[15px] font-semibold text-brand outline-none transition disabled:opacity-70 ${
           isPassword ? "pr-12" : ""
         } ${hasError ? "border-rose-400 focus:border-rose-500" : "border-brand-subtle focus:border-brand"}`}
@@ -66,6 +75,11 @@ function FloatingInput({
         >
           {show ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
         </button>
+      )}
+      {errorMessage && (
+        <p className="mt-1.5 px-1 text-[12.5px] font-semibold text-rose-500">
+          {errorMessage}
+        </p>
       )}
     </div>
   );
