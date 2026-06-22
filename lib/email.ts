@@ -213,3 +213,33 @@ export async function sendVerificationCode(
   });
   if (error) throw new Error(`Resend verification email failed: ${JSON.stringify(error)}`);
 }
+
+export async function sendPasswordResetCode(
+  email: string,
+  code: string,
+  name?: string | null
+) {
+  const body = `
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#111827;">Reset your password</h2>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
+      Hi ${name ?? "there"}, use the code below to reset your BotShare password.
+      It expires in 10 minutes.
+    </p>
+    <div style="text-align:center;margin:8px 0 24px;">
+      <div style="display:inline-block;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:12px;
+                  padding:18px 28px;font-family:monospace;font-size:34px;font-weight:700;
+                  letter-spacing:10px;color:#111827;">${code}</div>
+    </div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;">
+      If you didn't request this, you can safely ignore this email &mdash; your password won't change.
+    </p>
+  `;
+
+  const { error } = await getResend().emails.send({
+    from: FROM,
+    to: email,
+    subject: `Your BotShare password reset code: ${code}`,
+    html: emailLayout(body),
+  });
+  if (error) throw new Error(`Resend password reset email failed: ${JSON.stringify(error)}`);
+}

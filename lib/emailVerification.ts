@@ -64,3 +64,38 @@ export async function confirmVerificationCode(
   ]);
   return { ok: true };
 }
+
+/**
+ * Validates a code for a password reset. Same expiry/attempt/hash checks as
+ * confirmVerificationCode, but on success it only clears the code — it does
+ * NOT flip emailVerified or change the password (the caller does that). Used
+ * by the forgot-password flow.
+ */
+export async function verifyResetCode(
+  email: string,
+  code: string
+): Promise<ConfirmResult> {
+  const record = await prisma.emailVerificationCode.findUnique({ where: { email } });
+  if (!record) {
+    return { ok: false, error: "No reset request found. Request a new code." };
+  }
+  if (record.expiresAt < new Date()) {
+    await prisma.emailVerificationCode.delete({ where: { email } }).catch(() => {});
+    return { ok: false, error: "This code has expired. Request a new one." };
+  }
+  if (record.attempts >= MAX_ATTEMPTS) {
+    return { ok: false, error: "Too many attempts. Request a new code." };
+  }
+
+  const valid = await bcrypt.compare(code, record.codeHash);
+  if (!valid) {
+    await prisma.emailVerificationCode.update({
+      where: { email },
+      data: { attempts: { increment: 1 } },
+    });
+    return { ok: false, error: "Invalid or expired code." };
+  }
+
+  await prisma.emailVerificationCode.delete({ where: { email } });
+  return { ok: true };
+}
