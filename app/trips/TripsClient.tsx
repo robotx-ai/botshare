@@ -4,10 +4,7 @@ import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ListingCard from "@/components/listing/ListingCard";
 import { SafeReservation, SafeUser } from "@/types";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
-import { toast } from "react-toastify";
+import React from "react";
 
 type Props = {
   reservations: SafeReservation[];
@@ -15,29 +12,6 @@ type Props = {
 };
 
 function TripsClient({ reservations, currentUser }: Props) {
-  const router = useRouter();
-  const [deletingId, setDeletingId] = useState("");
-
-  const onCancel = useCallback(
-    (id: string) => {
-      setDeletingId(id);
-
-      axios
-        .delete(`/api/reservations/${id}`)
-        .then(() => {
-          toast.info("Booking canceled");
-          router.refresh();
-        })
-        .catch((error) => {
-          toast.error(error?.response?.data?.error);
-        })
-        .finally(() => {
-          setDeletingId("");
-        });
-    },
-    [router]
-  );
-
   return (
     <Container>
       <Heading
@@ -50,10 +24,6 @@ function TripsClient({ reservations, currentUser }: Props) {
             key={reservation.id}
             data={reservation.listing}
             reservation={reservation}
-            actionId={reservation.id}
-            onAction={onCancel}
-            disabled={deletingId === reservation.id}
-            actionLabel="Cancel booking"
             currentUser={currentUser}
           />
         ))}

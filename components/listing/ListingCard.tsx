@@ -4,10 +4,12 @@ import { SafeReservation, SafeUser, safeListing } from "@/types";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import Button from "../Button";
 import HeartButton from "../HeartButton";
+import StatusBadge from "../orders/StatusBadge";
 
 type Props = {
   data: safeListing;
@@ -99,7 +101,19 @@ function ListingCard({
         {reservationDate && (
           <div className="font-light text-neutral-500">{reservationDate}</div>
         )}
-        {onAction && actionLabel && (
+        {reservation && (
+          <div className="flex items-center justify-between gap-2">
+            <StatusBadge status={reservation.status} />
+            <Link
+              href={`/orders/${reservation.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-sm font-medium text-gray-700 underline hover:text-black"
+            >
+              View order status
+            </Link>
+          </div>
+        )}
+        {!reservation && onAction && actionLabel && (
           <Button
             disabled={disabled}
             small
