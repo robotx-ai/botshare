@@ -27,18 +27,15 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid booking id." }, { status: 400 });
   }
 
-  // Admins can cancel any booking; others can only cancel their own or bookings on their services
-  const where = isAdminEmail(currentUser.email)
-    ? { id: reservationId }
-    : {
-        id: reservationId,
-        OR: [
-          { userId: currentUser.id },
-          { listing: { userId: currentUser.id } },
-        ],
-      };
+  // Hard delete is admin-only true removal; owner/customer cancellation now goes
+  // through the soft-cancel status transition (PATCH .../status -> CANCELLED).
+  if (!isAdminEmail(currentUser.email)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
-  const reservation = await prisma.reservation.deleteMany({ where });
+  const reservation = await prisma.reservation.deleteMany({
+    where: { id: reservationId },
+  });
 
   return NextResponse.json(reservation);
 }

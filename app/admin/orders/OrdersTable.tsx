@@ -6,6 +6,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import StatusBadge from "@/components/orders/StatusBadge";
 
 type Props = {
   reservations: SafeAdminReservation[];
@@ -28,11 +29,11 @@ export default function OrdersTable({ reservations }: Props) {
     if (!window.confirm("Cancel this booking?")) return;
     setDeletingId(id);
     try {
-      await axios.delete(`/api/reservations/${id}`);
+      await axios.patch(`/api/reservations/${id}/status`, { status: "CANCELLED" });
       toast.success("Booking cancelled");
       router.refresh(); // re-runs page.tsx server action with current search params
-    } catch {
-      toast.error("Something went wrong");
+    } catch (e: any) {
+      toast.error(e?.response?.data?.error ?? "Something went wrong");
     } finally {
       setDeletingId(null);
     }
@@ -48,13 +49,14 @@ export default function OrdersTable({ reservations }: Props) {
               <th className="px-4 py-3 text-left font-medium text-gray-500">Service</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Dates</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Total</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Status</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Booked On</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="px-4 py-8 text-center text-gray-500" colSpan={6}>
+              <td className="px-4 py-8 text-center text-gray-500" colSpan={7}>
                 No bookings found.
               </td>
             </tr>
@@ -73,6 +75,7 @@ export default function OrdersTable({ reservations }: Props) {
             <th className="px-4 py-3 text-left font-medium text-gray-500">Service</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Dates</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Total</th>
+            <th className="px-4 py-3 text-left font-medium text-gray-500">Status</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Booked On</th>
             <th className="px-4 py-3 text-left font-medium text-gray-500">Actions</th>
           </tr>
@@ -98,6 +101,9 @@ export default function OrdersTable({ reservations }: Props) {
                   {formatDate(r.startDate)} → {formatDate(r.endDate)}
                 </td>
                 <td className="px-4 py-3 text-gray-900">${r.totalPrice}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={r.status} />
+                </td>
                 <td className="px-4 py-3 text-gray-500">{formatDate(r.createdAt)}</td>
                 <td className="px-4 py-3">
                   <button
@@ -111,7 +117,7 @@ export default function OrdersTable({ reservations }: Props) {
               </tr>
               {expandedId === r.id && (
                 <tr className="bg-gray-50">
-                  <td colSpan={6} className="px-4 py-3 text-sm text-gray-600">
+                  <td colSpan={7} className="px-4 py-3 text-sm text-gray-600">
                     <span className="mr-4">
                       <span className="font-medium">Email:</span> {r.customerEmail || "—"}
                     </span>

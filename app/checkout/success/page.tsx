@@ -46,15 +46,25 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
 
   const reservation =
     existing ??
-    (await prisma.reservation.create({
-      data: {
-        userId,
-        listingId,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        totalPrice: parseInt(totalPrice, 10),
-        stripeSessionId: sessionId,
-      },
+    (await prisma.$transaction(async (tx) => {
+      const created = await tx.reservation.create({
+        data: {
+          userId,
+          listingId,
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+          totalPrice: parseInt(totalPrice, 10),
+          stripeSessionId: sessionId,
+        },
+      });
+      await tx.reservationEvent.create({
+        data: {
+          reservationId: created.id,
+          status: "PLACED",
+          actorId: userId,
+        },
+      });
+      return created;
     }));
 
   // Send email notifications exactly once (skip on page refresh)
