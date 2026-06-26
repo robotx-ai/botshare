@@ -102,6 +102,11 @@ function RentModal({}: Props) {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    if (step === STEPS.ROBOT && !selectedRobot) {
+      toast.error("Please select a robot to continue.");
+      return;
+    }
+
     if (step === STEPS.LOCATION) {
       if (!zipData) {
         return;
@@ -153,7 +158,7 @@ function RentModal({}: Props) {
     <div className="flex flex-col gap-6">
       <Heading
         title="Choose your robot"
-        subtitle="Pick a robot from our catalog to auto-fill its details, or enter them manually."
+        subtitle="Pick a robot from our catalog to start your listing."
       />
       <RobotPicker selectedId={selectedRobot?.id ?? null} onSelect={onSelectRobot} />
     </div>
