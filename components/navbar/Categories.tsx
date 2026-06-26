@@ -1,32 +1,12 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  FaRobot,
-  FaWarehouse,
-  FaUtensils,
-} from "react-icons/fa";
-import { SERVICE_CATEGORIES } from "@/lib/serviceCategories";
+import { USE_CASE_META } from "@/lib/useCases";
 import CategoryBox from "../CategoryBox";
 import Container from "../Container";
 
-export const categories = [
-  {
-    label: SERVICE_CATEGORIES[0],
-    icon: FaRobot,
-    description: "Robots for demos, events, and live performance experiences.",
-  },
-  {
-    label: SERVICE_CATEGORIES[1],
-    icon: FaWarehouse,
-    description: "Automation support for warehouse operations and workflows.",
-  },
-  {
-    label: SERVICE_CATEGORIES[2],
-    icon: FaUtensils,
-    description: "Service robots for restaurant operations and customer service.",
-  },
-];
+// Exported for reuse (e.g. any consumer importing `categories`).
+export const categories = USE_CASE_META;
 
 type Props = {};
 
@@ -35,21 +15,19 @@ function Categories({}: Props) {
   const category = params?.get("category");
   const pathname = usePathname();
 
-  const isServicesPage = pathname === "/services";
-
-  if (!isServicesPage) {
+  if (pathname !== "/services") {
     return null;
   }
 
   return (
     <Container>
       <div className="pt-3 pb-1 flex flex-row items-center justify-center gap-3 overflow-x-auto">
-        {categories.map((items) => (
+        {categories.map((item) => (
           <CategoryBox
-            key={items.label}
-            icon={items.icon}
-            label={items.label}
-            selected={category === items.label}
+            key={item.label}
+            icon={item.icon}
+            label={item.label}
+            selected={category === item.label}
           />
         ))}
       </div>
