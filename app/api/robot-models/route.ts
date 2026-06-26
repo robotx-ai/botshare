@@ -20,6 +20,7 @@ export async function GET() {
   }
 
   const robots = await prisma.robotModel.findMany({
+    where: { listable: true },
     orderBy: [{ brand: "asc" }, { model: "asc" }],
     select: {
       id: true,
@@ -32,6 +33,10 @@ export async function GET() {
       serviceCategory: true,
       capabilityTag: true,
       imageUrl: true,
+      priceHourly: true,
+      priceDaily: true,
+      priceMonthly: true,
+      useCase: true,
     },
   });
 

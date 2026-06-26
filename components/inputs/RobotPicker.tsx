@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import useRobotModels, { RobotModelOption } from "@/hook/useRobotModels";
-import { SERVICE_CATEGORIES } from "@/lib/serviceCategories";
+import { USE_CASES } from "@/lib/useCases";
 
 type Props = {
   selectedId: string | null;
@@ -37,7 +37,7 @@ function RobotPicker({ selectedId, onSelect }: Props) {
         (r) =>
           (!query || matches(r, query)) &&
           (!brand || r.brand === brand) &&
-          (!category || r.serviceCategory === category)
+          (!category || r.useCase.includes(category))
       ),
     [robots, query, brand, category]
   );
@@ -60,7 +60,7 @@ function RobotPicker({ selectedId, onSelect }: Props) {
       />
 
       <div className="flex flex-wrap gap-2">
-        {SERVICE_CATEGORIES.map((c) => (
+        {USE_CASES.map((c) => (
           <button
             type="button"
             key={c}

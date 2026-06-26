@@ -13,6 +13,10 @@ export type RobotModelOption = {
   serviceCategory: string;
   capabilityTag: string;
   imageUrl: string | null;
+  priceHourly: number | null;
+  priceDaily: number | null;
+  priceMonthly: number | null;
+  useCase: string[];
 };
 
 // Module-level cache: the ~98-row catalog is fetched once per session and
