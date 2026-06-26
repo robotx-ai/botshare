@@ -85,6 +85,8 @@ model Listing {
   userId        String
   price         Int
   robotModelId  String?
+  sku           String?        // provider's physical-unit SKU (collected, not yet verified)
+  skuImageSrc   String?        // Cloudinary URL of the SKU-label photo
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   robotModel    RobotModel?    @relation(fields: [robotModelId], references: [id])
   reservations  Reservation[]
@@ -149,6 +151,11 @@ model RobotModel {
   sku             String?
   description     String
   msrp            Int? // USD purchase price — reference only, never a listing's rental price
+  priceHourly     Int? // USD per-hour rental price, null if not offered
+  priceDaily      Int? // USD per-day rental price, null if not offered
+  priceMonthly    Int? // USD per-month rental price, null if not offered
+  useCase         String[] // zero or more of the 6 canonical use cases
+  listable        Boolean  @default(false) // shows in the create-service robot picker
   serviceCategory String // one of the 3 canonical service categories
   capabilityTag   String // humanoid | quadruped | delivery | cleaning | reception | industrial | education
   imageUrl        String? // Cloudinary delivery URL, null if no source image
