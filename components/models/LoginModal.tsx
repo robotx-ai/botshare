@@ -2,6 +2,7 @@
 
 import useLoginModal from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
+import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -16,6 +17,7 @@ function LoginModal() {
   const router = useRouter();
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
+  const forgotModal = useForgotPasswordModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -51,6 +53,11 @@ function LoginModal() {
     registerModal.onOpen();
   }, [handleClose, registerModal]);
 
+  const toForgot = useCallback(() => {
+    handleClose();
+    forgotModal.onOpen();
+  }, [handleClose, forgotModal]);
+
   return (
     <AuthModal isOpen={loginModal.isOpen} onClose={handleClose} disabled={isLoading}>
       <div className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand">
@@ -63,7 +70,7 @@ function LoginModal() {
         <FloatingInput id="email" label="Email address" type="email" required disabled={isLoading} register={register} errors={errors} />
         <FloatingInput id="password" label="Password" type="password" required disabled={isLoading} register={register} errors={errors} />
         <div className="-mt-0.5 text-right">
-          <span className="cursor-pointer text-[14px] font-extrabold text-brand underline decoration-brand-subtle underline-offset-[3px]">
+          <span onClick={toForgot} className="cursor-pointer text-[14px] font-extrabold text-brand underline decoration-brand-subtle underline-offset-[3px]">
             Forgot password?
           </span>
         </div>

@@ -49,6 +49,7 @@ model User {
   userType             UserType       @default(CUSTOMER)
   phone                String?
   businessName         String?
+  verified             Boolean        @default(false)
   termsAcceptedAt      DateTime?
   termsAcceptedVersion String?
   accounts             Account[]
@@ -94,13 +95,18 @@ model Listing {
   lng           Float
   userId        String
   price         Int
+  robotModelId  String?
+  sku           String?        // provider's physical-unit SKU (collected, not yet verified)
+  skuImageSrc   String?        // Cloudinary URL of the SKU-label photo
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  robotModel    RobotModel?    @relation(fields: [robotModelId], references: [id])
   reservations  Reservation[]
   favoritedBy   UserFavorite[]
 
   @@index([userId])
   @@index([metro])
   @@index([zipCode])
+  @@index([robotModelId])
 }
 
 model Reservation {
@@ -157,4 +163,33 @@ model EmailVerificationCode {
   expiresAt DateTime
   attempts  Int      @default(0)
   createdAt DateTime @default(now())
+}
+
+// Curated catalog of robots a provider can pick from when creating a listing.
+// Seeded from data/robot-catalog/ via scripts/seed-robot-catalog.mjs.
+model RobotModel {
+  id              String   @id @default(cuid())
+  slug            String   @unique // "<brand>-<model>"; stable upsert key + Cloudinary public_id
+  brand           String
+  model           String
+  productName     String
+  sku             String?
+  description     String
+  msrp            Int? // USD purchase price — reference only, never a listing's rental price
+  priceHourly     Int? // USD per-hour rental price, null if not offered
+  priceDaily      Int? // USD per-day rental price, null if not offered
+  priceMonthly    Int? // USD per-month rental price, null if not offered
+  useCase         String[] // zero or more of the 6 canonical use cases
+  listable        Boolean  @default(false) // shows in the create-service robot picker
+  serviceCategory String // one of the 3 canonical service categories
+  capabilityTag   String // humanoid | quadruped | delivery | cleaning | reception | industrial | education
+  imageUrl        String? // Cloudinary delivery URL, null if no source image
+  needsReview     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  listings        Listing[]
+
+  @@index([brand])
+  @@index([serviceCategory])
+  @@index([model])
 }

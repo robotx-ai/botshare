@@ -26,7 +26,7 @@ const SERVICES = [
     subtitle: "Large & Small Venue",
     description:
       "Deploy BotSharing US performers alongside live acts — from intimate stages to arena-scale productions.",
-    href: "/services?category=Showcase+%26+Performance",
+    href: "/services?category=Performance",
     videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/agibot-stage-performance.mp4",
     waveConfig: { frequency: 0.006, amplitude: 70, speed: 0.017, layers: 3 },
   },
@@ -37,7 +37,7 @@ const SERVICES = [
     subtitle: "Corporate Events",
     description:
       "Captivate attendees at trade shows, product launches, and corporate showcases with live robot demos.",
-    href: "/services?category=Showcase+%26+Performance",
+    href: "/services?category=Performance",
     videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/exhibition-bg.mp4",
     waveConfig: { frequency: 0.018, amplitude: 55, speed: 0.022, layers: 3 },
   },
@@ -48,7 +48,7 @@ const SERVICES = [
     subtitle: "Birthday, Christmas",
     description:
       "Make any celebration unforgettable — robot waiters, interactive entertainment, and crowd-pleasing moments.",
-    href: "/services?category=Restaurant",
+    href: "/services?category=Delivery",
     videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/party-bg.mp4",
     waveConfig: { frequency: 0.012, amplitude: 38, speed: 0.013, layers: 3 },
   },

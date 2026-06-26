@@ -43,15 +43,20 @@ export async function POST(request: Request) {
 
   const session = await stripe().checkout.sessions.create({
     mode: "payment",
+    automatic_tax: { enabled: true },
+    billing_address_collection: "required",
+    customer_email: currentUser.email ?? undefined,
     line_items: [
       {
         quantity: 1,
         price_data: {
           currency: "usd",
           unit_amount: totalPrice * 100,
+          tax_behavior: "exclusive",
           product_data: {
             name: listing.title,
             description: "BotShare service booking",
+            tax_code: "txcd_99999999",
           },
         },
       },

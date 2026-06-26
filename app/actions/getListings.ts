@@ -1,6 +1,6 @@
 import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
-import { isServiceCategory } from "@/lib/serviceCategories";
+import { isUseCase } from "@/lib/useCases";
 import { getZipData } from "@/lib/zipMetro";
 
 export interface IListingsParams {
@@ -34,12 +34,15 @@ export default async function getListings(params: IListingsParams) {
       query.userId = userId;
     }
 
-    if (category && !isServiceCategory(category)) {
+    if (category && !isUseCase(category)) {
       return [];
     }
 
     if (category) {
-      query.category = category;
+      query.OR = [
+        { robotModel: { is: { useCase: { has: category } } } },
+        { category },
+      ];
     }
 
     if (roomCount) {
@@ -129,9 +132,9 @@ export default async function getListings(params: IListingsParams) {
 
     if (!category) {
       safeListings.sort((a, b) => {
-        const aIsShowcase = a.category === "Showcase & Performance" ? 0 : 1;
-        const bIsShowcase = b.category === "Showcase & Performance" ? 0 : 1;
-        return aIsShowcase - bIsShowcase;
+        const aIsPerformance = a.category === "Performance" ? 0 : 1;
+        const bIsPerformance = b.category === "Performance" ? 0 : 1;
+        return aIsPerformance - bIsPerformance;
       });
     }
 

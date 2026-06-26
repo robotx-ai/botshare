@@ -2,6 +2,7 @@ import ClientOnly from "@/components/ClientOnly";
 import Footer from "@/components/Footer";
 import ToastContainerBar from "@/components/ToastContainerBar";
 import LoginModal from "@/components/models/LoginModal";
+import ForgotPasswordModal from "@/components/models/ForgotPasswordModal";
 import RegisterModal from "@/components/models/RegisterModal";
 import RentModal from "@/components/models/RentModal";
 import SearchModal from "@/components/models/SearchModal";
@@ -43,6 +44,7 @@ export default async function RootLayout({
           <SearchModal />
           <RegisterModal />
           <LoginModal />
+          <ForgotPasswordModal />
           {isAdmin && <RentModal />}
           <Navbar currentUser={currentUser} isAdmin={isAdmin} />
         </ClientOnly>

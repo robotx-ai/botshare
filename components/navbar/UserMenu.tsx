@@ -10,6 +10,8 @@ import { SafeUser } from "@/types";
 import { signOut } from "next-auth/react";
 import { useCallback, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { toast } from "react-toastify";
+import { isProviderProfileComplete } from "@/lib/providerProfile";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 
@@ -37,12 +39,21 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
       return loginModel.onOpen();
     }
 
+    // isAdmin here is canManageServices (provider OR admin).
     if (!isAdmin) {
       return;
     }
 
+    // Require a complete profile before listing; otherwise send them to fill it.
+    if (!isProviderProfileComplete(currentUser)) {
+      toast("Complete your profile to start listing.");
+      setIsOpen(false);
+      router.push("/profile");
+      return;
+    }
+
     rentModel.onOpen();
-  }, [currentUser, isAdmin, loginModel, rentModel]);
+  }, [currentUser, isAdmin, loginModel, rentModel, router]);
 
   return (
     <div className="relative">
@@ -89,6 +100,10 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                     {isAdmin ? "Administrator" : "Service Provider"}
                   </div>
                 )}
+                <MenuItem
+                  onClick={() => { setIsOpen(false); router.push("/profile"); }}
+                  label="Profile"
+                />
                 {isCustomer ? (
                   <>
                     <MenuItem
