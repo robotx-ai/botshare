@@ -27,6 +27,14 @@ npm run deploy:prod      # Production deploy
 
 Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the site dashboard. The `.env` file is for local dev only.
 
+### ⚠️ Deployment Gotchas (learned the hard way — read before deploying)
+
+1. **Deploy with `npm run deploy:prod` (a LOCAL build), NOT a plain `git push`.** The Netlify site auto-deploys `main` on push, but its **CI build omits the Prisma `rhel-openssl-3.0.x` query engine** from the serverless function (~18 MB function, engine absent). The Lambda then throws `Query engine library ... could not be found` on **every DB query** — login and all data break. A *local* build bundles the engine correctly (~32 MB function), so `npm run deploy:prod` works. **If you do push to `main`, immediately run `npm run deploy:prod` afterward** (and expect ~3 min of broken login during the CI build window). Engine bundling is wired via `next.config.js` (`experimental.outputFileTracingIncludes`) + `scripts/bundle-prisma-engines.mjs` (runs in `build:netlify`); these fix LOCAL builds — the CI build path still needs a durable fix. Diagnose by function size (~18 MB = broken) or by curling the credentials login flow.
+
+2. **`.env` points at the PRODUCTION Supabase database — there is NO separate dev DB.** `npm run dev`, any script in `scripts/`, and any local Prisma/Supabase call read and **write live production data**. Be deliberate; always clean up test rows/files you create.
+
+3. **Prisma migration drift is common on prod.** The live schema is often ahead of `_prisma_migrations` (migrations applied out-of-band). `prisma migrate deploy` then fails `relation already exists` and leaves a FAILED record that blocks all future deploys. Recover with `prisma migrate resolve --applied <migration_name>` for each already-applied migration, then re-run `migrate deploy`. Verify objects exist first (read-only) before marking applied.
+
 ## Architecture
 
 **Framework**: Next.js 13 (App Router + Pages Router hybrid)
@@ -36,7 +44,7 @@ Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the s
 
 **Key directories**:
 - `app/actions/` — Server-side data fetchers: `getListings`, `getListingById`, `getReservations`, `getAllReservations` (admin), `getFavoriteListings`, `getCurrentUser`
-- `app/api/` — `listings/`, `reservations/`, `favorites/`, `register/`, `checkout/` (Stripe session), `upload/` (Cloudinary signatures)
+- `app/api/` — `listings/`, `reservations/`, `favorites/`, `register/`, `checkout/` (Stripe session), `upload/` (image upload → **Supabase Storage** `service-images` public bucket; server-side via service-role key)
 - `app/listings/[listingId]/` — Service detail page
 - `app/services/` — Browse/filter services catalog
 - `app/trips/`, `app/reservations/`, `app/favorites/`, `app/my-listings/` — Authenticated user pages (protected by `middleware.ts`)
@@ -100,6 +108,7 @@ Source of truth: `lib/serviceCategories.ts`
   - Provider check: `session.user.userType === 'PROVIDER'`
   - Admin check: `isAdminEmail()` from `lib/adminAuth.ts` — reads `ADMIN_EMAILS` env var
 - Enforce at API layer regardless of UI visibility. `RentModal` (create service) is mounted conditionally in `app/layout.tsx` for eligible roles.
+- **Image upload (`/api/upload`)** is part of service creation, so gate it with `canManageServices` (providers + admins) — the same audience as `POST /api/listings`. Do NOT restrict it to admins only (that 403s providers uploading service/SKU photos). The route uploads to the Supabase `service-images` public bucket and resolves the project URL via `SUPABASE_URL || NEXT_PUBLIC_SUPABASE_URL` (only the `NEXT_PUBLIC_` one is set in `.env`/Netlify).
 - **Admin-only surfaces**: `/admin/orders` (all bookings, filter, cross-tenant cancel). Middleware matcher in `middleware.ts` gates `/admin/*`.
 - **Reservation cancellation**: owners can cancel their own; admins can cancel any (DELETE `/api/reservations/[id]`).
 
