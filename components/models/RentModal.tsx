@@ -11,13 +11,10 @@ import { getMetroCentroid, getMetroLabel } from "@/lib/metro";
 import useZipCheck from "@/hook/useZipCheck";
 
 import Heading from "../Heading";
-import CategoryInput from "../inputs/CategoryInput";
-import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import RobotPicker from "../inputs/RobotPicker";
 import VideoUpload from "../inputs/VideoUpload";
-import { categories } from "../navbar/Categories";
 import Modal from "./Modal";
 import type { RobotModelOption } from "@/hook/useRobotModels";
 
@@ -25,12 +22,10 @@ type Props = {};
 
 enum STEPS {
   ROBOT = 0,
-  CATEGORY = 1,
-  LOCATION = 2,
-  INFO = 3,
-  IMAGES = 4,
-  DESCRIPTION = 5,
-  PRICE = 6,
+  LOCATION = 1,
+  IMAGES = 2,
+  DETAILS = 3,
+  PRICE = 4,
 }
 
 function RentModal({}: Props) {
@@ -51,26 +46,20 @@ function RentModal({}: Props) {
   } = useForm<FieldValues>({
     defaultValues: {
       robotModelId: null,
-      category: "",
       zipCode: "",
-      guestCount: 1,
-      roomCount: 1,
-      bathroomCount: 1,
       imageSrc: "",
       videoSrc: "",
-      price: 1,
+      skuImageSrc: "",
+      sku: "",
       title: "",
       description: "",
     },
   });
 
-  const category = watch("category");
   const zipCode: string = watch("zipCode") ?? "";
-  const guestCount = watch("guestCount");
-  const roomCount = watch("roomCount");
-  const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
   const videoSrc = watch("videoSrc");
+  const skuImageSrc = watch("skuImageSrc");
 
   const { zipData, invalid: zipInvalid } = useZipCheck(zipCode);
 
@@ -90,13 +79,12 @@ function RentModal({}: Props) {
     });
   };
 
-  // Picking a catalog robot pre-fills category/title/description/image (all still
-  // editable downstream); choosing "manual" clears the link. Price is never set here.
+  // Picking a catalog robot pre-fills title/description/image (all still editable).
+  // Category and price are derived server-side from the model, never set here.
   const onSelectRobot = (robot: RobotModelOption | null) => {
     setSelectedRobot(robot);
     setCustomValue("robotModelId", robot ? robot.id : null);
     if (robot) {
-      setCustomValue("category", robot.serviceCategory);
       setCustomValue("title", robot.productName);
       setCustomValue("description", robot.description ?? "");
       if (robot.imageUrl) {
@@ -171,33 +159,6 @@ function RentModal({}: Props) {
     </div>
   );
 
-  if (step === STEPS.CATEGORY) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Which service type are you publishing?"
-          subtitle={
-            selectedRobot
-              ? "Pre-selected from your chosen robot — change it if needed."
-              : "Select a service category."
-          }
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700">
-          {categories.map((item, index) => (
-            <div key={index} className="col-span-1">
-              <CategoryInput
-                onClick={(category) => setCustomValue("category", category)}
-                selected={category === item.label}
-                label={item.label}
-                icon={item.icon}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   if (step === STEPS.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
@@ -243,47 +204,22 @@ function RentModal({}: Props) {
     );
   }
 
-  if (step === STEPS.INFO) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Define service capacity"
-          subtitle="Set expected scale for each booking."
-        />
-        <Counter
-          title="Customers"
-          subtitle="How many customers should this service support?"
-          value={guestCount}
-          onChange={(value) => setCustomValue("guestCount", value)}
-        />
-        <hr />
-        <Counter
-          title="Service Units"
-          subtitle="How many robot units are included?"
-          value={roomCount}
-          onChange={(value) => setCustomValue("roomCount", value)}
-        />
-        <hr />
-        <Counter
-          title="Coverage Zones"
-          subtitle="How many areas can this service cover?"
-          value={bathroomCount}
-          onChange={(value) => setCustomValue("bathroomCount", value)}
-        />
-      </div>
-    );
-  }
-
   if (step === STEPS.IMAGES) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
           title="Add service visuals"
-          subtitle="Show customers the robots and deployment setup."
+          subtitle="Show customers the robot, and upload a photo of its SKU label."
         />
         <ImageUpload
           onChange={(value) => setCustomValue("imageSrc", value)}
           value={imageSrc}
+        />
+        <hr />
+        <Heading title="SKU photo" subtitle="Upload a clear photo of the robot's SKU label." />
+        <ImageUpload
+          onChange={(value) => setCustomValue("skuImageSrc", value)}
+          value={skuImageSrc}
         />
         <VideoUpload
           onChange={(value) => setCustomValue("videoSrc", value)}
@@ -293,12 +229,12 @@ function RentModal({}: Props) {
     );
   }
 
-  if (step === STEPS.DESCRIPTION) {
+  if (step === STEPS.DETAILS) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
           title="Describe the service package"
-          subtitle="Add a clear title and what this service includes."
+          subtitle="Add a clear title, description, and the robot's SKU."
         />
         <Input
           id="title"
@@ -317,33 +253,38 @@ function RentModal({}: Props) {
           errors={errors}
           required
         />
-      </div>
-    );
-  }
-
-  if (step == STEPS.PRICE) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Now, set your price"
-          subtitle="How much do you charge per day?"
-        />
-        {selectedRobot?.msrp != null && (
-          <p className="-mt-4 text-sm text-neutral-500">
-            Reference purchase price (MSRP): ${selectedRobot.msrp.toLocaleString()} — this
-            is the robot&apos;s retail cost, not a rental rate. Set your daily price below.
-          </p>
-        )}
+        <hr />
         <Input
-          id="price"
-          label="Price"
-          formatPrice
-          type="number"
+          id="sku"
+          label="SKU"
           disabled={isLoading}
           register={register}
           errors={errors}
           required
         />
+      </div>
+    );
+  }
+
+  if (step === STEPS.PRICE) {
+    const tiers = [
+      selectedRobot?.priceHourly != null ? `$${selectedRobot.priceHourly.toLocaleString()}/hr` : null,
+      selectedRobot?.priceDaily != null ? `$${selectedRobot.priceDaily.toLocaleString()}/day` : null,
+      selectedRobot?.priceMonthly != null ? `$${selectedRobot.priceMonthly.toLocaleString()}/mo` : null,
+    ].filter(Boolean);
+
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Your price"
+          subtitle="This price is set for the robot you selected."
+        />
+        <div className="rounded-xl border-2 border-neutral-200 p-6 text-center">
+          <p className="text-2xl font-semibold text-black">{tiers.join("  ·  ")}</p>
+          <p className="mt-2 text-sm text-neutral-500">
+            Billed per day at checkout for now. Hourly and monthly options are coming soon.
+          </p>
+        </div>
       </div>
     );
   }
