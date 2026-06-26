@@ -1,7 +1,6 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { canManageServices } from "@/lib/adminAuth";
-import { isServiceCategory } from "@/lib/serviceCategories";
 import { isProviderProfileComplete } from "@/lib/providerProfile";
 import { getMetroLabel, getZipData } from "@/lib/zipMetro";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
@@ -38,11 +37,8 @@ export async function POST(request: Request) {
     description,
     imageSrc,
     videoSrc,
-    category,
-    roomCount,
-    bathroomCount,
-    guestCount,
-    price,
+    sku,
+    skuImageSrc,
     zipCode,
     robotModelId,
   } = body;
@@ -70,49 +66,38 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!isServiceCategory(category)) {
+  if (!robotModelId) {
     return NextResponse.json(
-      { error: "Invalid service category." },
+      { error: "A robot model is required." },
       { status: 400 }
     );
   }
 
-  // Optional link to a catalog robot — validate it exists when provided.
-  let validRobotModelId: string | null = null;
-  if (robotModelId) {
-    const robot = await prisma.robotModel.findUnique({
-      where: { id: String(robotModelId) },
-      select: { id: true },
-    });
-    if (!robot) {
-      return NextResponse.json(
-        { error: "Selected robot model was not found." },
-        { status: 400 }
-      );
-    }
-    validRobotModelId = robot.id;
-  }
+  const robot = await prisma.robotModel.findUnique({
+    where: { id: String(robotModelId) },
+    select: { id: true, listable: true, useCase: true, priceDaily: true },
+  });
 
-  const parsedGuestCount = Number(guestCount);
-  const parsedRoomCount = Number(roomCount);
-  const parsedBathroomCount = Number(bathroomCount);
-  const parsedPrice = Number(price);
-
-  if (
-    !Number.isFinite(parsedGuestCount) ||
-    !Number.isFinite(parsedRoomCount) ||
-    !Number.isFinite(parsedBathroomCount) ||
-    !Number.isFinite(parsedPrice) ||
-    parsedGuestCount < 1 ||
-    parsedRoomCount < 1 ||
-    parsedBathroomCount < 1 ||
-    parsedPrice < 1
-  ) {
+  if (!robot || !robot.listable) {
     return NextResponse.json(
-      { error: "Invalid service capacity or pricing values." },
+      { error: "Selected robot model is not available for listing." },
       { status: 400 }
     );
   }
+
+  if (robot.priceDaily == null || robot.useCase.length === 0) {
+    return NextResponse.json(
+      { error: "Selected robot model is missing pricing or use case." },
+      { status: 400 }
+    );
+  }
+
+  const derivedCategory = robot.useCase[0];
+  const derivedPrice = robot.priceDaily;
+
+  const parsedGuestCount = 1;
+  const parsedRoomCount = 1;
+  const parsedBathroomCount = 1;
 
   const listing = await prisma.listing.create({
     data: {
@@ -120,7 +105,9 @@ export async function POST(request: Request) {
       description,
       imageSrc,
       ...(videoSrc ? { videoSrc } : {}),
-      category,
+      ...(sku ? { sku: String(sku) } : {}),
+      ...(skuImageSrc ? { skuImageSrc: String(skuImageSrc) } : {}),
+      category: derivedCategory,
       roomCount: parsedRoomCount,
       bathroomCount: parsedBathroomCount,
       guestCount: parsedGuestCount,
@@ -129,9 +116,9 @@ export async function POST(request: Request) {
       zipCode: normalizedZip,
       lat: zipData.lat,
       lng: zipData.lng,
-      price: Math.floor(parsedPrice),
+      price: derivedPrice,
       userId: currentUser.id,
-      ...(validRobotModelId ? { robotModelId: validRobotModelId } : {}),
+      robotModelId: robot.id,
     },
   });
 
