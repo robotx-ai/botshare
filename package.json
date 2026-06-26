@@ -14,7 +14,7 @@
     "db:migrate:data": "node scripts/migrate-mongo-to-postgres.js",
     "db:migrate:verify": "node scripts/verify-migration.js",
     "db:seed": "prisma db seed",
-    "build:netlify": "prisma generate && next build",
+    "build:netlify": "prisma generate && node scripts/bundle-prisma-engines.mjs && next build",
     "deploy:preview": "netlify build && netlify deploy --site 147defb9-131c-42ca-8375-37ebc8ba5531",
     "deploy:prod": "netlify build && netlify deploy --prod --site 147defb9-131c-42ca-8375-37ebc8ba5531"
   },

@@ -9,5 +9,12 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Prisma 4 generates engines into .prisma/client; scripts/bundle-prisma-engines.mjs
+# (run in build:netlify) also copies the rhel engines into @prisma/client/runtime,
+# which is where the Lambda's Prisma Client searches first. Bundle both locations.
 [functions."___netlify-server-handler"]
-  included_files = ["node_modules/.prisma/client/**", "node_modules/@prisma/client/runtime/libquery_engine-rhel-openssl-3.0.x.so.node"]
+  included_files = [
+    "node_modules/.prisma/client/**",
+    "node_modules/@prisma/client/runtime/libquery_engine-rhel-openssl-1.0.x.so.node",
+    "node_modules/@prisma/client/runtime/libquery_engine-rhel-openssl-3.0.x.so.node",
+  ]
