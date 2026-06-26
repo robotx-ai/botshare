@@ -1,16 +1,26 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import { isAdminEmail } from "@/lib/adminAuth";
+import { canManageServices } from "@/lib/adminAuth";
 
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser || !isAdminEmail(currentUser.email)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  if (!currentUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL;
+  // Image upload is part of creating a service, so allow the same audience that
+  // can create services (providers + admins), matching POST /api/listings.
+  if (!canManageServices(currentUser)) {
+    return NextResponse.json(
+      { error: "Forbidden: service provider access required." },
+      { status: 403 }
+    );
+  }
+
+  const supabaseUrl =
+    process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceRoleKey) {
