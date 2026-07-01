@@ -37,6 +37,11 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum ListingStatus {
+  AVAILABLE
+  CLAIMED
+}
+
 model User {
   id                   String         @id @default(cuid())
   name                 String?
@@ -53,7 +58,8 @@ model User {
   termsAcceptedAt      DateTime?
   termsAcceptedVersion String?
   accounts             Account[]
-  listings             Listing[]
+  listings             Listing[]      @relation("ownerListings")
+  operatedListings     Listing[]      @relation("operatorListings")
   reservations         Reservation[]
   favoriteListings     UserFavorite[]
 }
@@ -78,49 +84,56 @@ model Account {
 }
 
 model Listing {
-  id            String         @id @default(cuid())
-  title         String
-  description   String
-  imageSrc      String
-  videoSrc      String?
-  createdAt     DateTime       @default(now())
-  category      String
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
-  locationValue String
-  metro         Metro
-  zipCode       String
-  lat           Float
-  lng           Float
-  userId        String
-  price         Int
-  robotModelId  String?
-  sku           String?        // provider's physical-unit SKU (collected, not yet verified)
-  skuImageSrc   String?        // Cloudinary URL of the SKU-label photo
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  robotModel    RobotModel?    @relation(fields: [robotModelId], references: [id])
-  reservations  Reservation[]
-  favoritedBy   UserFavorite[]
+  id                String         @id @default(cuid())
+  title             String
+  description       String
+  imageSrc          String
+  videoSrc          String?
+  createdAt         DateTime       @default(now())
+  category          String
+  roomCount         Int
+  bathroomCount     Int
+  guestCount        Int
+  locationValue     String
+  metro             Metro
+  zipCode           String
+  lat               Float
+  lng               Float
+  userId            String
+  price             Int
+  robotModelId      String?
+  sku               String? // provider's physical-unit SKU (collected, not yet verified)
+  skuImageSrc       String? // Cloudinary URL of the SKU-label photo
+  isIndividualOwned Boolean        @default(false)
+  status            ListingStatus?
+  operatorId        String?
+  claimedAt         DateTime?
+  operator          User?          @relation("operatorListings", fields: [operatorId], references: [id])
+  user              User           @relation("ownerListings", fields: [userId], references: [id], onDelete: Cascade)
+  robotModel        RobotModel?    @relation(fields: [robotModelId], references: [id])
+  reservations      Reservation[]
+  favoritedBy       UserFavorite[]
 
   @@index([userId])
   @@index([metro])
   @@index([zipCode])
   @@index([robotModelId])
+  @@index([operatorId])
+  @@index([isIndividualOwned, status])
 }
 
 model Reservation {
-  id              String   @id @default(cuid())
+  id              String             @id @default(cuid())
   userId          String
   listingId       String
   startDate       DateTime
   endDate         DateTime
   totalPrice      Int
-  createdAt       DateTime @default(now())
-  stripeSessionId String?  @unique
-  status          OrderStatus       @default(PLACED)
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt       DateTime           @default(now())
+  stripeSessionId String?            @unique
+  status          OrderStatus        @default(PLACED)
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing         Listing            @relation(fields: [listingId], references: [id], onDelete: Cascade)
   events          ReservationEvent[]
 
   @@index([listingId])
@@ -168,8 +181,8 @@ model EmailVerificationCode {
 // Curated catalog of robots a provider can pick from when creating a listing.
 // Seeded from data/robot-catalog/ via scripts/seed-robot-catalog.mjs.
 model RobotModel {
-  id              String   @id @default(cuid())
-  slug            String   @unique // "<brand>-<model>"; stable upsert key + Cloudinary public_id
+  id              String    @id @default(cuid())
+  slug            String    @unique // "<brand>-<model>"; stable upsert key + Cloudinary public_id
   brand           String
   model           String
   productName     String
@@ -180,13 +193,13 @@ model RobotModel {
   priceDaily      Int? // USD per-day rental price, null if not offered
   priceMonthly    Int? // USD per-month rental price, null if not offered
   useCase         String[] // zero or more of the 6 canonical use cases
-  listable        Boolean  @default(false) // shows in the create-service robot picker
+  listable        Boolean   @default(false) // shows in the create-service robot picker
   serviceCategory String // one of the 3 canonical service categories
   capabilityTag   String // humanoid | quadruped | delivery | cleaning | reception | industrial | education
   imageUrl        String? // Cloudinary delivery URL, null if no source image
-  needsReview     Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  needsReview     Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
   listings        Listing[]
 
   @@index([brand])
