@@ -2,6 +2,7 @@ import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
 import { isUseCase } from "@/lib/useCases";
 import { getZipData } from "@/lib/zipMetro";
+import { customerVisibilityWhere } from "@/lib/individualListing";
 
 export interface IListingsParams {
   userId?: string;
@@ -32,6 +33,10 @@ export default async function getListings(params: IListingsParams) {
 
     if (userId) {
       query.userId = userId;
+    } else {
+      // Public catalog: hide AVAILABLE individual-owned pool robots; show
+      // company listings and CLAIMED (now operator-run) individual robots.
+      Object.assign(query, customerVisibilityWhere());
     }
 
     if (category && !isUseCase(category)) {
@@ -39,10 +44,15 @@ export default async function getListings(params: IListingsParams) {
     }
 
     if (category) {
-      query.OR = [
+      const categoryOr = [
         { robotModel: { is: { useCase: { has: category } } } },
         { category },
       ];
+      if (query.OR) {
+        query.AND = [...(query.AND ?? []), { OR: categoryOr }];
+      } else {
+        query.OR = categoryOr;
+      }
     }
 
     if (roomCount) {
