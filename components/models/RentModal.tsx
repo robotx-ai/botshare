@@ -1,6 +1,8 @@
 "use client";
 
 import useRentModal from "@/hook/useRentModal";
+import useIndividualRentModal from "@/hook/useIndividualRentModal";
+import { individualEarningsCopy } from "@/lib/individualListing";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -18,7 +20,8 @@ import VideoUpload from "../inputs/VideoUpload";
 import Modal from "./Modal";
 import type { RobotModelOption } from "@/hook/useRobotModels";
 
-type Props = {};
+type Mode = "provider" | "individual";
+type Props = { mode?: Mode };
 
 enum STEPS {
   ROBOT = 0,
@@ -28,10 +31,13 @@ enum STEPS {
   PRICE = 4,
 }
 
-function RentModal({}: Props) {
+function RentModal({ mode = "provider" }: Props) {
+  const isIndividual = mode === "individual";
   const defaultCenter = getMetroCentroid("LA");
   const router = useRouter();
-  const rentModel = useRentModal();
+  const providerModal = useRentModal();
+  const individualModal = useIndividualRentModal();
+  const rentModel = isIndividual ? individualModal : providerModal;
   const [step, setStep] = useState(STEPS.ROBOT);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRobot, setSelectedRobot] = useState<RobotModelOption | null>(null);
@@ -121,17 +127,17 @@ function RentModal({}: Props) {
     setIsLoading(true);
 
     axios
-      .post("/api/listings", data)
+      .post("/api/listings", { ...data, isIndividualOwned: isIndividual })
       .then(() => {
-        toast.success("Service created!");
+        toast.success(isIndividual ? "Robot listed — an operator can now pick it up." : "Service created!");
         router.refresh();
         reset();
         setSelectedRobot(null);
         setStep(STEPS.ROBOT);
         rentModel.onClose();
       })
-      .catch(() => {
-        toast.error("Something went wrong");
+      .catch((error) => {
+        toast.error(error?.response?.data?.error ?? "Something went wrong");
       })
       .finally(() => {
         setIsLoading(false);
@@ -281,14 +287,24 @@ function RentModal({}: Props) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Your price"
-          subtitle="This price is set for the robot you selected."
+          title={isIndividual ? "Your earnings" : "Your price"}
+          subtitle={
+            isIndividual
+              ? "An operator will run this robot. Here's your share of the price."
+              : "This price is set for the robot you selected."
+          }
         />
         <div className="rounded-xl border-2 border-neutral-200 p-6 text-center">
           <p className="text-2xl font-semibold text-black">{tiers.join("  ·  ")}</p>
-          <p className="mt-2 text-sm text-neutral-500">
-            Billed per day at checkout for now. Hourly and monthly options are coming soon.
-          </p>
+          {isIndividual ? (
+            <p className="mt-2 text-sm text-neutral-700 font-medium">
+              {individualEarningsCopy()}
+            </p>
+          ) : (
+            <p className="mt-2 text-sm text-neutral-500">
+              Billed per day at checkout for now. Hourly and monthly options are coming soon.
+            </p>
+          )}
         </div>
       </div>
     );
@@ -298,7 +314,7 @@ function RentModal({}: Props) {
     <Modal
       disabled={isLoading}
       isOpen={rentModel.isOpen}
-      title="Create a service"
+      title={isIndividual ? "List your robot" : "Create a service"}
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
