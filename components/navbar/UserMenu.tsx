@@ -3,6 +3,7 @@
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
 import useRentModal from "@/hook/useRentModal";
+import useIndividualRentModal from "@/hook/useIndividualRentModal";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -26,6 +27,7 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
   const rentModel = useRentModal();
+  const individualModal = useIndividualRentModal();
   const [isOpen, setIsOpen] = useState(false);
   const isProvider = currentUser?.userType === "PROVIDER";
   const isCustomer = currentUser?.userType === "CUSTOMER";
@@ -121,6 +123,18 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                       }}
                       label="Browse robot types"
                     />
+                    <MenuItem
+                      onClick={() => { setIsOpen(false); router.push("/my-robots"); }}
+                      label="My robots"
+                    />
+                    <MenuItem
+                      onClick={() => {
+                        if (!currentUser) { setIsOpen(false); return loginModel.onOpen(); }
+                        setIsOpen(false);
+                        individualModal.onOpen();
+                      }}
+                      label="List your robot"
+                    />
                     <hr />
                     <MenuItem onClick={() => { setIsOpen(false); signOut(); }} label="Logout" />
                   </>
@@ -143,6 +157,12 @@ function UserMenu({ currentUser, isAdmin = false, transparent = false }: Props) 
                       />
                     )}
                     {isAdmin && <MenuItem onClick={() => { setIsOpen(false); onRent(); }} label="List a service" />}
+                    {(isAdmin || isProvider) && (
+                      <MenuItem
+                        onClick={() => { setIsOpen(false); router.push("/available-robots"); }}
+                        label="Available robots"
+                      />
+                    )}
                     <MenuItem
                       onClick={() => {
                         setIsOpen(false);

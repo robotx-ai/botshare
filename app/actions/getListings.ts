@@ -2,9 +2,11 @@ import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
 import { isUseCase } from "@/lib/useCases";
 import { getZipData } from "@/lib/zipMetro";
+import { customerVisibilityWhere } from "@/lib/individualListing";
 
 export interface IListingsParams {
   userId?: string;
+  adminAll?: boolean;
   guestCount?: number;
   roomCount?: number;
   bathroomCount?: number;
@@ -19,6 +21,7 @@ export default async function getListings(params: IListingsParams) {
   try {
     const {
       userId,
+      adminAll,
       roomCount,
       guestCount,
       bathroomCount,
@@ -32,6 +35,12 @@ export default async function getListings(params: IListingsParams) {
 
     if (userId) {
       query.userId = userId;
+    } else if (!adminAll) {
+      // Public catalog: hide AVAILABLE individual-owned pool robots; show
+      // company listings and CLAIMED (now operator-run) individual robots.
+      // Admin all-listings (adminAll) intentionally bypasses this to retain
+      // oversight of the pending pool.
+      Object.assign(query, customerVisibilityWhere());
     }
 
     if (category && !isUseCase(category)) {
@@ -39,10 +48,15 @@ export default async function getListings(params: IListingsParams) {
     }
 
     if (category) {
-      query.OR = [
+      const categoryOr = [
         { robotModel: { is: { useCase: { has: category } } } },
         { category },
       ];
+      if (query.OR) {
+        query.AND = [...(query.AND ?? []), { OR: categoryOr }];
+      } else {
+        query.OR = categoryOr;
+      }
     }
 
     if (roomCount) {
@@ -121,14 +135,21 @@ export default async function getListings(params: IListingsParams) {
       },
       include: {
         user: { select: { name: true, businessName: true } },
+        operator: { select: { name: true, businessName: true } },
       },
     });
 
-    const safeListings = listing.map(({ user, ...list }) => ({
-      ...list,
-      createdAt: list.createdAt.toISOString(),
-      operatorName: user?.businessName || user?.name || undefined,
-    }));
+    const safeListings = listing.map(({ user, operator, ...list }) => {
+      const operatorName =
+        list.isIndividualOwned && list.status === "CLAIMED" && operator
+          ? operator.businessName || operator.name || undefined
+          : user?.businessName || user?.name || undefined;
+      return {
+        ...list,
+        createdAt: list.createdAt.toISOString(),
+        operatorName,
+      };
+    });
 
     if (!category) {
       safeListings.sort((a, b) => {

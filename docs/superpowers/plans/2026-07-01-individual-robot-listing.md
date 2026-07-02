@@ -1159,3 +1159,15 @@ Expected: all vitest specs pass; lint clean.
 - **Spec coverage:** roles/no-new-role (Tasks 5,7,8); extend-Listing data model (Task 1); owner-stays-`userId` + `operatorId` (Tasks 1,6); price-copy-only change (Task 7); state machine `AVAILABLE→CLAIMED` (Tasks 5,6); SKU one-active-per-robot (Tasks 2,5); location overwrite on claim (Task 6); pool hidden from customers (Tasks 2,3); individual portal `/my-robots` (Task 8); company portal `/available-robots` (Task 9); 15% display-only (Tasks 2,7,8 — no payout records). Out-of-scope items (payouts, unclaim, auto-relist, manual go-live) are intentionally absent.
 - **Type consistency:** `isIndividualOwned`/`status`/`operatorId`/`claimedAt`/`operator` defined in Task 1 and used identically in Tasks 3–9; `individualEarningsCopy`/`canClaimListing`/`hasActiveSkuConflict`/`customerVisibilityWhere` defined in Task 2 and imported unchanged; `getMyRobots(userId)` / `getAvailableRobots()` signatures match their consumers.
 - **Known MVP trade-off:** `getListings` zip-proximity raw SQL selects candidate ids before the visibility `where` is applied in `findMany`; pool listings are still filtered out by `findMany`, but the `DISTINCT ON (title)` candidate pick ignores visibility. Acceptable for MVP (documented here).
+
+---
+
+## Implementation Adjustments (post-review, applied on branch)
+
+These deviate from the task text above and are the intended final behavior:
+
+1. **`getAvailableRobots` hides the owner name** (Task 4): pool cards set `operatorName: undefined` rather than surfacing the individual owner's name to browsing orgs (user decision).
+2. **`getListings` operator name** (final review): for a CLAIMED individual robot the public catalog shows the **operating org's** name (`operator.businessName||name`), never the individual owner's — privacy + correctness.
+3. **`getListings` `adminAll` param** (final review): admin all-listings (`/my-listings`) passes `{ adminAll: true }` to bypass the customer-visibility filter and retain oversight of the AVAILABLE pool; the public catalog (no `userId`, no `adminAll`) still hides it.
+4. **Unclaimed robots are not bookable** (final review): `POST /api/checkout` returns 409 and `getListingById` returns `null` (detail page 404s) when `isIndividualOwned && status !== "CLAIMED"` — enforces the "AVAILABLE never customer-facing" invariant beyond the catalog list.
+5. **Individual wizard button label**: final step reads "List robot" in individual mode, "Create Service" in provider mode.

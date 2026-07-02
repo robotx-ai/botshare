@@ -2,6 +2,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { canManageServices } from "@/lib/adminAuth";
 import { isProviderProfileComplete } from "@/lib/providerProfile";
+import { hasActiveSkuConflict } from "@/lib/individualListing";
 import { getMetroLabel, getZipData } from "@/lib/zipMetro";
 import { getWritesBlockedResponse } from "@/lib/writeGuard";
 import { NextResponse } from "next/server";
@@ -16,21 +17,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (!canManageServices(currentUser)) {
-    return NextResponse.json(
-      { error: "Forbidden: service provider access required." },
-      { status: 403 }
-    );
-  }
-
-  // Anyone listing must have a complete provider profile (name, phone, company).
-  if (!isProviderProfileComplete(currentUser)) {
-    return NextResponse.json(
-      { error: "Complete your provider profile (name, phone, company) before listing." },
-      { status: 400 }
-    );
-  }
-
   const body = await request.json();
   const {
     title,
@@ -41,7 +27,27 @@ export async function POST(request: Request) {
     skuImageSrc,
     zipCode,
     robotModelId,
+    isIndividualOwned,
   } = body;
+
+  const individualIntent = isIndividualOwned === true;
+
+  // Company listings require provider/admin + a complete provider profile.
+  // Individual robot listings are open to any authenticated user.
+  if (!individualIntent) {
+    if (!canManageServices(currentUser)) {
+      return NextResponse.json(
+        { error: "Forbidden: service provider access required." },
+        { status: 403 }
+      );
+    }
+    if (!isProviderProfileComplete(currentUser)) {
+      return NextResponse.json(
+        { error: "Complete your provider profile (name, phone, company) before listing." },
+        { status: 400 }
+      );
+    }
+  }
 
   if (!title || !description || !imageSrc) {
     return NextResponse.json(
@@ -92,6 +98,30 @@ export async function POST(request: Request) {
     );
   }
 
+  if (individualIntent) {
+    const normalizedSku = sku ? String(sku).trim() : "";
+    if (!normalizedSku) {
+      return NextResponse.json(
+        { error: "A SKU is required to list your robot." },
+        { status: 400 }
+      );
+    }
+    const activeSameSku = await prisma.listing.findMany({
+      where: {
+        sku: normalizedSku,
+        isIndividualOwned: true,
+        status: { in: ["AVAILABLE", "CLAIMED"] },
+      },
+      select: { status: true },
+    });
+    if (hasActiveSkuConflict(activeSameSku)) {
+      return NextResponse.json(
+        { error: "This robot (SKU) already has an active listing." },
+        { status: 409 }
+      );
+    }
+  }
+
   const derivedCategory = robot.useCase[0];
   const derivedPrice = robot.priceDaily;
 
@@ -119,6 +149,8 @@ export async function POST(request: Request) {
       price: derivedPrice,
       userId: currentUser.id,
       robotModelId: robot.id,
+      isIndividualOwned: individualIntent,
+      ...(individualIntent ? { status: "AVAILABLE" as const } : {}),
     },
   });
 
