@@ -146,11 +146,11 @@ function RentModal({ mode = "provider" }: Props) {
 
   const actionLabel = useMemo(() => {
     if (step === STEPS.PRICE) {
-      return "Create Service";
+      return isIndividual ? "List robot" : "Create Service";
     }
 
     return "Next";
-  }, [step]);
+  }, [step, isIndividual]);
 
   const secondActionLabel = useMemo(() => {
     if (step === STEPS.ROBOT) {

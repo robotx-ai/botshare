@@ -28,7 +28,7 @@ const MyListingsPage = async () => {
   }
 
   const isAdmin = isAdminEmail(currentUser.email);
-  const listings = await getListings(isAdmin ? {} : { userId: currentUser.id });
+  const listings = await getListings(isAdmin ? { adminAll: true } : { userId: currentUser.id });
 
   if (listings.length === 0) {
     return (
