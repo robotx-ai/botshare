@@ -79,6 +79,7 @@ function ListingCard({
         <div className="aspect-square w-full relative overflow-hidden rounded-xl bg-neutral-100">
           <Image
             fill
+            sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-contain h-full w-full group-hover:scale-110 transition p-2"
             src={data.imageSrc}
             alt="service"

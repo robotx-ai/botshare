@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_PATH="${1:-$(pwd)}"
-CATEGORIES_FILE="$REPO_PATH/components/navbar/Categories.tsx"
+CHIPS_FILE="$REPO_PATH/components/services/CategoryChips.tsx"
 CONSTANTS_FILE="$REPO_PATH/lib/serviceCategories.ts"
 SCHEMA_FILE="$REPO_PATH/prisma/schema.prisma"
 
@@ -11,17 +11,20 @@ if ! command -v rg >/dev/null 2>&1; then
   exit 2
 fi
 
-for f in "$CATEGORIES_FILE" "$CONSTANTS_FILE" "$SCHEMA_FILE"; do
+for f in "$CHIPS_FILE" "$CONSTANTS_FILE" "$SCHEMA_FILE"; do
   if [[ ! -f "$f" ]]; then
     echo "error: missing file: $f" >&2
     exit 2
   fi
 done
 
-EXPECTED=$'Showcase & Performance\nWarehouse\nRestaurant'
+EXPECTED=$'Private Events\nCommercial Events\nSchools & Universities\nEntertainment\nRestaurants\nHotels\nShopping Centers\nWarehouses'
 
-# Extract canonical labels from the constants file (the source of truth)
-ACTUAL="$(rg --no-filename -o '"[^"]+"' "$CONSTANTS_FILE" | sed 's/"//g' | head -n 3 || true)"
+# Extract canonical labels from the SERVICE_CATEGORIES array (the source of truth)
+ACTUAL="$(
+  sed -n '/export const SERVICE_CATEGORIES = \[/,/\] as const;/p' "$CONSTANTS_FILE" |
+    rg --no-filename -o '"[^"]+"' | sed 's/"//g' || true
+)"
 
 if [[ -z "$ACTUAL" ]]; then
   echo "error: no category labels found in $CONSTANTS_FILE" >&2
@@ -37,9 +40,9 @@ if [[ "$ACTUAL" != "$EXPECTED" ]]; then
   exit 1
 fi
 
-# Verify Categories.tsx imports from the constants file
-if ! rg -q 'SERVICE_CATEGORIES' "$CATEGORIES_FILE"; then
-  echo "error: Categories.tsx does not use SERVICE_CATEGORIES constant" >&2
+# Verify the category chips render from the constants file
+if ! rg -q 'SERVICE_CATEGORY_META' "$CHIPS_FILE"; then
+  echo "error: CategoryChips.tsx does not use SERVICE_CATEGORY_META constant" >&2
   exit 1
 fi
 

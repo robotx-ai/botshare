@@ -12,7 +12,11 @@ import { toast } from "react-toastify";
 import { getMetroCentroid, getMetroLabel } from "@/lib/metro";
 import useZipCheck from "@/hook/useZipCheck";
 
+import { SERVICE_CATEGORY_META } from "@/lib/serviceCategories";
+import { defaultCategoryForUseCases } from "@/lib/useCases";
+
 import Heading from "../Heading";
+import CategoryInput from "../inputs/CategoryInput";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import RobotPicker from "../inputs/RobotPicker";
@@ -25,10 +29,11 @@ type Props = { mode?: Mode };
 
 enum STEPS {
   ROBOT = 0,
-  LOCATION = 1,
-  IMAGES = 2,
-  DETAILS = 3,
-  PRICE = 4,
+  CATEGORY = 1,
+  LOCATION = 2,
+  IMAGES = 3,
+  DETAILS = 4,
+  PRICE = 5,
 }
 
 function RentModal({ mode = "provider" }: Props) {
@@ -52,6 +57,7 @@ function RentModal({ mode = "provider" }: Props) {
   } = useForm<FieldValues>({
     defaultValues: {
       robotModelId: null,
+      category: "",
       zipCode: "",
       imageSrc: "",
       videoSrc: "",
@@ -62,6 +68,7 @@ function RentModal({ mode = "provider" }: Props) {
     },
   });
 
+  const category: string = watch("category") ?? "";
   const zipCode: string = watch("zipCode") ?? "";
   const imageSrc = watch("imageSrc");
   const videoSrc = watch("videoSrc");
@@ -85,8 +92,8 @@ function RentModal({ mode = "provider" }: Props) {
     });
   };
 
-  // Picking a catalog robot pre-fills title/description/image (all still editable).
-  // Category and price are derived server-side from the model, never set here.
+  // Picking a catalog robot pre-fills title/description/image and suggests a
+  // service scenario (all still editable). Price stays server-derived.
   const onSelectRobot = (robot: RobotModelOption | null) => {
     setSelectedRobot(robot);
     setCustomValue("robotModelId", robot ? robot.id : null);
@@ -96,6 +103,7 @@ function RentModal({ mode = "provider" }: Props) {
       if (robot.imageUrl) {
         setCustomValue("imageSrc", robot.imageUrl);
       }
+      setCustomValue("category", defaultCategoryForUseCases(robot.useCase));
     }
   };
 
@@ -110,6 +118,11 @@ function RentModal({ mode = "provider" }: Props) {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (step === STEPS.ROBOT && !selectedRobot) {
       toast.error("Please select a robot to continue.");
+      return;
+    }
+
+    if (step === STEPS.CATEGORY && !category) {
+      toast.error("Please choose a service scenario to continue.");
       return;
     }
 
@@ -169,6 +182,28 @@ function RentModal({ mode = "provider" }: Props) {
       <RobotPicker selectedId={selectedRobot?.id ?? null} onSelect={onSelectRobot} />
     </div>
   );
+
+  if (step === STEPS.CATEGORY) {
+    bodyContent = (
+      <div className="flex flex-col gap-6">
+        <Heading
+          title="Which service scenario is this?"
+          subtitle="Customers browse by scenario — pick the one this package is sold into."
+        />
+        <div className="grid max-h-[50vh] grid-cols-1 gap-3 overflow-y-auto md:grid-cols-2">
+          {SERVICE_CATEGORY_META.map((item) => (
+            <CategoryInput
+              key={item.slug}
+              icon={item.icon}
+              label={item.label}
+              selected={category === item.label}
+              onClick={(value) => setCustomValue("category", value)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (step === STEPS.LOCATION) {
     bodyContent = (

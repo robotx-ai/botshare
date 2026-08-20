@@ -1,6 +1,6 @@
 import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
-import { isUseCase } from "@/lib/useCases";
+import { isServiceCategory, SERVICE_CATEGORIES } from "@/lib/serviceCategories";
 import { getZipData } from "@/lib/zipMetro";
 import { customerVisibilityWhere } from "@/lib/individualListing";
 
@@ -43,20 +43,14 @@ export default async function getListings(params: IListingsParams) {
       Object.assign(query, customerVisibilityWhere());
     }
 
-    if (category && !isUseCase(category)) {
+    // `category` is one of the 8 canonical service scenarios; anything else is
+    // a dead filter rather than an unfiltered catalog.
+    if (category && !isServiceCategory(category)) {
       return [];
     }
 
     if (category) {
-      const categoryOr = [
-        { robotModel: { is: { useCase: { has: category } } } },
-        { category },
-      ];
-      if (query.OR) {
-        query.AND = [...(query.AND ?? []), { OR: categoryOr }];
-      } else {
-        query.OR = categoryOr;
-      }
+      query.AND = [...(query.AND ?? []), { category }];
     }
 
     if (roomCount) {
@@ -152,11 +146,15 @@ export default async function getListings(params: IListingsParams) {
     });
 
     if (!category) {
-      safeListings.sort((a, b) => {
-        const aIsPerformance = a.category === "Performance" ? 0 : 1;
-        const bIsPerformance = b.category === "Performance" ? 0 : 1;
-        return aIsPerformance - bIsPerformance;
-      });
+      // Unfiltered catalog leads with the scenarios customers browse most.
+      const order = new Map(
+        SERVICE_CATEGORIES.map((label, index) => [label as string, index])
+      );
+      safeListings.sort(
+        (a, b) =>
+          (order.get(a.category) ?? order.size) -
+          (order.get(b.category) ?? order.size)
+      );
     }
 
     if (!userId) {

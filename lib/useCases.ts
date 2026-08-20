@@ -1,13 +1,10 @@
-import type { IconType } from "react-icons";
-import {
-  FaBroom,
-  FaTruck,
-  FaTheaterMasks,
-  FaUserTie,
-  FaVideo,
-  FaShieldAlt,
-} from "react-icons/fa";
-
+/**
+ * Robot *capability* tags, stored on `RobotModel.useCase`. These describe what
+ * a machine can physically do and are used to filter the internal robot
+ * catalog — they are NOT service categories and never appear as customer-facing
+ * taxonomy. The customer-facing taxonomy is the eight scenarios in
+ * `lib/serviceCategories.ts`.
+ */
 export const USE_CASES = [
   "Cleaning",
   "Delivery",
@@ -23,11 +20,25 @@ export function isUseCase(value: unknown): value is UseCase {
   return typeof value === "string" && (USE_CASES as readonly string[]).includes(value);
 }
 
-export const USE_CASE_META: { label: UseCase; icon: IconType; description: string }[] = [
-  { label: "Cleaning", icon: FaBroom, description: "Robots for recurring cleaning and facility upkeep." },
-  { label: "Delivery", icon: FaTruck, description: "Robots that move goods and orders between points." },
-  { label: "Performance", icon: FaTheaterMasks, description: "Robots for demos, events, and live performance." },
-  { label: "Guide", icon: FaUserTie, description: "Reception, showroom, and visitor-guidance robots." },
-  { label: "Live streaming", icon: FaVideo, description: "Robots for live broadcast and remote presence." },
-  { label: "Patrol", icon: FaShieldAlt, description: "Robots for patrol, inspection, and outdoor coverage." },
-];
+/**
+ * Fallback used when a provider does not pick a service scenario explicitly:
+ * maps a robot's primary capability onto the closest of the eight scenarios.
+ */
+const CAPABILITY_TO_CATEGORY: Record<UseCase, string> = {
+  Cleaning: "Warehouses",
+  Delivery: "Restaurants",
+  Performance: "Entertainment",
+  Guide: "Hotels",
+  "Live streaming": "Entertainment",
+  Patrol: "Warehouses",
+};
+
+export function defaultCategoryForUseCases(useCases: string[]): string {
+  for (const useCase of useCases) {
+    if (isUseCase(useCase)) {
+      return CAPABILITY_TO_CATEGORY[useCase];
+    }
+  }
+
+  return "Commercial Events";
+}

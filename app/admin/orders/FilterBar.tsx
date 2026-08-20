@@ -1,6 +1,6 @@
 "use client";
 
-import { USE_CASES } from "@/lib/useCases";
+import { SERVICE_CATEGORIES } from "@/lib/serviceCategories";
 
 type Props = {
   search: string;
@@ -39,7 +39,7 @@ export default function FilterBar({
         className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-400"
       >
         <option value="">All categories</option>
-        {USE_CASES.map((cat) => (
+        {SERVICE_CATEGORIES.map((cat) => (
           <option key={cat} value={cat}>{cat}</option>
         ))}
       </select>

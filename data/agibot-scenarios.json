@@ -2,6 +2,7 @@
   {
     "id": "party",
     "title": "Party",
+    "category": "Private Events",
     "description": "Bring your party to life with AGIBOT robots performing dynamic dances, crowd interactions, and entertainment routines. Perfect for corporate celebrations, product launches, and private events.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/party",
     "primaryRobot": "AGIBOT X2",
@@ -50,6 +51,7 @@
   {
     "id": "exhibition",
     "title": "Exhibition",
+    "category": "Commercial Events",
     "description": "Captivate exhibition attendees with cutting-edge humanoid robots that demonstrate AI capabilities, engage visitors, and serve as a stunning centerpiece for your booth or display.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/exhibition",
     "primaryRobot": "AGIBOT X2 Ultra",
@@ -98,6 +100,7 @@
   {
     "id": "salesman",
     "title": "Salesman",
+    "category": "Commercial Events",
     "description": "Deploy intelligent humanoid robots as proactive sales assistants. They approach potential customers, deliver tailored pitches, answer questions, and guide prospects through your product offerings.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/salesman",
     "primaryRobot": "AGIBOT X2 Ultra",
@@ -146,6 +149,7 @@
   {
     "id": "showroom-guide",
     "title": "Showroom Guide",
+    "category": "Shopping Centers",
     "description": "Transform your showroom with an intelligent robotic guide that welcomes visitors, explains product features, leads tours, and answers questions — delivering a memorable brand experience.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/showroom-guide",
     "primaryRobot": "AGIBOT A2 Ultra",
@@ -194,6 +198,7 @@
   {
     "id": "show",
     "title": "Show",
+    "category": "Entertainment",
     "description": "Stage a breathtaking live performance with humanoid robots. From choreographed solo acts to ensemble shows, AGIBOT robots deliver precision movement and dramatic presence on any stage.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/show",
     "primaryRobot": "AGIBOT X2",
@@ -242,6 +247,7 @@
   {
     "id": "reception",
     "title": "Reception",
+    "category": "Hotels",
     "description": "Elevate your front-of-house experience with a sophisticated robotic receptionist. Greet guests, check them in, answer FAQs, and direct visitors — all with a cutting-edge AI personality.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/reception",
     "primaryRobot": "AGIBOT X2 Ultra",
@@ -290,6 +296,7 @@
   {
     "id": "live-stream",
     "title": "Live Stream",
+    "category": "Entertainment",
     "description": "Supercharge your live stream content with a humanoid robot co-host, performer, or interactive guest. Drive engagement, go viral, and give your audience a glimpse into the future of entertainment.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/live-stream",
     "primaryRobot": "AGIBOT X2",
@@ -338,6 +345,7 @@
   {
     "id": "school",
     "title": "School",
+    "category": "Schools & Universities",
     "description": "Inspire the next generation with hands-on AI education. AGIBOT robots conduct STEM demonstrations, assist teachers, and provide interactive learning experiences that make technology tangible.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/school",
     "primaryRobot": "AGIBOT D1 Edu",
@@ -386,6 +394,7 @@
   {
     "id": "security",
     "title": "Security",
+    "category": "Warehouses",
     "description": "Enhance your security operations with intelligent robotic patrol units. AGIBOT security robots monitor premises, detect anomalies, alert staff, and provide a visible deterrent — 24/7.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/security",
     "primaryRobot": "AGIBOT D1 Ultra",
@@ -434,6 +443,7 @@
   {
     "id": "athlete",
     "title": "Athlete",
+    "category": "Entertainment",
     "description": "Showcase the physical capabilities of humanoid robotics with athletic demonstrations — running, jumping, lifting, and sports performances that blur the line between machine and human.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/athlete",
     "primaryRobot": "AGIBOT X2",
@@ -482,6 +492,7 @@
   {
     "id": "retail",
     "title": "Retail",
+    "category": "Shopping Centers",
     "description": "Revolutionize the in-store experience with robotic retail assistants that help customers find products, answer questions, manage queues, and create buzz that drives foot traffic and sales.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/retail",
     "primaryRobot": "AGIBOT X2",
@@ -530,6 +541,7 @@
   {
     "id": "cleaning",
     "title": "Cleaning",
+    "category": "Warehouses",
     "description": "Deploy AGIBOT cleaning robots to handle routine floor care with consistent coverage, remote support, and operational reporting for commercial environments.",
     "imageSrc": "https://res.cloudinary.com/dmrhtzqyx/image/upload/q_auto,f_auto/agibot/scenarios/cleaning",
     "primaryRobot": "AGIBOT C5",
@@ -567,6 +579,486 @@
           "Operator onsite setup and physical training",
           "1 month use",
           "Full performance report"
+        ]
+      }
+    }
+  },
+  {
+    "id": "celebration",
+    "title": "Celebration",
+    "category": "Private Events",
+    "description": "Add a scheduled robot moment to a birthday, anniversary or family celebration. The robot greets invited guests, performs one existing X2 dance and holds preset poses for photos.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/private-events-02-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 1800,
+      "gold": 2400,
+      "platinum": 3600
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h activity window",
+          "Guest greeting and preset gestures",
+          "One existing X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h activity window",
+          "One short approved celebration message",
+          "Group photo session with preset poses",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h activity window",
+          "Themed appearance materials",
+          "Multi-robot entrance option",
+          "1-month pre-event consulting",
+          "2 rehearsals",
+          "Dedicated support team"
+        ]
+      }
+    }
+  },
+  {
+    "id": "home-gathering",
+    "title": "Home Gathering",
+    "category": "Private Events",
+    "description": "A single X2 joins a privately hosted gathering at an agreed time. Children can observe it up close while family and friends watch, respond to preset gestures or take photos together.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/private-events-04-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 1800,
+      "gold": 2200,
+      "platinum": 3200
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h activity window",
+          "Fixed-point greeting and preset gestures",
+          "One existing X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h activity window",
+          "One short approved greeting",
+          "Individual and group photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2",
+        "hours": 8,
+        "features": [
+          "8h activity window",
+          "Second robot character option",
+          "Extended photo session",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated operator"
+        ]
+      }
+    }
+  },
+  {
+    "id": "campus-open-day",
+    "title": "Campus Open Day",
+    "category": "Schools & Universities",
+    "description": "A scheduled robot segment for campus open days and education expos. The robot works from a marked activity point while prospective students and families observe from outside it.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/schools-universities-02-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 600,
+      "gold": 1800,
+      "platinum": 2400
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT D1 Edu",
+        "hours": 4,
+        "features": [
+          "4h campus session",
+          "Fixed-point greeting and preset gestures",
+          "One existing X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h campus session",
+          "Gestures selected for the audience and setting",
+          "Student and family photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h campus program",
+          "Multi-point scheduling across the campus",
+          "Extended photo session",
+          "1-month program development",
+          "2 rehearsals",
+          "Dedicated education specialist"
+        ]
+      }
+    }
+  },
+  {
+    "id": "science-center",
+    "title": "Science Center",
+    "category": "Schools & Universities",
+    "description": "Robot demonstrations for science centers, museums and planetariums. Interaction, one existing dance and photos are scheduled into the venue programme as a distinct segment.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/schools-universities-01-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 700,
+      "gold": 1800,
+      "platinum": 2500
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT D1 Edu",
+        "hours": 4,
+        "features": [
+          "4h exhibit session",
+          "Fixed-point greeting and preset gestures",
+          "One existing X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h exhibit session",
+          "Children's interaction module",
+          "Visitor and group photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h exhibit program",
+          "Multiple scheduled sessions per day",
+          "Themed exhibit tie-in",
+          "1-month content development",
+          "2 rehearsals",
+          "Dedicated technical crew"
+        ]
+      }
+    }
+  },
+  {
+    "id": "restaurant-greeting",
+    "title": "Restaurant Greeting",
+    "category": "Restaurants",
+    "description": "Door greeting for restaurant entrances and waiting areas. X2 greets arriving guests from a fixed point without blocking the service route, using preset gestures and one short approved message.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/restaurants-01-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 1200,
+      "gold": 1800,
+      "platinum": 2600
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h service window",
+          "Door greeting from a fixed point",
+          "Preset gestures",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h service window",
+          "One short approved welcome message",
+          "Fixed-point guest photos",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h service window",
+          "Extended welcome scripts",
+          "Scheduled greeting rotations",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated operator"
+        ]
+      }
+    }
+  },
+  {
+    "id": "dining-show",
+    "title": "Dining Show",
+    "category": "Restaurants",
+    "description": "One existing X2 dance placed at an agreed time at a fixed dining-floor activity point, outside staff service activity. Food handling and table service are not part of this service.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/restaurants-02-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 1400,
+      "gold": 2000,
+      "platinum": 3000
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h service window",
+          "One existing X2 dance at a fixed point",
+          "Basic guest interaction",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h service window",
+          "Two scheduled routine slots",
+          "Guest photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h service window",
+          "Multiple scheduled routine slots",
+          "Themed appearance materials",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated support team"
+        ]
+      }
+    }
+  },
+  {
+    "id": "restaurant-opening",
+    "title": "Restaurant Opening",
+    "category": "Restaurants",
+    "description": "A robot segment for restaurant openings and celebration programs. One short approved celebration message and a preset pose are used for the photo session.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/restaurants-03-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 1800,
+      "gold": 2600,
+      "platinum": 3800
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h opening window",
+          "Entrance greeting and preset gestures",
+          "One existing X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 6,
+        "features": [
+          "6h opening window",
+          "Approved celebration message",
+          "Celebration photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h opening window",
+          "Multi-robot entrance option",
+          "Branded appearance materials",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated support team"
+        ]
+      }
+    }
+  },
+  {
+    "id": "hotel-lobby",
+    "title": "Hotel Lobby",
+    "category": "Hotels",
+    "description": "Fixed-point greeting and a scheduled routine for hotel lobbies and reception areas. The robot works from an agreed position and does not obstruct guest circulation.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/hotels-01-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 2000,
+      "gold": 2800,
+      "platinum": 4200
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h lobby window",
+          "Fixed-point guest greeting",
+          "Preset gestures",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 6,
+        "features": [
+          "6h lobby window",
+          "One existing X2 dance at a scheduled time",
+          "Lobby photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h lobby window",
+          "Multiple scheduled segments",
+          "Seasonal appearance materials",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated operator"
+        ]
+      }
+    }
+  },
+  {
+    "id": "hotel-concierge",
+    "title": "Hotel Concierge",
+    "category": "Hotels",
+    "description": "A scheduled robot presence for event foyers, themed displays and resort public areas. Facility information and hotel service content are quoted separately.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/hotels-03-1200.jpg",
+    "primaryRobot": "AGIBOT X2 Ultra",
+    "pricing": {
+      "silver": 2200,
+      "gold": 3200,
+      "platinum": 4800
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h foyer window",
+          "Fixed-point greeting and preset gestures",
+          "One existing X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 6,
+        "features": [
+          "6h foyer window",
+          "One short approved welcome message",
+          "Themed-area photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h foyer window",
+          "Seasonal costumes and themed production",
+          "Multi-area scheduling",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated support team"
+        ]
+      }
+    }
+  },
+  {
+    "id": "mall-atrium",
+    "title": "Mall Atrium",
+    "category": "Shopping Centers",
+    "description": "One existing single-X2 dance at a scheduled time inside a marked shopping-center atrium area, with fixed-point greeting and storefront photos around it.",
+    "imageSrc": "https://raw.githubusercontent.com/a607a/botshare-deploy/main/img/scenarios/gallery/shopping-centers-01-1200.jpg",
+    "primaryRobot": "AGIBOT X2",
+    "pricing": {
+      "silver": 2000,
+      "gold": 2800,
+      "platinum": 4200
+    },
+    "tiers": {
+      "silver": {
+        "robot": "AGIBOT X2",
+        "hours": 4,
+        "features": [
+          "4h atrium window",
+          "Fixed-point greeting and preset gestures",
+          "One existing single-X2 dance",
+          "5-day advance consultation"
+        ]
+      },
+      "gold": {
+        "robot": "AGIBOT X2",
+        "hours": 6,
+        "features": [
+          "6h atrium window",
+          "One short approved campaign message",
+          "Shopper photo session",
+          "20-day consultation",
+          "On-site operator"
+        ]
+      },
+      "platinum": {
+        "robot": "AGIBOT X2 Ultra",
+        "hours": 8,
+        "features": [
+          "8h atrium window",
+          "Multi-robot atrium show option",
+          "Holiday costumes and brand materials",
+          "1-month consulting",
+          "2 rehearsals",
+          "Dedicated retail specialist"
         ]
       }
     }

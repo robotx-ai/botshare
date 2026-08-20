@@ -263,17 +263,26 @@ Rules:
 
 ## Product constraints
 
-**Service categories** — exactly three, source of truth `lib/serviceCategories.ts`.
-Do not add more without an explicit product request.
+**Service categories** — exactly eight, source of truth `lib/serviceCategories.ts`.
+Do not add more without an explicit product request. `Listing.category` stores the label.
 
 | Label | Slug |
 |---|---|
-| `Showcase & Performance` | `showcase-performance` |
-| `Warehouse` | `warehouse` |
-| `Restaurant` | `restaurant` |
+| `Private Events` | `private-events` |
+| `Commercial Events` | `commercial-events` |
+| `Schools & Universities` | `schools-universities` |
+| `Entertainment` | `entertainment` |
+| `Restaurants` | `restaurants` |
+| `Hotels` | `hotels` |
+| `Shopping Centers` | `shopping-centers` |
+| `Warehouses` | `warehouses` |
 
-**Use cases** — exactly six, source of truth `lib/useCases.ts`: Cleaning, Delivery,
-Performance, Guide, Live streaming, Patrol.
+`/services` renders the scenario index; `/services/<slug>` renders one scenario with its
+bookable packages. Per-scenario editorial content is in `lib/serviceScenarios.ts`.
+
+**Robot capabilities** — exactly six, source of truth `lib/useCases.ts`: Cleaning,
+Delivery, Performance, Guide, Live streaming, Patrol. These tag `RobotModel.useCase` and
+filter the internal robot catalog; they are **not** service categories.
 
 **Theme** — user-facing UI uses **white, gray, and black only**. Any legacy
 rose/coral/indigo/blue accent gets replaced with neutral grayscale. Prefer changing the

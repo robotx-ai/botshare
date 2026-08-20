@@ -110,13 +110,27 @@ Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the s
 
 Internal variable names and route paths may keep legacy names during MVP for compatibility.
 
-## Service Categories (Canonical — Do Not Add Without Explicit Request)
+## Service Categories (Canonical — exactly 8, do not add without explicit request)
 
-- `Showcase & Performance` (slug: `showcase-performance`)
-- `Warehouse` (slug: `warehouse`)
-- `Restaurant` (slug: `restaurant`)
+- `Private Events` (slug: `private-events`)
+- `Commercial Events` (slug: `commercial-events`)
+- `Schools & Universities` (slug: `schools-universities`)
+- `Entertainment` (slug: `entertainment`)
+- `Restaurants` (slug: `restaurants`)
+- `Hotels` (slug: `hotels`)
+- `Shopping Centers` (slug: `shopping-centers`)
+- `Warehouses` (slug: `warehouses`)
 
-Source of truth: `lib/serviceCategories.ts`
+Source of truth: `lib/serviceCategories.ts` (labels, slugs, icons).
+Editorial content per scenario (hero art, overview, modules, flow, gallery) lives in
+`lib/serviceScenarios.ts`.
+
+Routes: `/services` is the scenario index; `/services/<slug>` is a scenario page with
+its bookable packages. `/services?category=<label>&zipCode=…` still renders the filtered
+catalog. `Listing.category` stores the **label**, never the slug.
+
+`RobotModel.useCase` (`lib/useCases.ts`) is a separate internal robot-capability
+vocabulary — it is not a service category and must never surface as one.
 
 ## Access Control
 

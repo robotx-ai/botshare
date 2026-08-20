@@ -6,6 +6,18 @@ const prisma = new PrismaClient();
 const scenarios = require("../data/agibot-scenarios.json");
 const zipToMetro = require("../data/zip-to-metro.json");
 
+// Mirrors lib/serviceCategories.ts — plain JS so this script needs no build step.
+const SERVICE_CATEGORIES = [
+  "Private Events",
+  "Commercial Events",
+  "Schools & Universities",
+  "Entertainment",
+  "Restaurants",
+  "Hotels",
+  "Shopping Centers",
+  "Warehouses",
+];
+
 const METRO_ANCHORS = {
   SF: { zip: "94102", label: "San Francisco Bay Area" },
   LA: { zip: "90001", label: "Los Angeles Metro" },
@@ -78,6 +90,13 @@ async function main() {
 
   console.log(`Using admin user: ${adminUser.email} (${adminUser.id})`);
 
+  const uncategorized = scenarios.filter((s) => !SERVICE_CATEGORIES.includes(s.category));
+  if (uncategorized.length > 0) {
+    throw new Error(
+      `Scenarios missing a canonical category: ${uncategorized.map((s) => s.id).join(", ")}`
+    );
+  }
+
   let created = 0;
   let skipped = 0;
 
@@ -99,7 +118,7 @@ async function main() {
           title,
           description: buildDescription(scenario),
           imageSrc: resolveScenarioImageSrc(scenario.imageSrc),
-          category: "Showcase & Performance",
+          category: scenario.category,
           price: scenario.pricing.silver,
           metro,
           zipCode: anchor.zip,

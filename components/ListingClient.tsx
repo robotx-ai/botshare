@@ -15,7 +15,7 @@ import ListingHead from "./listing/ListingHead";
 import ListingInfo from "./listing/ListingInfo";
 import ListingReservation from "./listing/ListingReservation";
 import { TIERS } from "./listing/ServiceTierSelector";
-import { categories } from "./navbar/Categories";
+import { getCategoryMeta } from "@/lib/serviceCategories";
 import { getScenarioPricing } from "@/lib/scenarioPricing";
 import { getAgibotScenarioDetails } from "@/lib/agibotScenarioDetails";
 
@@ -119,7 +119,7 @@ function ListingClient({ reservations = [], listing, currentUser }: Props) {
   }, [dateRange, listing.price, selectedTierId, robotCount, scenarioPricing]);
 
   const category = useMemo(() => {
-    return categories.find((item) => item.label === listing.category);
+    return getCategoryMeta(listing.category);
   }, [listing.category]);
 
   const agibotScenario = useMemo(() => {

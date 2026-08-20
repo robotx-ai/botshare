@@ -3,10 +3,15 @@
 A task is complete only if all criteria below pass.
 
 ## 1. Taxonomy
-- Service taxonomy is constrained to:
-  - `Showcase & Performance`
-  - `Warehouse`
-  - `Restaurant`
+- Service taxonomy is constrained to the eight service scenarios:
+  - `Private Events`
+  - `Commercial Events`
+  - `Schools & Universities`
+  - `Entertainment`
+  - `Restaurants`
+  - `Hotels`
+  - `Shopping Centers`
+  - `Warehouses`
 - Category UI uses only those values.
 - API validation rejects category values outside the canonical set.
 

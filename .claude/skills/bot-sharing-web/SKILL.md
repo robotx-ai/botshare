@@ -21,10 +21,15 @@ Follow this sequence unless the user requests a narrower scope.
 - Review any hits and fix customer-facing copy immediately.
 
 ### 2. Update taxonomy sources
-- Canonical categories are fixed to:
-  - `Showcase & Performance`
-  - `Warehouse`
-  - `Restaurant`
+- Canonical categories are fixed to the eight service scenarios:
+  - `Private Events`
+  - `Commercial Events`
+  - `Schools & Universities`
+  - `Entertainment`
+  - `Restaurants`
+  - `Hotels`
+  - `Shopping Centers`
+  - `Warehouses`
 - Update category constants/UI filters first.
 - Keep route/API shapes unchanged in MVP.
 - Run `scripts/validate_service_categories.sh <repo_path>`.
@@ -80,7 +85,7 @@ Provide:
 - Preserve existing route and API paths.
 - Do not run schema migrations unless explicitly requested.
 - Keep Prisma models structurally unchanged unless explicitly requested.
-- `Listing.category` must map to one of the 3 Hifivebot service categories.
+- `Listing.category` must map to one of the 8 Hifivebot service categories (the label, not the slug).
 - `Listing.price` is per-day service pricing.
 - `locationValue` is service coverage area.
 - No banned terms in user-facing copy (see `references/term-map.md`).

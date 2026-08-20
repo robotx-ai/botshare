@@ -24,23 +24,26 @@ npm run db:migrate:verify
 - `app/services/`: service catalog browsing/filtering.
 - `app/trips/`, `app/reservations/`, `app/favorites/`, `app/my-listings/`: authenticated pages protected by `middleware.ts`.
 - `components/modals/`: modal dialogs (Login, Register, RentModal, Search).
-- `components/navbar/`: navbar, categories filter, search, user menu.
+- `components/navbar/`: navbar, search, user menu.
+- `components/services/`: scenario index, scenario hero/detail, category chips, results grid.
 - `components/listing/`: service card/detail UI.
 - `lib/`: shared utilities including `adminAuth.ts`, `serviceCategories.ts`, `writeGuard.ts`, `prismadb.ts`.
 - Database: Supabase Postgres via Prisma (`prisma/schema.prisma`).
 - Auth: NextAuth with Prisma adapter, customer/provider roles, and admin override by `ADMIN_EMAILS`.
 
 ## Canonical Service Taxonomy
-- Allowed service categories (exact labels):
-  - `Showcase & Performance`
-  - `Warehouse`
-  - `Restaurant`
-- Canonical slugs:
-  - `showcase-performance`
-  - `warehouse`
-  - `restaurant`
+- Allowed service categories — exactly eight (exact label / slug):
+  - `Private Events` / `private-events`
+  - `Commercial Events` / `commercial-events`
+  - `Schools & Universities` / `schools-universities`
+  - `Entertainment` / `entertainment`
+  - `Restaurants` / `restaurants`
+  - `Hotels` / `hotels`
+  - `Shopping Centers` / `shopping-centers`
+  - `Warehouses` / `warehouses`
+- Source of truth: `lib/serviceCategories.ts`. `Listing.category` stores the label.
 - No additional categories without explicit product request.
-- If other docs mention 4 categories, treat that as stale unless this file is explicitly updated.
+- If other docs mention 3, 4, or 6 categories, treat that as stale unless this file is explicitly updated.
 
 ## Strict Terminology Map (Mandatory)
 Use this map in user-facing copy first, then variable naming when practical and safe.

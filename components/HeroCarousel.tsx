@@ -3,14 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Barlow_Condensed } from "next/font/google";
-
-const barlow = Barlow_Condensed({
-  subsets: ["latin"],
-  weight: ["700", "800"],
-  style: ["normal"],
-  display: "swap",
-});
+import { barlow } from "@/lib/fonts";
 
 const slides = [
   { videoSrc: "https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/pepsi-bg.mp4", label: "Brand Promotion" },

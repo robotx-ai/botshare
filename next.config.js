@@ -18,6 +18,12 @@ const nextConfig = {
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
+      // Service-scenario photography served from the public asset repo.
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        pathname: "/a607a/botshare-deploy/**",
+      },
       {
         protocol: "https",
         hostname: "*.supabase.co",

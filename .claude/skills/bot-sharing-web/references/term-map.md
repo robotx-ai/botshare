@@ -5,9 +5,14 @@
 - Primary domain: `hifivebot.com`.
 
 ## Canonical Service Categories
-- `Showcase & Performance` (`showcase-performance`)
-- `Warehouse` (`warehouse`)
-- `Restaurant` (`restaurant`)
+- `Private Events` (`private-events`)
+- `Commercial Events` (`commercial-events`)
+- `Schools & Universities` (`schools-universities`)
+- `Entertainment` (`entertainment`)
+- `Restaurants` (`restaurants`)
+- `Hotels` (`hotels`)
+- `Shopping Centers` (`shopping-centers`)
+- `Warehouses` (`warehouses`)
 
 ## Replacement Table
 | Legacy term | Canonical term | Usage guidance |

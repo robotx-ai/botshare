@@ -1,6 +1,8 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { canManageServices } from "@/lib/adminAuth";
+import { isServiceCategory } from "@/lib/serviceCategories";
+import { defaultCategoryForUseCases } from "@/lib/useCases";
 import { isProviderProfileComplete } from "@/lib/providerProfile";
 import { hasActiveSkuConflict } from "@/lib/individualListing";
 import { getMetroLabel, getZipData } from "@/lib/zipMetro";
@@ -21,6 +23,7 @@ export async function POST(request: Request) {
   const {
     title,
     description,
+    category,
     imageSrc,
     videoSrc,
     sku,
@@ -122,7 +125,11 @@ export async function POST(request: Request) {
     }
   }
 
-  const derivedCategory = robot.useCase[0];
+  // The service scenario is the provider's choice; fall back to the robot's
+  // primary capability so older clients keep working.
+  const derivedCategory = isServiceCategory(category)
+    ? category
+    : defaultCategoryForUseCases(robot.useCase);
   const derivedPrice = robot.priceDaily;
 
   const parsedGuestCount = 1;
