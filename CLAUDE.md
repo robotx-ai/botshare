@@ -16,24 +16,40 @@ npm run lint         # ESLint check (must pass before any PR/merge)
 
 ## Deployment
 
-This repo deploys to **botsharing.us** (Netlify site `147defb9`, Supabase project `jylxrvwxsjehthsqswib`).
+This repo deploys to **hifivebot.com** (Netlify project `hifivebot-com`, site id `79afde94-abbe-422c-ba4c-f68ab0100e62`, Supabase project `jylxrvwxsjehthsqswib`).
+
+**Netlify CI builds; you never build or upload locally.** Pushing to `main` triggers a build on Netlify. Nothing goes live from that build on its own.
+
+**Auto-publishing is deliberately OFF.** The published deploy is kept *locked*, so each CI build finishes as a `ready` but unpublished deploy with its own URL (`https://<deploy_id>--hifivebot-com.netlify.app`). Every push is effectively a preview. Going live is a separate, explicit act.
 
 ```bash
-npm run deploy:preview   # Preview deploy (safe — no live site impact)
-npm run deploy:prod      # Production deploy
+git push origin main            # -> CI build; preview only, never goes live
+npm run deploy:status           # recent deploys (add --silent to pipe JSON)
+npm run deploy:logs             # stream the log of a build in progress
+npm run deploy:build            # trigger a CI build without pushing a commit
+npm run deploy:promote          # publish newest ready deploy to hifivebot.com
+npm run deploy:rollback         # republish the previously published deploy
 ```
 
-**Default:** always deploy preview first; use `deploy:prod` only when verified.
+`deploy:promote` runs `scripts/promote-deploy.mjs`: it preflights the target deploy on its own URL (home 200, `/services` 200 rendering real DB rows) and refuses to publish if the database is not answering. Publishing is an API call — instant, no rebuild, no build minutes, nothing uploaded. Rollback is the same operation in reverse and equally instant. Prefer the `/prod-deploy` skill, which wraps this with a confirmation step.
 
-Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the site dashboard. The `.env` file is for local dev only.
+`npm run deploy:local` is the escape hatch for when Netlify CI is unavailable: it builds locally and publishes directly, bypassing the lock. It uploads ~32 MB and is unreliable on a flaky connection. Do not reach for it by default.
+
+Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the site dashboard, scoped to all contexts. The `.env` file is for local dev only, and is a strict subset of what the site holds.
 
 ### ⚠️ Deployment Gotchas (learned the hard way — read before deploying)
 
-1. **Deploy with `npm run deploy:prod` (a LOCAL build), NOT a plain `git push`.** The Netlify site auto-deploys `main` on push, but its **CI build omits the Prisma `rhel-openssl-3.0.x` query engine** from the serverless function (~18 MB function, engine absent). The Lambda then throws `Query engine library ... could not be found` on **every DB query** — login and all data break. A *local* build bundles the engine correctly (~32 MB function), so `npm run deploy:prod` works. **If you do push to `main`, immediately run `npm run deploy:prod` afterward** (and expect ~3 min of broken login during the CI build window). Engine bundling is wired via `next.config.js` (`experimental.outputFileTracingIncludes`) + `scripts/bundle-prisma-engines.mjs` (runs in `build:netlify`); these fix LOCAL builds — the CI build path still needs a durable fix. Diagnose by function size (~18 MB = broken) or by curling the credentials login flow.
+1. **The Prisma rhel query engine must be forced into the build.** `prisma generate` only materializes a schema `binaryTarget` when that engine is already in `~/.cache/prisma` or was fetched by the `@prisma/engines` postinstall. On Netlify's cold CI cache that silently yields a client with `rhel-openssl-1.0.x` but **not** the `rhel-openssl-3.0.x` the nodejs20.x Lambda loads. The result builds and serves HTML fine, then throws `Query engine library ... could not be found` on **every DB query** — login and all data break. `scripts/bundle-prisma-engines.mjs` (runs in `build:netlify`) now downloads any missing rhel engine straight from `binaries.prisma.sh`, pinned to the engine commit from `@prisma/engines-version`, then stages both engines into `node_modules/@prisma/client/runtime` where the Lambda looks first. `netlify.toml` `included_files` + `next.config.js` `outputFileTracingIncludes` bundle them. The script hard-fails the build if the engine is still absent — that guard is the reason a broken function cannot reach production. Never weaken it. Do **not** set `PRISMA_CLI_BINARY_TARGETS`: Prisma 4.12 rejects `native` in that list and the build dies with `Unknown binaryTarget native`.
 
-2. **`.env` points at the PRODUCTION Supabase database — there is NO separate dev DB.** `npm run dev`, any script in `scripts/`, and any local Prisma/Supabase call read and **write live production data**. Be deliberate; always clean up test rows/files you create.
+2. **`next/font/google` fetches from `fonts.gstatic.com` at build time and intermittently times out** (`NextFontError: Failed to fetch 'Barlow Condensed'`), which fails the whole build. It is transient — retry with `npm run deploy:build`. The durable fix is self-hosting via `next/font/local`.
 
-3. **Prisma migration drift is common on prod.** The live schema is often ahead of `_prisma_migrations` (migrations applied out-of-band). `prisma migrate deploy` then fails `relation already exists` and leaves a FAILED record that blocks all future deploys. Recover with `prisma migrate resolve --applied <migration_name>` for each already-applied migration, then re-run `migrate deploy`. Verify objects exist first (read-only) before marking applied.
+3. **`.env` points at the PRODUCTION Supabase database — there is NO separate dev DB.** `npm run dev`, any script in `scripts/`, and any local Prisma/Supabase call read and **write live production data**. Be deliberate; always clean up test rows/files you create.
+
+4. **Prisma migration drift is common on prod.** The live schema is often ahead of `_prisma_migrations` (migrations applied out-of-band). `prisma migrate deploy` then fails `relation already exists` and leaves a FAILED record that blocks all future deploys. Recover with `prisma migrate resolve --applied <migration_name>` for each already-applied migration, then re-run `migrate deploy`. Verify objects exist first (read-only) before marking applied.
+
+5. **Netlify does not expose build logs over its API.** `netlify logs:deploy` streams *in-progress* builds only. To capture a failure, trigger the build, poll until `state=building`, then attach the stream — otherwise the reason for an `exit code 2` is invisible.
+
+6. **A local VPN/proxy client breaks Netlify CLI calls and can make hifivebot.com look down.** The npm deploy scripts strip `HTTP_PROXY`/`HTTPS_PROXY` for this reason. If `curl https://hifivebot.com` fails while `--resolve`-ing the same host to its edge IP succeeds, the resolver is handing back fake-IP space (`198.18.0.0/15`) — that is the local tunnel, not the site.
 
 ## Architecture
 

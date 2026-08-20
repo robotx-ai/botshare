@@ -53,5 +53,5 @@ Prioritize these files for BotShare web tasks.
 
 ## Supabase operations context
 - `/Users/jasonliu/Github/botshare/.env.example`
-  - Template for local dev env vars. Production env vars live in Netlify dashboard for site `147defb9`.
+  - Template for local dev env vars. Production env vars live in Netlify dashboard for site `79afde94`.
 - See `references/supabase-operations.md` for Supabase project config.

@@ -58,8 +58,9 @@ Follow this sequence unless the user requests a narrower scope.
   - `npm run build`
 - Execute smoke scenarios from `references/qa-checklist.md`.
 - Deploy to preview before promoting to production:
-  - `npm run deploy:preview` — preview deploy
-  - `npm run deploy:prod` — production deploy (only after preview is verified)
+  - `npm run deploy:status` — find the deploy and its URL
+  - `npm run deploy:promote -- --dry-run` — preflight (home + DB-backed route)
+  - `npm run deploy:promote` — publish to hifivebot.com, only after the preview is verified
 
 ### 7. Supabase operations (when requested)
 - Confirm env readiness with `scripts/check_supabase_env.sh <repo_path>`.

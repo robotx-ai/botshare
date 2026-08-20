@@ -98,16 +98,18 @@ Drop a script in `scripts/` (plain `.js`, not wired to build). Examples: `duplic
 
 No automated test suite observed in git history. Pre-merge gate is `npm run lint`. Production verification path:
 
-1. `npm run build` locally
-2. `npm run deploy:preview` (safe, no live impact)
-3. Manual QA against preview URL
-4. `npm run deploy:prod` only after preview verified
+1. `npm run lint` locally
+2. Push to `main` — Netlify CI builds; nothing goes live (published deploy is locked)
+3. Manual QA against the deploy URL from `npm run deploy:status`
+4. `npm run deploy:promote` only after the deploy URL is verified
 
 Future test additions should live alongside source (`__tests__/` or `.test.ts` suffix) and hit 80%+ per global rules.
 
 ## Deploy Topology
 
-- Netlify site `147defb9`
+- Netlify project `hifivebot-com` (`79afde94`), serving hifivebot.com
+- Git-linked: push to `main` builds on Netlify CI
+- Auto-publishing off — published deploy is locked, so builds stay unpublished until promoted
 - Supabase project `jylxrvwxsjehthsqswib`
 - Env managed in Netlify dashboard (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, ADMIN_EMAILS, CLOUDINARY_*)
 - Local `.env` is dev-only

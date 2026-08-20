@@ -141,9 +141,13 @@ npm run dev                 # http://localhost:3000</code></pre>
               <tr><td><code>npm run build</code></td><td>Production build (<code>next build</code>)</td></tr>
               <tr><td><code>npm run start</code></td><td>Serve a built app</td></tr>
               <tr><td><code>npm run lint</code></td><td>ESLint — <strong>must pass before any PR/merge</strong></td></tr>
-              <tr><td><code>npm run build:netlify</code></td><td><code>prisma generate &amp;&amp; next build</code> (Netlify build cmd)</td></tr>
-              <tr><td><code>npm run deploy:preview</code></td><td>Netlify <strong>preview</strong> deploy (safe, no live impact)</td></tr>
-              <tr><td><code>npm run deploy:prod</code></td><td>Netlify <strong>production</strong> deploy → botsharing.us</td></tr>
+              <tr><td><code>npm run build:netlify</code></td><td><code>prisma generate</code> + Prisma engine staging + <code>next build</code> (Netlify CI build cmd)</td></tr>
+              <tr><td><code>npm run deploy:status</code></td><td>Recent Netlify deploys (add <code>--silent</code> to pipe JSON)</td></tr>
+              <tr><td><code>npm run deploy:logs</code></td><td>Stream the log of a build <strong>in progress</strong></td></tr>
+              <tr><td><code>npm run deploy:build</code></td><td>Trigger a CI build without pushing a commit</td></tr>
+              <tr><td><code>npm run deploy:promote</code></td><td>Publish a built deploy → hifivebot.com (<code>-- --dry-run</code> to check)</td></tr>
+              <tr><td><code>npm run deploy:rollback</code></td><td>Republish the previously published deploy</td></tr>
+              <tr><td><code>npm run deploy:local</code></td><td>Escape hatch: local build + direct publish (bypasses the lock)</td></tr>
               <tr><td><code>npm run db:seed</code></td><td>Seed via <code>prisma/seed.js</code></td></tr>
               <tr><td><code>npm run db:migrate:sql</code></td><td>Generate init SQL from schema (diff from empty)</td></tr>
               <tr><td><code>npm run db:migrate:data</code></td><td>Mongo→Postgres data migration helper</td></tr>
@@ -168,16 +172,20 @@ npm run build                     # full production build (Node 20)</code></pre>
 
         <section id="deploy">
           <h2>Deployment</h2>
-          <p class="lead">Netlify site <code>botsharing-us</code> (<code>147defb9-…</code>). Deploys are CLI/API based (not git-linked), so a push alone does <strong>not</strong> deploy.</p>
-          <pre><code>npm run deploy:preview   # build locally + upload a preview (verify first)
-npm run deploy:prod      # build locally + publish to botsharing.us</code></pre>
+          <p class="lead">Netlify project <code>hifivebot-com</code> (<code>79afde94-…</code>), serving <strong>hifivebot.com</strong>. The repo <strong>is</strong> git-linked: a push to <code>main</code> builds on Netlify CI. Nothing goes live from that build on its own.</p>
+          <p>Auto-publishing is deliberately <strong>off</strong> — the published deploy is kept <em>locked</em>, so each CI build finishes as a ready-but-unpublished deploy with its own URL. Every push is effectively a preview; going live is a separate, explicit act.</p>
+          <pre><code>git push origin main       # -&gt; CI build; preview only, never goes live
+npm run deploy:promote     # publish a built deploy to hifivebot.com
+npm run deploy:rollback    # instant revert</code></pre>
           <table>
             <thead><tr><th>Step</th><th>Notes</th></tr></thead>
             <tbody>
-              <tr><td>Default</td><td>Always preview first; only <code>deploy:prod</code> once verified.</td></tr>
-              <tr><td>Build source</td><td><code>deploy:*</code> builds your <strong>local working tree</strong>, not <code>main</code>. Checkout + pull main first.</td></tr>
+              <tr><td>Default</td><td>Push, let CI build, check the deploy URL, then <code>deploy:promote</code> (or the <code>/prod-deploy</code> skill).</td></tr>
+              <tr><td>Build source</td><td>CI builds the <strong>pushed commit</strong>, not your working tree. <code>deploy:local</code> is the only thing that builds locally.</td></tr>
+              <tr><td>Promotion cost</td><td>Publishing is an API call — instant, no rebuild, no build minutes, nothing uploaded.</td></tr>
+              <tr><td>Preflight</td><td><code>promote-deploy.mjs</code> refuses to publish unless the target renders real DB rows — catches a function missing the Prisma rhel engine.</td></tr>
               <tr><td>Env vars</td><td>Managed in the Netlify dashboard (DATABASE_URL, SUPABASE_*, NEXTAUTH_*, STRIPE_*, RESEND_*, CLOUDINARY_*). <code>.env</code> is local only.</td></tr>
-              <tr><td>If build fails</td><td>Nothing uploads — the live site is untouched.</td></tr>
+              <tr><td>If build fails</td><td>Nothing is published — the live site keeps serving the locked deploy.</td></tr>
             </tbody>
           </table>
         </section>

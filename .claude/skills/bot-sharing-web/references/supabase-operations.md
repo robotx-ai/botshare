@@ -23,7 +23,7 @@ Use `scripts/check_supabase_env.sh <repo_path>` before Supabase actions.
 
 ## Project
 This repo targets Supabase project `jylxrvwxsjehthsqswib` (`botsharing.us`).
-Local `.env` should point to this project. Production env vars live in the Netlify dashboard for site `147defb9`.
+Local `.env` should point to this project. Production env vars live in the Netlify dashboard for site `79afde94`.
 
 - When running Supabase CLI or MCP operations, confirm `SUPABASE_PROJECT_REF=jylxrvwxsjehthsqswib` is active before executing.
 
