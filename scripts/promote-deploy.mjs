@@ -23,9 +23,13 @@ import { existsSync, readFileSync } from "node:fs";
 
 const DEPLOY_URL_SUFFIX = "--hifivebot-com.netlify.app";
 // A route that must hit the database. If Prisma's engine is missing this 500s.
-const DB_ROUTE = "/services";
-// getListings() dedupes the catalog by title; a healthy render carries many ids.
-const MIN_DB_IDS = 5;
+// `/services` is the static scenario index and touches no data, so probe a
+// scenario page — it queries listings for its category on every request.
+const DB_ROUTE = "/services/entertainment";
+// getListings() dedupes the public catalog by title, so a category renders one
+// row per distinct package (3-4 today). A missing query engine renders zero, so
+// any non-trivial count still proves the database answered.
+const MIN_DB_IDS = 3;
 
 function siteId() {
   if (process.env.NETLIFY_SITE_ID) return process.env.NETLIFY_SITE_ID;
