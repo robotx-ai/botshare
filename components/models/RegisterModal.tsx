@@ -156,7 +156,7 @@ function RegisterModal() {
         <div>
           {kicker("Get started")}
           <h2 className="font-display mt-3 text-[34px] leading-[1.16] text-brand">
-            How will you use BotShare?
+            How will you use Hifivebot?
           </h2>
           <p className="mt-1.5 text-[15px] text-brand-muted">
             Pick the path that fits you best.
@@ -216,7 +216,7 @@ function RegisterModal() {
                   <span>
                     I agree to the{" "}
                     <a href="/terms" target="_blank" rel="noopener noreferrer" className="font-bold text-brand underline underline-offset-2">
-                      BotShare Terms
+                      Hifivebot Terms
                     </a>{" "}
                     &amp; Privacy Policy.
                   </span>
@@ -275,10 +275,10 @@ function RegisterModal() {
           </div>
           <h2 className="font-display text-[32px] leading-[1.16] text-brand">You&apos;re all set</h2>
           <p className="mb-6 mt-2 max-w-[320px] text-[15px] text-brand-muted">
-            Your email is verified. Welcome to BotShare.
+            Your email is verified. Welcome to Hifivebot.
           </p>
           <div className="w-full">
-            <Button label="Continue to BotShare" onClick={goToLogin} />
+            <Button label="Continue to Hifivebot" onClick={goToLogin} />
           </div>
         </div>
       )}

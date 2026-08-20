@@ -1,16 +1,16 @@
 # Repo Hotspots
 
-Prioritize these files for BotShare web tasks.
+Prioritize these files for Hifivebot web tasks.
 
 ## Core UX surfaces
 - `/Users/jasonliu/Github/botshare/components/navbar/Categories.tsx`
-  - Update category definitions to the 3 BotShare service categories.
+  - Update category definitions to the 3 Hifivebot service categories.
 - `/Users/jasonliu/Github/botshare/components/modals/RentModal.tsx`
   - Rebrand create flow copy from property/home language to service package language.
 - `/Users/jasonliu/Github/botshare/components/modals/SearchModal.tsx`
   - Rebrand filters copy to service coverage and booking date wording.
 - `/Users/jasonliu/Github/botshare/components/listing/ListingInfo.tsx`
-  - Remove host/property/AirCover wording; adopt BotSharing US Service Assurance copy.
+  - Remove host/property/AirCover wording; adopt Hifivebot Service Assurance copy.
 - `/Users/jasonliu/Github/botshare/components/listing/ListingReservation.tsx`
   - Replace per-night text with per-day booking language.
 - `/Users/jasonliu/Github/botshare/components/navbar/Search.tsx`

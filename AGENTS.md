@@ -1,7 +1,7 @@
-# BotShare Agent Playbook
+# Hifivebot Agent Playbook
 
 ## Product Identity
-- Primary brand/domain: `botsharing.us` (robot service rental bookings).
+- Primary brand/domain: `hifivebot.com` (robot service rental bookings).
 - Do not present this product as Airbnb, home rental, or property rental.
 - If any internal doc conflicts on branding/taxonomy, this file is the source of truth for agent behavior.
 
@@ -53,7 +53,7 @@ Use this map in user-facing copy first, then variable naming when practical and 
 | home/place/property | service package or deployment |
 | reservation | booking |
 | per night | per day |
-| AirCover | BotSharing US Service Assurance |
+| AirCover | Hifivebot Service Assurance |
 
 Hard rule:
 - Reject PRs that introduce new Airbnb wording in user-facing copy.
@@ -135,6 +135,7 @@ Hard rule:
 - Replace legacy accent colors (for example rose/coral/indigo/blue) with neutral grayscale equivalents.
 - Prefer centralized Tailwind/CSS tokens for neutral palette updates instead of scattered hardcoded values.
 - Do not introduce non-neutral theme colors unless there is an explicit product request in the task thread.
+- Exception: the Hifivebot brand mark (`public/hifivebot-icon.png`, `public/hifivebot-logo.png`, `app/icon.png`, `app/apple-icon.png`) is full color by design and must not be grayscaled or recolored. Vector originals live in `brand/`.
 
 ## Cloudinary Video Management
 - Cloudinary is used for both images and videos.

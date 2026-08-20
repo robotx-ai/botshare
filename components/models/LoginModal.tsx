@@ -64,7 +64,7 @@ function LoginModal() {
         Sign in
       </div>
       <h2 className="font-display mt-3 text-[34px] leading-[1.16] text-brand">Welcome back</h2>
-      <p className="mt-1.5 text-[15px] text-brand-muted">Log in to your BotShare account.</p>
+      <p className="mt-1.5 text-[15px] text-brand-muted">Log in to your Hifivebot account.</p>
 
       <div className="mt-6 flex flex-col gap-3.5">
         <FloatingInput id="email" label="Email address" type="email" required disabled={isLoading} register={register} errors={errors} />
@@ -76,7 +76,7 @@ function LoginModal() {
         </div>
         <Button label="Log in" disabled={isLoading} onClick={handleSubmit(onSubmit)} />
         <p className="text-center text-[14px] text-brand-muted">
-          New to BotShare?{" "}
+          New to Hifivebot?{" "}
           <span onClick={toRegister} className="cursor-pointer font-extrabold text-brand underline decoration-brand-subtle underline-offset-[3px]">
             Create an account
           </span>

@@ -1,8 +1,8 @@
-# BotShare Term Map
+# Hifivebot Term Map
 
 ## Canonical Product Framing
-- Product: BotShare robot service rental marketplace (single provider: BotShare).
-- Primary domain: `botsharing.us`.
+- Product: Hifivebot robot service rental marketplace (single provider: Hifivebot).
+- Primary domain: `hifivebot.com`.
 
 ## Canonical Service Categories
 - `Showcase & Performance` (`showcase-performance`)
@@ -18,7 +18,7 @@
 | home/place/property | service package or deployment | Choose based on sentence context. |
 | reservation | booking | Use in visible labels and messages. |
 | per night | per day | Pricing semantics are daily in MVP. |
-| AirCover | BotSharing US Service Assurance | Use in policy/assurance UI text. |
+| AirCover | Hifivebot Service Assurance | Use in policy/assurance UI text. |
 
 ## Banned customer-facing terms
 These should not appear in new user-facing copy:

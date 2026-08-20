@@ -7,7 +7,7 @@ export function TermsContent() {
     <article className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold">
-          BotSharing Robot Rental Platform Terms
+          Hifivebot Robot Rental Platform Terms
         </h1>
         <p className="text-sm text-neutral-500">
           User Agreement &ndash; Accepted at Registration
@@ -21,7 +21,7 @@ export function TermsContent() {
         <h2 className="text-xl font-semibold">1. About These Terms</h2>
         <p>
           These Robot Rental Platform Terms (the &ldquo;Terms&rdquo;) govern the
-          relationship among three roles: BotSharing, which operates the
+          relationship among three roles: Hifivebot, which operates the
           platform and collects payment (the &ldquo;Platform Operator&rdquo;);
           the equipment owner that supplies, ships, and retrieves the rental
           robot(s) (the &ldquo;Equipment Owner&rdquo;); and you, the customer
@@ -46,7 +46,7 @@ export function TermsContent() {
           and agrees to rent such robot(s) to the Customer under these Terms.
         </p>
         <p>
-          The Platform Operator operates the BotSharing platform, facilitates
+          The Platform Operator operates the Hifivebot platform, facilitates
           the transaction, and is authorized by the Equipment Owner to collect
           payment from the Customer.
         </p>
@@ -248,7 +248,7 @@ export function TermsContent() {
         </h2>
         <p>
           The Platform Operator may provide the Customer access to the
-          BotSharing platform solely for account management, order tracking,
+          Hifivebot platform solely for account management, order tracking,
           payment management, support tickets, and other platform functions
           made available.
         </p>
@@ -271,7 +271,7 @@ export function TermsContent() {
         </p>
         <p>
           As between the Platform Operator and the Equipment Owner, the
-          Platform Operator owns the BotSharing platform and the Equipment
+          Platform Operator owns the Hifivebot platform and the Equipment
           Owner owns its equipment, firmware, and equipment-specific
           operational materials. As between the Equipment Owner and the
           Customer, the Equipment Owner retains ownership of all embedded
@@ -297,7 +297,7 @@ export function TermsContent() {
         </p>
         <p>
           <strong>Platform Warranties.</strong> The Platform Operator
-          represents that it has authority to operate the BotSharing platform
+          represents that it has authority to operate the Hifivebot platform
           and to collect payments in the manner described herein.
         </p>
         <p>
@@ -308,7 +308,7 @@ export function TermsContent() {
         </p>
         <p className="uppercase text-sm">
           Disclaimer. Except as expressly set forth in these Terms, the
-          BotSharing platform, the robot(s), and any related services are
+          Hifivebot platform, the robot(s), and any related services are
           provided &ldquo;as is&rdquo; and &ldquo;as available,&rdquo; and each
           of the Platform Operator and the Equipment Owner disclaims all
           implied warranties to the maximum extent permitted by law, including
@@ -520,7 +520,7 @@ export function TermsContent() {
         <h2 className="text-xl font-semibold">16. Acceptance</h2>
         <p>
           By clicking &ldquo;I Agree&rdquo; (or a similar control) or by
-          registering for or using the BotSharing platform, you acknowledge
+          registering for or using the Hifivebot platform, you acknowledge
           that you have read, understood, and agree to be bound by these Terms.
         </p>
       </section>

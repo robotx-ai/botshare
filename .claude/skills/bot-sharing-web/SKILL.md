@@ -1,15 +1,15 @@
 ---
 name: bot-sharing-web
-description: Use when working on the BotShare (botsharing.us) Next.js web app — enforcing terminology, category constraints, white/gray/black theme colors, provider/admin write policy, Supabase operations, and regression validation.
+description: Use when working on the Hifivebot (hifivebot.com) Next.js web app — enforcing terminology, category constraints, white/gray/black theme colors, provider/admin write policy, Supabase operations, and regression validation.
 ---
 
-# BotShare Web Standards
+# Hifivebot Web Standards
 
 ## When to use this skill
 Use this skill when any request includes:
 - Updating service taxonomy, category filters, booking copy, or service detail text.
 - Updating or normalizing UI theme colors to white/gray/black.
-- Enforcing BotShare provider/admin mutation rules for service catalog endpoints.
+- Enforcing Hifivebot provider/admin mutation rules for service catalog endpoints.
 - Running Supabase checks/migrations/policies for this repo.
 - Running QA checks to detect regressions in wording, taxonomy, or authorization.
 
@@ -80,7 +80,7 @@ Provide:
 - Preserve existing route and API paths.
 - Do not run schema migrations unless explicitly requested.
 - Keep Prisma models structurally unchanged unless explicitly requested.
-- `Listing.category` must map to one of the 3 BotShare service categories.
+- `Listing.category` must map to one of the 3 Hifivebot service categories.
 - `Listing.price` is per-day service pricing.
 - `locationValue` is service coverage area.
 - No banned terms in user-facing copy (see `references/term-map.md`).

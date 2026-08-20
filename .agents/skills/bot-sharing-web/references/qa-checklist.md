@@ -20,7 +20,7 @@ Run these checks for each task PR.
 
 3. Service detail
 - Pricing language is per day.
-- Assurance copy is BotSharing US Service Assurance branded.
+- Assurance copy is Hifivebot Service Assurance branded.
 
 4. Create-service flow
 - Customers cannot create or mutate service records.
@@ -33,7 +33,7 @@ Run these checks for each task PR.
 - Provider incoming-booking views stay scoped to the current operator's services.
 
 6. Navigation and branding
-- Metadata and major page headings reflect BotShare (botsharing.us) branding.
+- Metadata and major page headings reflect Hifivebot (hifivebot.com) branding.
 
 7. Supabase control readiness
 - Required Supabase env vars report as set.

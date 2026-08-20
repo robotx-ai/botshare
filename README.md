@@ -1,4 +1,4 @@
-# BotShare
+# Hifivebot
 
 **Robot service rental marketplace.** Customers browse robots by metro, use case, and
 service category, book them for a date range, pay through Stripe, and track the unit
@@ -8,7 +8,7 @@ runs on their behalf.
 
 | | |
 |---|---|
-| Brand / product domain | `botsharing.us` |
+| Brand / product domain | `hifivebot.com` |
 | Deployed at | `hifivebot.com` (Netlify project `hifivebot-com`) |
 | Repository | `robotx-ai/botshare` |
 | Stack | Next.js 13 (App Router) · TypeScript · Prisma · Supabase Postgres · Stripe · Tailwind |
@@ -295,7 +295,7 @@ Prefer reinterpreting a field's meaning in copy and validation over migrating it
 | service operator | host |
 | service package / deployment | home, place, property |
 | per day | per night |
-| BotSharing US Service Assurance | AirCover |
+| Hifivebot Service Assurance | AirCover |
 
 **Banned in new copy**: Airbnb, host, guest, property, per night, AirCover. PRs that
 introduce Airbnb wording into user-facing copy should be rejected. Internal variable

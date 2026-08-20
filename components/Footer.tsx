@@ -11,8 +11,8 @@ function Footer({}: Props) {
 
   const itemData = [
     [
-      "BOTSHARING US",
-      "About BotSharing US",
+      "HIFIVEBOT",
+      "About Hifivebot",
       "Service categories",
       "Company updates",
       "Careers",
@@ -21,7 +21,7 @@ function Footer({}: Props) {
     [
       "Support",
       "Help Center",
-      "BotSharing US Service Assurance",
+      "Hifivebot Service Assurance",
       "Booking options",
       "Safety information",
       "Report an issue",

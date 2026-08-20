@@ -12,7 +12,7 @@ A task is complete only if all criteria below pass.
 
 ## 2. Copy integrity
 - No new Airbnb terms in customer-facing copy.
-- Search, listing card, listing detail, and create-service modal use BotShare service vocabulary.
+- Search, listing card, listing detail, and create-service modal use Hifivebot service vocabulary.
 - Pricing text uses per-day semantics.
 
 ## 3. Authorization

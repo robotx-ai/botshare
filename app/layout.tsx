@@ -13,9 +13,8 @@ import "../styles/globals.css";
 import getCurrentUser from "./actions/getCurrentUser";
 
 export const metadata = {
-  title: "BotShare — Robot Service Rentals",
+  title: "Hifivebot — Robot Service Rentals",
   description: "Book professional robot services for performances, events, restaurants, and warehouses.",
-  icons: "/favicon.ico",
 };
 
 const font = Nunito({

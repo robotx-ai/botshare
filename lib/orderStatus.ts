@@ -27,7 +27,7 @@ export const ORDER_STEPS: OrderStatus[] = [
 
 export const TERMINAL_STATUSES: OrderStatus[] = ["COMPLETED", "CANCELLED"];
 
-// Customer-facing labels (BotShare terminology).
+// Customer-facing labels (Hifivebot terminology).
 export const STATUS_LABELS: Record<OrderStatus, string> = {
   PLACED: "Order placed",
   CONFIRMED: "Confirmed by operator",

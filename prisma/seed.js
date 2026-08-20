@@ -83,12 +83,12 @@ for (const metro of METROS) {
 async function main() {
   const adminEmail =
     (process.env.ADMIN_EMAILS ?? "").split(",")[0].trim() ||
-    "seed@botsharing.us";
+    "seed@hifivebot.com";
 
   console.log(`Upserting seed admin user: ${adminEmail}`);
   const seedUser = await prisma.user.upsert({
     where: { email: adminEmail },
-    create: { email: adminEmail, name: "BotSharing US Admin" },
+    create: { email: adminEmail, name: "Hifivebot Admin" },
     update: {},
   });
 

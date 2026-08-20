@@ -31,7 +31,7 @@ function ListingCard({
   currentUser,
 }: Props) {
   const router = useRouter();
-  const serviceDetail = data.title?.trim() || "BotSharing US Service";
+  const serviceDetail = data.title?.trim() || "Hifivebot Service";
 
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {

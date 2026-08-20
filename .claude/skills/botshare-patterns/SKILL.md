@@ -1,14 +1,14 @@
 ---
 name: botshare-patterns
-description: Descriptive coding patterns, commit conventions, architecture hotspots, and workflow templates extracted from the BotShare repository git history. Complement to bot-sharing-web (which holds prescriptive standards).
+description: Descriptive coding patterns, commit conventions, architecture hotspots, and workflow templates extracted from the Hifivebot repository git history. Complement to bot-sharing-web (which holds prescriptive standards).
 version: 1.0.0
 source: local-git-analysis
 analyzed_commits: 47
 ---
 
-# BotShare Patterns
+# Hifivebot Patterns
 
-Robot service rental booking platform (`botsharing.us`). Next.js 13 hybrid (App Router + Pages Router), Prisma + Supabase Postgres, NextAuth, Tailwind.
+Robot service rental booking platform (`hifivebot.com`). Next.js 13 hybrid (App Router + Pages Router), Prisma + Supabase Postgres, NextAuth, Tailwind.
 
 See also: `bot-sharing-web` skill — the prescriptive side (terminology, categories, theme, access-control rules). This file documents *how the team actually works* based on commit history.
 

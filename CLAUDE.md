@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Identity
 
-**BotShare** (`botsharing.us`) is a robot service rental booking platform. The `AGENTS.md` file contains the authoritative product and terminology rules; always consult it for any user-facing copy decisions.
+**Hifivebot** (`hifivebot.com`) is a robot service rental booking platform. The `AGENTS.md` file contains the authoritative product and terminology rules; always consult it for any user-facing copy decisions.
 
 ## Commands
 
@@ -103,7 +103,7 @@ Netlify manages env vars (DATABASE_URL, SUPABASE_*, NEXTAUTH_URL, etc.) in the s
 | customer | guest |
 | service package / deployment | home / place / property |
 | per day | per night |
-| BotSharing US Service Assurance | AirCover |
+| Hifivebot Service Assurance | AirCover |
 | service operator | host |
 
 **Banned in new copy**: Airbnb, host, guest, property, per night, AirCover.
@@ -131,6 +131,8 @@ Source of truth: `lib/serviceCategories.ts`
 ## Theme Colors (MVP Constraint)
 
 User-facing UI must use only **white, gray, and black**. Replace any legacy rose/coral/indigo/blue accent colors with neutral grayscale Tailwind classes. Prefer updating centralized Tailwind tokens over scattered hardcoded values.
+
+**Exception: the Hifivebot brand mark.** `public/hifivebot-icon.png`, `public/hifivebot-logo.png`, `app/icon.png`, and `app/apple-icon.png` are the official multi-color logo and must stay in full color — do not grayscale or recolor them. Everything around the mark (wordmark text, chrome) stays neutral. Vector originals live in `brand/`.
 
 ## Schema Guardrails
 

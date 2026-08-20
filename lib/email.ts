@@ -9,9 +9,9 @@ function getResend(): Resend {
   return _resend;
 }
 
-const FROM = process.env.RESEND_FROM_EMAIL ?? "bookings@botsharing.us";
-const LOGO_URL = "https://botsharing.us/Botsharing_Logo.png";
-const SITE_URL = "https://botsharing.us";
+const FROM = process.env.RESEND_FROM_EMAIL ?? "bookings@hifivebot.com";
+const LOGO_URL = "https://hifivebot.com/hifivebot-logo.png";
+const SITE_URL = "https://hifivebot.com";
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString("en-US", {
@@ -32,8 +32,8 @@ function emailLayout(body: string): string {
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
         <!-- Header -->
         <tr>
-          <td style="background:#000000;padding:24px 32px;">
-            <img src="${LOGO_URL}" alt="BotSharing US" width="180" style="display:block;height:auto;">
+          <td style="background:#ffffff;padding:24px 32px;border-bottom:1px solid #e5e7eb;">
+            <img src="${LOGO_URL}" alt="Hifivebot" width="150" style="display:block;height:auto;">
           </td>
         </tr>
         <!-- Body -->
@@ -42,12 +42,12 @@ function emailLayout(body: string): string {
         <tr>
           <td style="background:#f3f4f6;padding:20px 32px;border-top:1px solid #e5e7eb;text-align:center;">
             <p style="margin:0;font-size:12px;color:#6b7280;">
-              <strong style="color:#111827;">BOTSHARING US</strong> &nbsp;·&nbsp;
+              <strong style="color:#111827;">HIFIVEBOT</strong> &nbsp;·&nbsp;
               <a href="${SITE_URL}" style="color:#6b7280;text-decoration:none;">${SITE_URL}</a> &nbsp;·&nbsp;
               <a href="mailto:info@usrobotx.com" style="color:#6b7280;text-decoration:none;">info@usrobotx.com</a>
             </p>
             <p style="margin:8px 0 0;font-size:11px;color:#9ca3af;">
-              Robot Service Rentals &mdash; Powered by BotSharing US
+              Robot Service Rentals &mdash; Powered by Hifivebot
             </p>
           </td>
         </tr>
@@ -138,7 +138,7 @@ export async function sendAdminBookingNotification(data: BookingEmailData) {
   const { error } = await getResend().emails.send({
     from: FROM,
     to: adminEmails,
-    subject: `New Booking — ${title} | BotShare`,
+    subject: `New Booking — ${title} | Hifivebot`,
     html: emailLayout(body),
   });
   if (error) throw new Error(`Resend admin email failed: ${JSON.stringify(error)}`);
@@ -178,7 +178,7 @@ export async function sendCustomerBookingConfirmation(data: BookingEmailData) {
   const { error } = await getResend().emails.send({
     from: FROM,
     to: customer.email,
-    subject: `Booking Confirmed — ${title} | BotShare`,
+    subject: `Booking Confirmed — ${title} | Hifivebot`,
     html: emailLayout(body),
   });
   if (error) throw new Error(`Resend customer email failed: ${JSON.stringify(error)}`);
@@ -192,7 +192,7 @@ export async function sendVerificationCode(
   const body = `
     <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#111827;">Verify your email</h2>
     <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
-      Hi ${name ?? "there"}, use the code below to finish creating your BotShare account.
+      Hi ${name ?? "there"}, use the code below to finish creating your Hifivebot account.
       It expires in 10 minutes.
     </p>
     <div style="text-align:center;margin:8px 0 24px;">
@@ -208,7 +208,7 @@ export async function sendVerificationCode(
   const { error } = await getResend().emails.send({
     from: FROM,
     to: email,
-    subject: `Your BotShare verification code: ${code}`,
+    subject: `Your Hifivebot verification code: ${code}`,
     html: emailLayout(body),
   });
   if (error) throw new Error(`Resend verification email failed: ${JSON.stringify(error)}`);
@@ -222,7 +222,7 @@ export async function sendPasswordResetCode(
   const body = `
     <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#111827;">Reset your password</h2>
     <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
-      Hi ${name ?? "there"}, use the code below to reset your BotShare password.
+      Hi ${name ?? "there"}, use the code below to reset your Hifivebot password.
       It expires in 10 minutes.
     </p>
     <div style="text-align:center;margin:8px 0 24px;">
@@ -238,7 +238,7 @@ export async function sendPasswordResetCode(
   const { error } = await getResend().emails.send({
     from: FROM,
     to: email,
-    subject: `Your BotShare password reset code: ${code}`,
+    subject: `Your Hifivebot password reset code: ${code}`,
     html: emailLayout(body),
   });
   if (error) throw new Error(`Resend password reset email failed: ${JSON.stringify(error)}`);

@@ -1,7 +1,7 @@
 import { TermsContent } from "@/lib/termsContent";
 
 export const metadata = {
-  title: "Terms of Service | BotSharing US",
+  title: "Terms of Service | Hifivebot",
 };
 
 export default function TermsPage() {

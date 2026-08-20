@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const origin = request.headers.get("origin") ?? "https://botsharing.us";
+  const origin = request.headers.get("origin") ?? "https://hifivebot.com";
 
   const session = await stripe().checkout.sessions.create({
     mode: "payment",
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
           tax_behavior: "exclusive",
           product_data: {
             name: listing.title,
-            description: "BotShare service booking",
+            description: "Hifivebot service booking",
             tax_code: "txcd_99999999",
           },
         },
