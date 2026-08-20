@@ -1,341 +1,439 @@
-<div align="center">
+# BotShare
 
-  <img src="https://user-images.githubusercontent.com/99184393/185779974-a31a9f47-f8d3-42ea-b7f8-4a2971774615.png" alt="logo" width="250" height="auto" />
-  
-# Airbnb Clone with Next.js 13!
-  
-  <p>
-Full Stack Airbnb Clone with Next.js 13 Tailwind-css, Prisma, MongoDB, NextAuth, Framer-motionSocial, Login (Google and Facebook), Image upload, Cloudinary CDN, Location selection, Map component, Country autocomplete, Fetching listings with server components.
-  </p>
-  
-<!-- Badges -->
-<a href="https://airbnb-sclone.vercel.app" target="_blank">![](https://img.shields.io/website-up-down-green-red/http/monip.org.svg)</a>
-![](https://img.shields.io/badge/Maintained-Yes-indigo)
-![](https://img.shields.io/github/forks/SashenJayathilaka/Airbnb-Build.svg)
-![](https://img.shields.io/github/stars/SashenJayathilaka/Airbnb-Build.svg)
-![](https://img.shields.io/github/issues/SashenJayathilaka/Airbnb-Build)
-![](https://img.shields.io/github/last-commit/SashenJayathilaka/Airbnb-Build)
+**Robot service rental marketplace.** Customers browse robots by metro, use case, and
+service category, book them for a date range, pay through Stripe, and track the unit
+through a shipped → delivered → returned lifecycle. Providers list company-owned
+fleets; individuals can put a single robot into a pool that a local operator claims and
+runs on their behalf.
 
-<h4>
-    <a href="https://abproject-sclone.vercel.app">View Demo</a>
-  <span> · </span>
-    <a href="https://github.com/SashenJayathilaka/Airbnb-Build/blob/master/README.md">Documentation</a>
-  <span> · </span>
-    <a href="https://github.com/SashenJayathilaka/Airbnb-Build/issues">Report Bug</a>
-  <span> · </span>
-    <a href="https://github.com/SashenJayathilaka/Airbnb-Build/issues">Request Feature</a>
-  </h4>
-</div>
+| | |
+|---|---|
+| Brand / product domain | `botsharing.us` |
+| Deployed at | `hifivebot.com` (Netlify project `hifivebot-com`) |
+| Repository | `robotx-ai/botshare` |
+| Stack | Next.js 13 (App Router) · TypeScript · Prisma · Supabase Postgres · Stripe · Tailwind |
 
-<br />
+> The repo started life as an Airbnb-clone template. The product is **not** a home rental
+> app, and Airbnb vocabulary is banned from user-facing copy — see
+> [Terminology](#terminology-enforced). Some internal identifiers (`Listing`,
+> `Reservation`, `guestCount`, the `airbnb-clone` package name) are deliberate legacy
+> compatibility and are not being renamed during MVP.
 
-<!-- Table of Contents -->
+---
 
-## :notebook_with_decorative_cover: Table of Contents
+## Table of contents
 
-- [About the Project](#star2-about-the-project)
-  - [Screenshots](#camera-screenshots)
-  - [Tech Stack](#space_invader-tech-stack)
-  - [Environment Variables](#key-environment-variables)
-- [Getting Started](#toolbox-getting-started)
-  - [Prerequisites](#bangbang-prerequisites)
-  - [Installation](#gear-installation)
-  - [Run Locally](#running-run-locally)
-  - [Deployment](#triangular_flag_on_post-deployment)
-- [Contact](#handshake-contact)
+- [Quick start](#quick-start)
+- [Environment variables](#environment-variables)
+- [Commands](#commands)
+- [Architecture](#architecture)
+- [Domain model](#domain-model)
+- [Core flows](#core-flows)
+- [Roles and access control](#roles-and-access-control)
+- [Product constraints](#product-constraints)
+- [Terminology (enforced)](#terminology-enforced)
+- [Deployment](#deployment)
+- [Testing and quality gates](#testing-and-quality-gates)
+- [Data and one-off scripts](#data-and-one-off-scripts)
+- [Further docs](#further-docs)
 
-<!-- About the Project -->
+---
 
-## :star2: About the Project
-
-<!-- Screenshots -->
-
-### :camera: Screenshots
-
-- Reservation functionality & Description and Price, Listing creation, Listing card component
-
-<div align="center">
-<a href="https://airbnb-sclone.vercel.app"><img  src='./demo/ezgif-4-27f1be5f56.gif' alt='image'/></a>
-</div>
-
-<br />
-
-- Searching functionality Favorite functionality, Individual Listing View, Listing reservation component
-
-<div align="center">
-<a href="https://airbnb-sclone.vercel.app"><img  src='./demo/ezgif-4-8ac9db77ff.gif' alt='image'/></a>
-</div>
-
-## <a href="https://airbnb-sclone.vercel.app" target="_blank">LIVE DEMO 💥</a>
-
-![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
-![forthebadge](https://forthebadge.com/images/badges/for-you.svg)
-![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)
-
-### :space_invader: Tech Stack
-
-<details>
-  <summary>Client</summary>
-  <ul>
-    <li><a href="https://#/">Typescript</a></li>
-    <li><a href="https://nextjs.org/">Next.js</a></li>
-    <li><a href="https://reactjs.org/">React.js</a></li>
-    <li><a href="https://tailwindcss.com/">TailwindCSS</a></li>
-    <li><a href="https://www.prisma.io">Prisma</a></li>
-  </ul>
-</details>
-
-<details>
-<summary>Database</summary>
-  <ul>
-  <li><a href="https://firebase.google.com">Mongodb</a></li>
-  <li><a href="https://cloudinary.com/">Cloudinary</a></li>
-  </ul>
-</details>
-
-<br />
-
-<table>
-    <tr>
-        <td>
-<a href="#"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="" width="30" height="30" /></a>
-        </td>
-                <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/183096870-fdf58e59-d78c-44f4-bd1c-f9033c16d907.png" alt="Google" width="30" height="30" /></a>
-        </td>
-                        <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/179383376-874f547c-4e6f-4826-850e-706b009e7e2b.png" alt="" width="30" height="30" /></a>
-        </td>
-                              <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/181918664-569af962-756c-438c-b350-294f042e6f61.png" alt="" width="30" height="30" /></a>
-        </td>
-                        <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/180462270-ea4a249c-627c-4479-9431-5c3fd25454c4.png" alt="" width="30" height="30" /></a>
-        </td>
-                                <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/185779974-a31a9f47-f8d3-42ea-b7f8-4a2971774615.png" alt="" width="30"height="30"/></a>
-        </td>
-                                      <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/229775276-a7cb148b-7fbd-4334-a07f-f2223bc49f62.png" alt="" width="30"height="30"/></a>
-        </td>
-      <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/204170976-0e5c6e2a-2b41-483d-adbd-d5d1e40b8d15.png" alt="" width="30"height="30"/></a>
-        </td>
-        <td>
-<a href="#"><img src="https://user-images.githubusercontent.com/99184393/214867309-7b59fa0e-c872-484e-bc8f-462896c54d2a.png" alt="" height="30"/></a>
-        </td>
-    </tr>
-</table>
-
-## :toolbox: Getting Started
-
-### :bangbang: Prerequisites
-
-- Install Node JS in your computer <a href='https://nodejs.org/en/'>HERE</a>
-- Sign up for a Cloudinary account <a href='https://cloudinary.com/'>HERE</a>
-- Sign up for a Google Cloud Platform <a href='https://console.cloud.google.com/'>HERE</a>
-- Sign up for a Meta for Developers <a href='https://developers.facebook.com'>HERE</a>
-- Get Lookup APi Key <a href='https://extreme-ip-lookup.com/'>HERE</a>
-
-<!-- Env Variables -->
-
-### :key: Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`DATABASE_URL`
-
-`GOOGLE_CLIENT_ID`
-
-`GOOGLE_CLIENT_SECRET`
-
-`FACEBOOK_ID`
-
-`FACEBOOK_SECRET`
-
-`NEXTAUTH_SECRET`
-
-`NEXTAUTH_URL`
-
-`NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
-
-`NEXT_PUBLIC_LOOKUP_KEY`
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-### :gear: Installation
-
-![](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![](https://img.shields.io/badge/next.js-20232A?style=for-the-badge&logo=next.js&logoColor=61DAFB)
-
-Install my-project with npm
-
-```
-npx create-next-app@latest my-project --typescript --eslint
-```
-
-```
-cd my-project
-```
-
-Install dependencies
-
-### :test_tube: Install Tailwind CSS with Next.js
-
-#### Install Tailwind CSS
-
-![](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-
-Install tailwindcss and its peer dependencies via npm, and then run the init command to generate both `tailwind.config.js` and `postcss.config.js`.
-
-```
-npm install -D tailwindcss postcss autoprefixer
-```
-
-```
-npx tailwindcss init -p
-```
-
-#### Configure your template paths
-
-Add the paths to all of your template files in your `tailwind.config.js` file.
-<br>
-
-```js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-
-    // Or if using `src` directory:
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
-```
-
-#### Add the Tailwind directives to your CSS
-
-Add the `@tailwind` directives for each of Tailwind’s layers to your `./styles/globals.css` file.
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-Install dependencies
-
-<a href="https://github.com/SashenJayathilaka/Airbnb-Build/blob/master/package.json" target="_blank">🔶 Dependency Info</a>
-
-<!-- Run Locally -->
-
-### :running: Run Locally
-
-![](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
-
-Clone the project
+## Quick start
 
 ```bash
-  git clone https://github.com/SashenJayathilaka/Airbnb-Build.git
+git clone https://github.com/robotx-ai/botshare.git
+cd botshare
+npm install
+cp .env.example .env      # then fill in real values
+npx prisma generate
+npm run dev               # http://localhost:3000
 ```
 
-change directory
+> [!WARNING]
+> **There is no separate dev database.** `.env` points `DATABASE_URL` at the **production**
+> Supabase project. `npm run dev`, every script in `scripts/`, and any local Prisma or
+> Supabase call read and **write live production data**. Be deliberate, and delete any test
+> rows or uploaded files you create.
+
+If `npm run dev` crashes with a Prisma client/schema mismatch right after a `git pull`,
+the generated client is stale — re-run `npx prisma generate`.
+
+## Environment variables
+
+Copy `.env.example` and fill in. On the deployed site these live in the Netlify site
+dashboard (scoped to all contexts); `.env` is a strict subset used for local dev only.
+
+**Database**
+
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | Supabase Postgres, pooled connection |
+| `DIRECT_URL` | Direct connection, used by migrations |
+| `DB_MIGRATION_READ_ONLY` | `"true"` makes `lib/writeGuard.ts` reject every mutating API route — cutover kill-switch |
+
+**Auth**
+
+| Variable | Purpose |
+|---|---|
+| `NEXTAUTH_SECRET`, `NEXTAUTH_URL` | NextAuth config |
+| `ADMIN_EMAILS` | Comma-separated admin allowlist, read by `lib/adminAuth.ts` |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, `FACEBOOK_ID` / `FACEBOOK_SECRET` | OAuth providers — wired but **currently commented out** in `pages/api/auth/[...nextauth].ts`; sign-in today is credentials-only |
+
+**Payments and email**
+
+| Variable | Purpose |
+|---|---|
+| `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe Checkout |
+| `RESEND_API_KEY`, `RESEND_FROM_EMAIL` | Transactional email via Resend (`lib/email.ts`) |
+
+**Media and maps**
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (or `CLOUDINARY_URL`) | Image + video delivery |
+| `SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Supabase Storage uploads (`service-images` bucket) and CLI ops |
+| `NEXT_PUBLIC_MAPTILER_KEY` | MapLibre GL basemap tiles |
+
+`MONGODB_MIGRATION_URI` / `MONGODB_MIGRATION_DB` are only read by the one-time
+Mongo → Postgres migration scripts and can stay unset.
+
+## Commands
 
 ```bash
-  cd Airbnb-Build
+npm run dev             # dev server on :3000
+npm run build           # production build
+npm run lint            # ESLint — must pass before any PR or merge
+npm test                # vitest, single run
+npm run test:watch      # vitest, watch mode
+npm run db:seed         # prisma/seed.js
 ```
 
-Install dependencies
+Deploy commands are listed under [Deployment](#deployment); data scripts under
+[Data and one-off scripts](#data-and-one-off-scripts).
+
+## Architecture
+
+Next.js 13 **hybrid router**: everything lives in `app/` except NextAuth, which requires
+the Pages Router.
+
+```
+app/
+├── actions/                 server-side data loaders (RSC-only, no client imports)
+│   getListings, getListingById, getReservations, getAllReservations,
+│   getAvailableRobots, getMyRobots, getOrderById, getFavoriteListings, getCurrentUser
+├── api/                     App Router API routes
+│   listings/  listings/[id]/claim/  reservations/  reservations/[id]/status/
+│   checkout/  favorites/  register/  profile/  upload/  robot-models/
+│   verify-email/  forgot-password/  reset-password/  zip-check/
+├── services/                browse + filter the catalog
+├── listings/[listingId]/    service detail + booking widget
+├── available-robots/        operator view of the unclaimed individual pool
+├── my-robots/               individual owner's submitted robots
+├── my-listings/             provider's own services
+├── orders/[reservationId]/  order timeline + status transitions
+├── trips/  reservations/  favorites/  profile/
+├── admin/orders/            admin-only: all bookings, filter, cross-tenant cancel
+├── robot-types/[model]/     static marketing pages per robot model
+└── checkout/success/        Stripe post-payment landing
+
+pages/api/auth/[...nextauth].ts   the only Pages Router file
+
+components/
+├── models/       Login, Register, RentModal (create service), Search
+├── navbar/       navbar, category filter, zip search, role-aware user menu
+├── listing/      service card + detail sub-components
+├── orders/       order timeline / status controls
+├── auth/  inputs/  robot-types/
+
+lib/
+├── prismadb.ts             Prisma singleton
+├── adminAuth.ts            isAdminEmail(), canManageServices()
+├── writeGuard.ts           read-only lock for migration cutovers
+├── orderStatus.ts          order lifecycle: statuses, labels, transition table
+├── individualListing.ts    pool claim rules + catalog visibility predicates
+├── serviceCategories.ts    the 3 canonical categories
+├── useCases.ts             the 6 canonical use cases
+├── robotModel.ts, robotTypeCatalog.ts    robot taxonomy
+├── metro.ts, zipMetro.ts   zip → metro resolution, bboxes, centroids
+├── scenarioPricing.ts, agibotScenarioDetails.ts    scenario pricing model
+├── email.ts, emailVerification.ts, passwordPolicy.ts
+└── providerProfile.ts, stripe.ts, termsContent.tsx
+
+hook/     Zustand modal stores and small utility hooks
+data/     zip-to-metro.json, metro-bbox.json, robot-catalog/, agibot-scenarios.json
+scripts/  seeding, catalog builds, migration helpers, deploy promotion
+```
+
+- **Auth**: NextAuth + Prisma adapter. Credentials provider with bcrypt hashes and a
+  6-digit emailed verification code (`EmailVerificationCode`); Google/Facebook are
+  scaffolded but disabled.
+- **Maps**: MapLibre GL via `react-map-gl` (migrated off Leaflet). Zip proximity search
+  resolves a zip to a metro through `lib/zipMetro.ts` and `data/zip-to-metro.json`.
+- **Media**: service and SKU images go to the Supabase Storage `service-images` public
+  bucket through `POST /api/upload` (server-side, service-role key). Hero and showcase
+  **videos** are hosted on Cloudinary — never commit video files; `public/videos/*.mp4|.mov|.webm`
+  is gitignored.
+- **Route protection**: `middleware.ts` gates `/trips`, `/reservations`, `/my-listings`,
+  `/favorites`, `/profile`, `/my-robots`, `/available-robots`, `/orders/*`, `/admin/orders`.
+  The middleware only checks *authentication* — authorization is enforced per-route in the
+  API layer.
+
+## Domain model
+
+Postgres via Prisma (`prisma/schema.prisma`).
+
+| Model | Notes |
+|---|---|
+| `User` | `userType: CUSTOMER \| PROVIDER` is the canonical role flag. Also `businessName`, `phone`, `verified`, terms-acceptance stamps. |
+| `Listing` | A bookable service. `price` = **per day**. `metro`, `zipCode`, `lat`, `lng` drive proximity search. `robotModelId` links the catalog entry; `sku` + `skuImageSrc` capture the physical unit. `isIndividualOwned` + `status` + `operatorId` + `claimedAt` implement the pool. |
+| `Reservation` | A booking. `status: OrderStatus`, unique `stripeSessionId` set after checkout. |
+| `ReservationEvent` | Append-only audit row per status transition (actor + optional note). |
+| `RobotModel` | Curated catalog seeded from `data/robot-catalog/`. Carries brand/model, `useCase[]`, `serviceCategory`, `capabilityTag`, hourly/daily/monthly prices, and `listable` (controls whether it appears in the create-service picker). `msrp` is reference-only and must never be used as a rental price. |
+| `UserFavorite` | Unique on `(userId, listingId)`. |
+| `EmailVerificationCode` | One active hashed code per email, with expiry and attempt counter. |
+
+Enums: `UserType`, `Metro` (`SF`, `LA`, `VEGAS`, `DALLAS`, `NYC`, `MIAMI`),
+`ListingStatus` (`AVAILABLE`, `CLAIMED`), `OrderStatus` (below).
+
+`guestCount`, `roomCount`, and `bathroomCount` on `Listing` are legacy compatibility
+fields. Do not repurpose them.
+
+## Core flows
+
+### Booking and payment
+
+1. Customer picks a date range on `/listings/[listingId]`.
+2. `POST /api/checkout` validates the listing, refuses unclaimed pool robots (409), and
+   creates a Stripe Checkout Session.
+3. Stripe redirects to `/checkout/success`, which finalizes the `Reservation` and stores
+   `stripeSessionId`.
+4. Resend sends the customer confirmation and the admin notification (`lib/email.ts`).
+
+### Order lifecycle
+
+`lib/orderStatus.ts` is the single source of truth and mirrors the Prisma enum exactly.
+Seven happy-path steps, with `CANCELLED` as a side exit:
+
+```
+PLACED → CONFIRMED → SHIPPED → DELIVERED → RETURN_INITIATED → RETURN_RECEIVED → COMPLETED
+```
+
+Every transition is declared in an explicit table with the roles allowed to perform it —
+anything not listed is illegal. Providers confirm, ship, receive the return, and settle;
+customers acknowledge delivery and initiate the return; admins can do any non-terminal
+transition. Cancellation is open to customer/provider only *before* the robot ships.
+Transitions run through `PATCH /api/reservations/[reservationId]/status` and each one
+writes a `ReservationEvent`.
+
+### Individual robot pool
+
+An individual lists a robot they own; it is stored with `isIndividualOwned = true` and
+`status = AVAILABLE`. It is **not** visible to customers and **not** bookable in that
+state. A provider or admin claims it via `POST /api/listings/[listingId]/claim` with a
+5-digit operating zip, which sets `status = CLAIMED`, records `operatorId`/`claimedAt`,
+and resolves the zip to a supported metro. Only then does it enter the customer catalog.
+The owner earns `INDIVIDUAL_EARNINGS_PERCENT` (15%) of the booking price. A SKU may have
+only one active (`AVAILABLE` or `CLAIMED`) individual listing at a time.
+
+All of these rules are pure functions in `lib/individualListing.ts`
+(`canClaimListing`, `isCustomerVisible`, `customerVisibilityWhere`, `hasActiveSkuConflict`)
+so they stay unit-testable and cannot drift between the API layer and the query layer.
+
+## Roles and access control
+
+Two independent axes:
+
+- **`User.userType`** — `CUSTOMER` or `PROVIDER`. Product role; drives the user menu and
+  service-management surfaces. Do not add parallel role booleans.
+- **`ADMIN_EMAILS`** — an ops allowlist checked by `isAdminEmail()`. Orthogonal to
+  `userType`.
+
+Rules:
+
+- Catalog writes (create/edit/delete a service) are gated to **providers and admins**
+  via `canManageServices()`. Customers never write to the catalog.
+- Providers see and manage only their own services and the bookings placed on them.
+  Admins get full cross-tenant visibility and override.
+- `POST /api/upload` is part of service creation, so it is gated with `canManageServices`
+  — the same audience as `POST /api/listings`. **Do not** narrow it to admins only; that
+  403s providers uploading service and SKU photos.
+- **Enforce authorization at the API layer regardless of what the UI shows.** Hidden
+  buttons are not access control.
+
+## Product constraints
+
+**Service categories** — exactly three, source of truth `lib/serviceCategories.ts`.
+Do not add more without an explicit product request.
+
+| Label | Slug |
+|---|---|
+| `Showcase & Performance` | `showcase-performance` |
+| `Warehouse` | `warehouse` |
+| `Restaurant` | `restaurant` |
+
+**Use cases** — exactly six, source of truth `lib/useCases.ts`: Cleaning, Delivery,
+Performance, Guide, Live streaming, Patrol.
+
+**Theme** — user-facing UI uses **white, gray, and black only**. Any legacy
+rose/coral/indigo/blue accent gets replaced with neutral grayscale. Prefer changing the
+centralized Tailwind tokens over scattering hardcoded classes.
+
+**Schema** — no Prisma redesigns during MVP. Keep existing route shapes
+(`/listings/[listingId]`, `/api/listings`, `/api/reservations`, `/api/checkout`, …).
+Prefer reinterpreting a field's meaning in copy and validation over migrating it.
+
+## Terminology (enforced)
+
+`AGENTS.md` is the authoritative source for product copy. User-facing text must use:
+
+| Use | Never |
+|---|---|
+| service | listing |
+| booking | reservation |
+| customer | guest |
+| service operator | host |
+| service package / deployment | home, place, property |
+| per day | per night |
+| BotSharing US Service Assurance | AirCover |
+
+**Banned in new copy**: Airbnb, host, guest, property, per night, AirCover. PRs that
+introduce Airbnb wording into user-facing copy should be rejected. Internal variable
+names and route paths may keep legacy names for compatibility.
+
+## Deployment
+
+Deploys to **hifivebot.com** (Netlify project `hifivebot-com`, Supabase project
+`jylxrvwxsjehthsqswib`).
+
+**Netlify CI builds; nothing is built or uploaded locally.** Pushing to `main` triggers a
+CI build — and that build does **not** go live. Auto-publishing is deliberately off and
+the published deploy is kept *locked*, so every CI build finishes as a `ready` but
+unpublished deploy at `https://<deploy_id>--hifivebot-com.netlify.app`. Every push is
+effectively a preview; going live is a separate, explicit act.
 
 ```bash
-  npm install
+git push origin main      # → CI build; preview only, never goes live
+npm run deploy:status     # recent deploys (add --silent to pipe JSON)
+npm run deploy:logs       # stream the log of an in-progress build
+npm run deploy:build      # trigger a CI build without pushing a commit
+npm run deploy:promote    # publish the newest ready deploy to hifivebot.com
+npm run deploy:rollback   # republish the previously published deploy
 ```
 
-Start the server
+`deploy:promote` runs `scripts/promote-deploy.mjs`, which preflights the target deploy on
+its own URL (home returns 200, `/services` returns 200 rendering real DB rows) and refuses
+to publish if the database is not answering. Publishing is a single API call — instant, no
+rebuild, no build minutes, nothing uploaded. Rollback is the same operation in reverse and
+equally instant. Prefer the `/prod-deploy` skill, which wraps this with a confirmation step.
+
+`npm run deploy:local` is the escape hatch for when Netlify CI is unavailable: it builds
+locally and publishes directly, bypassing the lock. It uploads ~32 MB and is unreliable on
+a flaky connection. Do not reach for it by default.
+
+### Deployment gotchas (learned the hard way)
+
+1. **The Prisma rhel query engine must be forced into the build.** `prisma generate` only
+   materializes a schema `binaryTarget` that is already in `~/.cache/prisma` or was fetched
+   by the `@prisma/engines` postinstall. On Netlify's cold CI cache that silently produces a
+   client with `rhel-openssl-1.0.x` but **not** the `rhel-openssl-3.0.x` the nodejs20.x
+   Lambda loads. It builds and serves HTML fine, then throws
+   `Query engine library ... could not be found` on **every DB query** — login and all data
+   break. `scripts/bundle-prisma-engines.mjs` (run by `build:netlify`) downloads any missing
+   rhel engine from `binaries.prisma.sh`, pinned to the commit in `@prisma/engines-version`,
+   then stages both engines into `node_modules/@prisma/client/runtime` where the Lambda looks
+   first. `netlify.toml` `included_files` bundles those staged copies; `next.config.js`
+   `outputFileTracingIncludes` bundles `node_modules/.prisma/client`. The script hard-fails the build if the engine is still missing — that guard
+   is why a broken function cannot reach production. Never weaken it.
+   Do **not** set `PRISMA_CLI_BINARY_TARGETS`: Prisma 4.12 rejects `native` in that list and
+   the build dies with `Unknown binaryTarget native`.
+2. **`next/font/google` fetches from `fonts.gstatic.com` at build time and intermittently
+   times out** (`NextFontError: Failed to fetch 'Barlow Condensed'`), failing the whole
+   build. It is transient — retry with `npm run deploy:build`. The durable fix is
+   self-hosting via `next/font/local`.
+3. **Prisma migration drift is common on prod.** The live schema is often ahead of
+   `_prisma_migrations`. `prisma migrate deploy` then fails with `relation already exists`
+   and leaves a FAILED record that blocks every future deploy. Recover with
+   `prisma migrate resolve --applied <migration_name>` per already-applied migration, then
+   re-run `migrate deploy`. Verify the objects exist (read-only) before marking anything applied.
+4. **Netlify does not expose build logs over its API.** `netlify logs:deploy` streams
+   *in-progress* builds only. To capture a failure: trigger the build, poll until
+   `state=building`, then attach the stream — otherwise the reason behind an `exit code 2`
+   is invisible.
+5. **A local VPN/proxy client breaks Netlify CLI calls** and can make hifivebot.com look
+   down. The npm deploy scripts strip `HTTP_PROXY`/`HTTPS_PROXY` for exactly this reason.
+   If `curl https://hifivebot.com` fails while `--resolve`-ing the same host to its edge IP
+   succeeds, the resolver is handing back fake-IP space (`198.18.0.0/15`) — that is the local
+   tunnel, not the site.
+
+## Testing and quality gates
 
 ```bash
-  npm run dev
+npm run lint    # required before any PR or merge
+npm test        # vitest
 ```
 
-### :card_file_box: Mongo to Supabase Migration
+Unit tests cover the pure decision logic — `lib/orderStatus.test.ts` (transition table)
+and `lib/individualListing.test.ts` (pool claim and visibility rules). New business rules
+belong in a pure, DB-free module in `lib/` with tests, not inline in a route handler.
 
-This repository now includes one-time migration utilities for moving MongoDB data to Supabase Postgres.
+## Data and one-off scripts
 
-Set migration env vars in `.env`:
+Reference data lives in `data/`: `zip-to-metro.json` and `metro-bbox.json` (proximity
+search), `robot-catalog/` and `robot-catalog.json` (the `RobotModel` catalog),
+`agibot-scenarios.json` (scenario pricing).
 
-- `DATABASE_URL` (target Supabase Postgres)
-- `MONGODB_MIGRATION_URI` (source MongoDB)
-- `MONGODB_MIGRATION_DB` (source DB name)
-- `DB_MIGRATION_READ_ONLY` (`"true"` to block mutating API routes during cutover)
+| Script | Purpose |
+|---|---|
+| `scripts/seed-robot-catalog.mjs` | Upsert `RobotModel` rows from `data/robot-catalog/`, keyed on `slug` |
+| `scripts/curate-listable-models.mjs` | Flip `listable` on catalog entries |
+| `scripts/build-robot-catalog.py` | Rebuild the catalog JSON from the source spreadsheet |
+| `scripts/build-zip-metro-map.js` | Regenerate `zip-to-metro.json` / `metro-bbox.json` |
+| `scripts/seed-agibot-scenarios.js`, `scripts/sync-scenario-thumbnails.js` | Scenario pricing data + imagery |
+| `scripts/migrate-listing-use-cases.mjs` | Backfill `useCase[]` on existing listings |
+| `scripts/bundle-prisma-engines.mjs` | Netlify build step — see gotcha 1 |
+| `scripts/promote-deploy.mjs` | Preflight + publish/rollback a Netlify deploy |
 
-Commands:
+**Mongo → Postgres migration** (historical; the cutover is complete):
 
 ```bash
-npm run db:migrate:sql
-npm run db:migrate:data
-npm run db:migrate:verify
+npm run db:migrate:sql      # generate the init migration from the Prisma schema
+npm run db:migrate:data     # copy Mongo documents into Postgres
+npm run db:migrate:verify   # row-count and integrity checks
 ```
 
-Operational docs:
+Set `DB_MIGRATION_READ_ONLY="true"` during a cutover to make `lib/writeGuard.ts` reject
+every mutating API route.
 
-- `docs/supabase-cutover-runbook.md`
-- `docs/migration-verification-template.md`
+Every script in `scripts/` runs against the **production** database. Re-read the warning
+in [Quick start](#quick-start) before running one.
 
-<hr />
+### Uploading a video to Cloudinary
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Cloud name `dmrhtzqyx`. Credentials are in `.env`.
 
-<hr />
+```bash
+curl -X POST \
+  -F "file=@public/videos/<file>.mp4" \
+  -F "public_id=<asset-name>" \
+  -F "resource_type=video" \
+  -F "overwrite=true" \
+  -u "$CLOUDINARY_API_KEY:$CLOUDINARY_API_SECRET" \
+  "https://api.cloudinary.com/v1_1/$NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME/video/upload"
+```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Delivery URL: `https://res.cloudinary.com/dmrhtzqyx/video/upload/q_auto,f_auto/<public_id>.mp4`
+(`q_auto` = per-device quality, `f_auto` = WebM to Chrome, mp4 elsewhere).
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Current assets: `showcase-bg` (`components/ServiceShowcase.tsx`), `pepsi-bg` and
+`paris-performance-bg` (`components/HeroCarousel.tsx`).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Further docs
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-### Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-<!-- Deployment -->
-
-### :triangular_flag_on_post: Deployment
-
-To deploy this project run
-
-##### Deploy on Vercel
-
-![](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## :handshake: Contact
-
-Sashen - [@twitter_handle](https://twitter.com/SashenHasinduJ) - sashenjayathilaka95@gmail.com
-
-Project Link: [https://github.com/SashenJayathilaka/Airbnb-Build.git](https://github.com/SashenJayathilaka/Airbnb-Build.git)
-
-<br />
-
-<div align="center">
-<a href="https://airbnb-sclone.vercel.app"><img  src='https://user-images.githubusercontent.com/99184393/229773559-72e7f64a-361d-4285-976a-00a8919dd783.png' alt='image'/></a>
-</div>
-
-<br />
-
-<div align="center">Don't forget to leave a star ⭐️</div>
+| File | Contents |
+|---|---|
+| `AGENTS.md` | Authoritative product, terminology, and taxonomy rules |
+| `CLAUDE.md` | Working instructions for Claude Code in this repo |
+| `docs/supabase-cutover-runbook.md` | Mongo → Supabase cutover procedure |
+| `docs/migration-verification-template.md` | Post-migration verification checklist |
+| `docs/helper.html` | Internal operator helper reference |
