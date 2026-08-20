@@ -15,8 +15,8 @@
     "db:migrate:verify": "node scripts/verify-migration.js",
     "db:seed": "prisma db seed",
     "build:netlify": "prisma generate && node scripts/bundle-prisma-engines.mjs && next build",
-    "deploy:preview": "netlify build && netlify deploy --site 147defb9-131c-42ca-8375-37ebc8ba5531",
-    "deploy:prod": "netlify build && netlify deploy --prod --site 147defb9-131c-42ca-8375-37ebc8ba5531"
+    "deploy:preview": "netlify build && netlify deploy --site 79afde94-abbe-422c-ba4c-f68ab0100e62",
+    "deploy:prod": "netlify build && netlify deploy --prod --site 79afde94-abbe-422c-ba4c-f68ab0100e62"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
